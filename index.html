@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ハートピアスローライフ 生物図鑑</title>
+    <meta
+      name="description"
+      content="ハートピアスローライフの趣味図鑑。釣り・虫捕り・野鳥観察の生き物データ検索とフィルタリングができます。"
+    />
+    <meta
+      name="keywords"
+      content="ハートピア, スローライフ, 趣味図鑑, 釣り, 虫捕り, 野鳥観察"
+    />
+    <link rel="icon" type="image/png" href="img/favicon.png" />
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+    <meta name="theme-color" content="#ffffff" />
+    <!-- 本番リリースでは長期キャッシュを活かすため、バージョン付きリソースを自動付与 -->
+    <script>
+      window.assetVer = Date.now();
+      document.write(
+        '<link rel="stylesheet" href="style.css?v=' + window.assetVer + '">',
+      );
+    </script>
+  </head>
+  <body>
+    <!-- ▼ 上部ナビ（デスクトップ/タブレット用） -->
+    <nav class="nav-tabs top-nav" role="navigation" aria-label="上部ナビ">
+      <button class="tab active" data-target="page-zukan">生物図鑑</button>
+      <button class="tab" data-target="page-info">園芸・料理</button>
+      <button class="tab" data-target="page-cat">にゃんこ</button>
+      <button class="tab" data-target="page-settings">そのた</button>
+    </nav>
+
+    <!-- ▼ 図鑑ページ -->
+    <main>
+      <section
+        id="page-zukan"
+        class="page active"
+        aria-labelledby="zukan-title"
+      >
+        <header class="page-header">
+          <h1 id="zukan-title">ハートピアスローライフ 生物図鑑</h1>
+        </header>
+
+        <!-- ▼ 表示列切り替え -->
+        <div class="view-switch" role="toolbar" aria-label="表示切替">
+          <div class="view-buttons">
+            <button id="view1" aria-pressed="false">1列</button>
+            <button id="view2" class="active" aria-pressed="true">2列</button>
+          </div>
+          <div class="status-buttons" aria-label="表示切替フィルター">
+            <button
+              id="acquiredToggle"
+              class="filter-toggle active"
+              aria-pressed="true"
+            >
+              獲得 ON
+            </button>
+            <button
+              id="star5Toggle"
+              class="filter-toggle active"
+              aria-pressed="true"
+            >
+              ★5 ON
+            </button>
+          </div>
+        </div>
+
+        <div class="status-summary">
+          <span id="totalCount">全件：0</span>
+          <span id="displayCount">表示：0</span>
+          <span id="acquiredCount">獲得：0</span>
+          <span id="star5Count">★5：0</span>
+        </div>
+
+        <div class="search-box">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="名前で検索…"
+            aria-label="検索"
+          />
+        </div>
+
+        <section class="controls" aria-label="フィルター">
+          <div>
+            <label for="userLevel">趣味レベル：</label>
+            <select id="userLevel">
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="seasonFilter">シーズン：</label>
+            <select id="seasonFilter">
+              <option value="">すべて</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="hobbyFilter">趣味：</label>
+            <select id="hobbyFilter">
+              <option value="">すべて</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="place1Filter">場所1：</label>
+            <select id="place1Filter"></select>
+          </div>
+
+          <div>
+            <label for="place2Filter">場所2：</label>
+            <select id="place2Filter"></select>
+          </div>
+
+          <div>
+            <label for="timeFilter">時間：</label>
+            <select id="timeFilter"></select>
+          </div>
+
+          <div>
+            <label for="weatherFilter">天候：</label>
+            <select id="weatherFilter"></select>
+            <select id="weatherMode" aria-label="天候条件"></select>
+          </div>
+        </section>
+
+        <section id="result" class="result" aria-live="polite"></section>
+      </section>
+
+      <!-- ▼ 情報ページ -->
+      <section id="page-info" class="page" aria-labelledby="info-title">
+        <h2 id="info-title">ハートピアスローライフ 園芸・料理・販売食材図鑑</h2>
+        <div class="search-box">
+          <input
+            type="text"
+            id="searchInputPage2"
+            placeholder="名前で検索…"
+            aria-label="ページ2検索"
+          />
+        </div>
+
+        <section class="controls controls-page2" aria-label="ページ2フィルター">
+          <div>
+            <label for="userLevelPage2">趣味レベル：</label>
+            <select id="userLevelPage2">
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="seasonFilterPage2">シーズン：</label>
+            <select id="seasonFilterPage2">
+              <option value="">すべて</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="hobbyFilterPage2">表示：</label>
+            <select id="hobbyFilterPage2">
+              <option value="">すべて</option>
+              <option value="園芸">園芸</option>
+              <option value="料理">料理</option>
+              <option value="採取・販売">採取・販売</option>
+            </select>
+            <select id="hobbyModeFilterPage2" aria-label="表示種別">
+              <option value="">すべて</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="sortPage2">ソート：</label>
+            <select id="sortPage2">
+              <option value="level">趣味レベル順</option>
+              <option value="seedprice">種の値段順</option>
+              <option value="time">時間順</option>
+              <option value="sell">売値順</option>
+            </select>
+          </div>
+        </section>
+
+        <section id="resultPage2" class="result" aria-live="polite"></section>
+      </section>
+
+      <!-- ▼ にゃんこページ -->
+      <section id="page-cat" class="page" aria-labelledby="cat-title">
+        <h2 id="cat-title">にゃんこ</h2>
+        <p class="cat-help">
+          猫ごとに「好物ではない魚」をチェックして非表示にし、候補を絞り込めます。
+        </p>
+
+        <section class="cat-controls" aria-label="猫の管理">
+          <div id="catTabs" class="cat-tabs" role="tablist" aria-label="猫選択">
+            <button
+              class="cat-tab active"
+              data-cat-index="0"
+              aria-pressed="true"
+            >
+              猫1
+            </button>
+            <button class="cat-tab" data-cat-index="1" aria-pressed="false">
+              猫2
+            </button>
+            <button class="cat-tab" data-cat-index="2" aria-pressed="false">
+              猫3
+            </button>
+            <button class="cat-tab" data-cat-index="3" aria-pressed="false">
+              猫4
+            </button>
+            <button class="cat-tab" data-cat-index="4" aria-pressed="false">
+              猫5
+            </button>
+          </div>
+
+          <div
+            id="cat5ExcludedToggleWrap"
+            class="cat5-toggle-wrap"
+            aria-live="polite"
+          >
+            <button
+              id="cat5ExcludedToggle"
+              type="button"
+              class="filter-toggle"
+              aria-pressed="false"
+            >
+              好物じゃない表示 OFF
+            </button>
+          </div>
+
+          <div class="cat-name-row">
+            <label for="catNameInput">猫の名前：</label>
+            <input
+              id="catNameInput"
+              type="text"
+              maxlength="20"
+              placeholder="例：しろ"
+              aria-label="猫の名前"
+            />
+            <button id="catResetBtn" type="button">この猫をリセット</button>
+            <span id="catVisibleCount">候補：0匹</span>
+          </div>
+        </section>
+
+        <section
+          id="resultPage3"
+          class="cat-fish-grid"
+          aria-live="polite"
+        ></section>
+      </section>
+
+      <!-- ▼ 設定ページ -->
+      <section id="page-settings" class="page" aria-labelledby="settings-title">
+        <h2 id="settings-title">そのた</h2>
+        <p>作成者：りょーな</p>
+        <p>heartpiaID：1hbmee1k</p>
+        <p>フレンド申請待ってます！</p>
+        <p></p>
+        <p>
+          Xに移動します→
+          <a href="https://x.com/Rimu53637051">@Rimu53637051</a>
+        </p>
+        <p>要望・バグ報告：XのDMにお願いします！</p>
+      </section>
+    </main>
+
+    <!-- ▼ 下部ナビ（スマホ向け固定） -->
+    <nav class="nav-tabs bottom-nav" role="navigation" aria-label="下部ナビ">
+      <button class="tab active" data-target="page-zukan" aria-label="生物図鑑">
+        生物図鑑
+      </button>
+      <button class="tab" data-target="page-info" aria-label="園芸・料理">
+        園芸・料理
+      </button>
+      <button class="tab" data-target="page-cat" aria-label="にゃんこ">
+        にゃんこ
+      </button>
+      <button class="tab" data-target="page-settings" aria-label="そのた">
+        そのた
+      </button>
+    </nav>
+
+    <script>
+      const assetVer = window.assetVer || Date.now();
+      document.write('<script src="data.js?v=' + assetVer + '"><\/script>');
+      document.write('<script src="script.js?v=' + assetVer + '"><\/script>');
+      document.write('<script src="ui.js?v=' + assetVer + '"><\/script>');
+    </script>
+  </body>
+</html>
