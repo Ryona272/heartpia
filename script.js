@@ -310,9 +310,13 @@ function filterCreatures() {
       if (weather === "rainbow_only") {
         if (!(w.length === 1 && w[0] === "虹")) return false;
       } else if (weather === "exclude_sunny") {
-        if (w.includes("晴れ")) return false;
+        const isRainbowOnly = w.length === 1 && w[0] === "虹";
+        if (!w.includes("雨(雪)") && (!w.includes("虹") || isRainbowOnly))
+          return false;
       } else if (weather === "exclude_rain") {
-        if (w.includes("雨(雪)")) return false;
+        const isRainbowOnly = w.length === 1 && w[0] === "虹";
+        if (!w.includes("晴れ") && (!w.includes("虹") || isRainbowOnly))
+          return false;
       }
     }
     // グローバル toggles: OFF にすると該当済みを非表示
@@ -1923,9 +1927,13 @@ function renderPage3FishList() {
         if (catWeather === "rainbow_only") {
           if (w.length !== 1 || w[0] !== "虹") return false;
         } else if (catWeather === "exclude_sunny") {
-          if (w.includes("晴れ")) return false;
+          const isRainbowOnly = w.length === 1 && w[0] === "虹";
+          if (!w.includes("雨(雪)") && (!w.includes("虹") || isRainbowOnly))
+            return false;
         } else if (catWeather === "exclude_rain") {
-          if (w.includes("雨(雪)")) return false;
+          const isRainbowOnly = w.length === 1 && w[0] === "虹";
+          if (!w.includes("晴れ") && (!w.includes("虹") || isRainbowOnly))
+            return false;
         }
       }
       return true;
