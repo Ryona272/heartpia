@@ -365,6 +365,10 @@ function saveFilterState() {
     place1Filter: place1Filter?.value ?? "",
     place2Filter: place2Filter?.value ?? "",
     weatherFilter: weatherFilter?.value ?? "",
+    catPlace1Filter: catPlace1Filter?.value ?? "",
+    catPlace2Filter: catPlace2Filter?.value ?? "",
+    catTimeFilter: catTimeFilter?.value ?? "",
+    catWeatherFilter: catWeatherFilter?.value ?? "",
     viewOneColumn: result?.classList.contains("one-column") ?? false,
     searchInputPage2: searchInputPage2?.value ?? "",
     hobbyFilterPage2: hobbyFilterPage2?.value ?? "",
@@ -402,6 +406,8 @@ function loadFilterState() {
     if (timeFilter && s.timeFilter != null) timeFilter.value = s.timeFilter;
     if (weatherFilter && s.weatherFilter != null)
       weatherFilter.value = s.weatherFilter;
+    if (catWeatherFilter && s.catWeatherFilter != null)
+      catWeatherFilter.value = s.catWeatherFilter;
     if (s.viewOneColumn) {
       result?.classList.add("one-column");
       document.getElementById("view1")?.classList.add("active");
@@ -2501,10 +2507,26 @@ function init() {
 
     // 天候（固定選択肢のためHTML側に定義済み。動的構築不要）
 
+    // 保存済みのにゃんこフィルター値を復元（動的オプション構築後に実施）
+    const savedCatFilters = (() => {
+      try {
+        return JSON.parse(localStorage.getItem(FILTER_STORAGE_KEY)) || {};
+      } catch {
+        return {};
+      }
+    })();
+    if (savedCatFilters.catPlace1Filter != null)
+      catPlace1Filter.value = savedCatFilters.catPlace1Filter;
+    if (savedCatFilters.catPlace2Filter != null)
+      catPlace2Filter.value = savedCatFilters.catPlace2Filter;
+    if (savedCatFilters.catTimeFilter != null)
+      catTimeFilter.value = savedCatFilters.catTimeFilter;
+
     // イベントリスナー
     [catPlace1Filter, catPlace2Filter, catTimeFilter, catWeatherFilter].forEach(
       (el) => {
         el.addEventListener("change", renderPage3FishList);
+        el.addEventListener("change", saveFilterState);
       },
     );
   }
