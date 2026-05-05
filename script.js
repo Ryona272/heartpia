@@ -8,7 +8,6 @@ const place1Filter = document.getElementById("place1Filter");
 const place2Filter = document.getElementById("place2Filter");
 const timeFilter = document.getElementById("timeFilter");
 const weatherFilter = document.getElementById("weatherFilter");
-const weatherMode = document.getElementById("weatherMode");
 const searchInput = document.getElementById("searchInput");
 const result = document.getElementById("result");
 const acquiredToggle = document.getElementById("acquiredToggle");
@@ -24,18 +23,40 @@ const searchInputPage2 = document.getElementById("searchInputPage2");
 const hobbyFilterPage2 = document.getElementById("hobbyFilterPage2");
 const hobbyModeFilterPage2 = document.getElementById("hobbyModeFilterPage2");
 const resultPage2 = document.getElementById("resultPage2");
+const acquiredTogglePage2 = document.getElementById("acquiredTogglePage2");
+const star5TogglePage2 = document.getElementById("star5TogglePage2");
+const totalCountPage2El = document.getElementById("totalCountPage2");
+const displayCountPage2El = document.getElementById("displayCountPage2");
+const acquiredCountPage2El = document.getElementById("acquiredCountPage2");
+const star5CountPage2El = document.getElementById("star5CountPage2");
 const catTabsEl = document.getElementById("catTabs");
 const catNameInput = document.getElementById("catNameInput");
 const catResetBtn = document.getElementById("catResetBtn");
 const catVisibleCount = document.getElementById("catVisibleCount");
+const catSearchInput = document.getElementById("catSearchInput");
+const catPlace1Filter = document.getElementById("catPlace1Filter");
+const catPlace2Filter = document.getElementById("catPlace2Filter");
+const catTimeFilter = document.getElementById("catTimeFilter");
+const catWeatherFilter = document.getElementById("catWeatherFilter");
 const cat5ExcludedToggleWrap = document.getElementById(
   "cat5ExcludedToggleWrap",
 );
 const cat5ExcludedToggle = document.getElementById("cat5ExcludedToggle");
 const resultPage3 = document.getElementById("resultPage3");
+const resetFilterBtn = document.getElementById("resetFilterBtn");
+const resetFilterBtnPage2 = document.getElementById("resetFilterBtnPage2");
+const resetFilterBtnCat = document.getElementById("resetFilterBtnCat");
+const eventnameFilterWrap = document.getElementById("eventnameFilterWrap");
+const eventnameFilter = document.getElementById("eventnameFilter");
+const eventnameFilterPage2Wrap = document.getElementById(
+  "eventnameFilterPage2Wrap",
+);
+const eventnameFilterPage2 = document.getElementById("eventnameFilterPage2");
 
 let showAcquired = true;
 let showFiveStar = true;
+let showAcquiredPage2 = true;
+let showFiveStarPage2 = true;
 
 const PLACE1_BACKGROUND_IMAGE_NAMES = new Set([
   "森林",
@@ -58,21 +79,35 @@ const SEASON_LABELS = {
   otherevent: "その他イベント",
 };
 
+// 配列seasonの場合、"normal"以外の最初の値をプライマリとして返す
+function getPrimarySeasonValue(seasonValue) {
+  if (Array.isArray(seasonValue)) {
+    return seasonValue.find((v) => v !== "normal") ?? "normal";
+  }
+  return seasonValue;
+}
+
 function isFestivalSeason(seasonValue) {
-  return FESTIVAL_SEASON_VALUES.has(seasonValue);
+  return FESTIVAL_SEASON_VALUES.has(getPrimarySeasonValue(seasonValue));
 }
 
 function isOtherEvent(seasonValue) {
-  return OTHER_EVENT_SEASON_VALUES.has(seasonValue);
+  return OTHER_EVENT_SEASON_VALUES.has(getPrimarySeasonValue(seasonValue));
 }
 
 function isRegularSeason(seasonValue) {
+  const primary = getPrimarySeasonValue(seasonValue);
   return (
-    seasonValue &&
-    seasonValue !== "normal" &&
-    !isFestivalSeason(seasonValue) &&
-    !isOtherEvent(seasonValue)
+    primary &&
+    primary !== "normal" &&
+    !FESTIVAL_SEASON_VALUES.has(primary) &&
+    !OTHER_EVENT_SEASON_VALUES.has(primary)
   );
+}
+
+// seasonが配列で"normal"を含むアイテム（通常フィルターでも表示するが、プライマリ枠に表示）
+function isMultiSeasonNormal(seasonValue) {
+  return Array.isArray(seasonValue) && seasonValue.includes("normal");
 }
 
 function getPlace1BackgroundName(places1 = []) {
@@ -90,8 +125,8 @@ function getPlace1BackgroundName(places1 = []) {
 
   return (
     places1.find(
-      (place) => !["水辺", "ホーム", "中心街", "★特殊"].includes(place),
-    ) || places1[0]
+      (place) => !["水辺", "郊外", "ホーム", "中心街", "★特殊"].includes(place),
+    ) || ""
   );
 }
 
@@ -151,6 +186,66 @@ const place1ToExcludedPlace2Map = {
 };
 
 // =======================
+// 検索リセット
+// =======================
+function applyDefaultSeasons() {
+  // page1: 通常のみ
+  if (seasonFilter) {
+    seasonFilter.value = "normal";
+    if (eventnameFilter) eventnameFilter.style.visibility = "hidden";
+  }
+  // page2: MALTESEコラボ（otherevent）
+  if (seasonFilterPage2) {
+    seasonFilterPage2.value = "otherevent";
+    if (eventnameFilterPage2) {
+      eventnameFilterPage2.value = "MALTESEコラボ";
+      eventnameFilterPage2.style.visibility = "visible";
+    }
+  }
+}
+
+function resetFiltersPage1() {
+  if (searchInput) searchInput.value = "";
+  if (hobbyFilter) hobbyFilter.value = "";
+  if (userLevelInput) userLevelInput.value = "1";
+  updatePlace1Options();
+  updatePlace2Options();
+  if (timeFilter) timeFilter.value = "";
+  if (weatherFilter) weatherFilter.value = "";
+  if (seasonFilter) {
+    seasonFilter.value = "normal";
+    if (eventnameFilter) eventnameFilter.style.visibility = "hidden";
+  }
+  saveFilterState();
+  filterCreatures();
+}
+
+function resetFiltersPage2() {
+  if (searchInputPage2) searchInputPage2.value = "";
+  if (hobbyFilterPage2) hobbyFilterPage2.value = "";
+  if (userLevelPage2Input) userLevelPage2Input.value = "1";
+  if (seasonFilterPage2) {
+    seasonFilterPage2.value = "otherevent";
+    if (eventnameFilterPage2) {
+      eventnameFilterPage2.value = "MALTESEコラボ";
+      eventnameFilterPage2.style.visibility = "visible";
+    }
+  }
+  if (sortPage2Select) sortPage2Select.value = "level";
+  saveFilterState();
+  filterAndRenderPage2();
+}
+
+function resetFiltersCat() {
+  if (catSearchInput) catSearchInput.value = "";
+  if (catPlace1Filter) catPlace1Filter.value = "";
+  if (catPlace2Filter) catPlace2Filter.value = "";
+  if (catTimeFilter) catTimeFilter.value = "";
+  if (catWeatherFilter) catWeatherFilter.value = "";
+  renderPage3FishList();
+}
+
+// =======================
 // フィルター処理
 // =======================
 function filterCreatures() {
@@ -161,7 +256,6 @@ function filterCreatures() {
   const place2 = place2Filter.value;
   const time = timeFilter.value;
   const weather = weatherFilter.value;
-  const mode = weatherMode.value; // any / only / exclude
   const keyword = searchInput.value.trim().toLowerCase();
 
   const filtered = creatures.filter((c) => {
@@ -171,12 +265,9 @@ function filterCreatures() {
     // シーズン/フェスフィルター（1つのセレクトボックスで一括管理）
     if (season) {
       if (season === "normal") {
-        // 通常アイテムのみ表示（シーズン限定なし）
-        if (c.season !== "normal" && isRegularSeason(c.season)) return false;
-        // フェスは除外
-        if (isFestivalSeason(c.season)) return false;
-        // その他イベントは除外
-        if (isOtherEvent(c.season)) return false;
+        // 通常アイテムのみ表示（配列seasonの通常兼用アイテムも含む）
+        if (c.season !== "normal" && !isMultiSeasonNormal(c.season))
+          return false;
       } else if (season === "allseason") {
         // 全てのシーズン（normal を除く）
         if (
@@ -189,33 +280,40 @@ function filterCreatures() {
         // 全てのフェスを表示
         if (!isFestivalSeason(c.season)) return false;
       } else if (season === "allotherevent") {
-        // 全てのその他イベントを表示
-        if (!isOtherEvent(c.season)) return false;
+        // 全てのその他イベント + 通常も表示
+        if (!isOtherEvent(c.season) && c.season !== "normal") return false;
       } else if (isRegularSeason(season)) {
-        // 特定シーズン（snowseason など）+ 通常も表示
-        if (c.season !== season && c.season !== "normal") return false;
+        // 特定シーズン（snowseason など）+ 通常も表示（配列seasonも対応）
+        const primary = getPrimarySeasonValue(c.season);
+        if (primary !== season && c.season !== "normal") return false;
       } else if (isFestivalSeason(season)) {
         // 特定フェス（dreamlightfes など）+ 通常も表示
-        if (c.season !== season && c.season !== "normal") return false;
+        const primary = getPrimarySeasonValue(c.season);
+        if (primary !== season && c.season !== "normal") return false;
       } else if (isOtherEvent(season)) {
-        // 特定その他イベント + 通常も表示
-        if (c.season !== season && c.season !== "normal") return false;
+        // その他イベント + 通常も表示
+        if (!isOtherEvent(c.season) && c.season !== "normal") return false;
       }
     }
+
+    // eventnameフィルター（常時適用）
+    const evName = eventnameFilter.value;
+    if (evName && isOtherEvent(c.season) && c.eventname !== evName)
+      return false;
 
     if (hobby && c.hobby !== hobby) return false;
     if (place1 && !c.places1?.includes(place1)) return false;
     if (place2 && !c.places2?.includes(place2)) return false;
     if (time && !c.times?.includes(time)) return false;
     if (weather) {
-      const has = c.weathers?.includes(weather);
-      if (mode === "any" && !has) return false; // must include selected weather
-      if (mode === "only") {
-        // only matches when the creature's weather list contains exactly the single value
-        const list = c.weathers || [];
-        if (!(list.length === 1 && list[0] === weather)) return false;
+      const w = c.weathers || [];
+      if (weather === "rainbow_only") {
+        if (!(w.length === 1 && w[0] === "虹")) return false;
+      } else if (weather === "exclude_sunny") {
+        if (w.includes("晴れ")) return false;
+      } else if (weather === "exclude_rain") {
+        if (w.includes("雨(雪)")) return false;
       }
-      if (mode === "exclude" && has) return false;
     }
     // グローバル toggles: OFF にすると該当済みを非表示
     if (!showAcquired && c.acquired) return false;
@@ -224,6 +322,16 @@ function filterCreatures() {
     if (keyword && !c.name.toLowerCase().includes(keyword)) return false;
     return true;
   });
+
+  // 通常アイテムを末尾に移動（シーズン/イベント選択時）
+  const evNameSort = eventnameFilter.value;
+  if ((season && season !== "normal") || evNameSort) {
+    filtered.sort((a, b) => {
+      const aN = a.season === "normal" ? 1 : 0;
+      const bN = b.season === "normal" ? 1 : 0;
+      return aN - bN;
+    });
+  }
 
   renderList(filtered, userLevel);
 }
@@ -240,12 +348,100 @@ function updateToggleButtons() {
 
 const STORAGE_KEY = "heartpia-state-v2";
 const LEGACY_STORAGE_KEY = "heartpia-state";
+const FILTER_STORAGE_KEY = "heartpia-filters-v1";
+
+function saveFilterState() {
+  const state = {
+    searchInput: searchInput?.value ?? "",
+    hobbyFilter: hobbyFilter?.value ?? "",
+    userLevel: userLevelInput?.value ?? "1",
+    seasonFilter: seasonFilter?.value ?? "",
+    eventnameFilter: eventnameFilter?.value ?? "",
+    timeFilter: timeFilter?.value ?? "",
+    place1Filter: place1Filter?.value ?? "",
+    place2Filter: place2Filter?.value ?? "",
+    weatherFilter: weatherFilter?.value ?? "",
+    viewOneColumn: result?.classList.contains("one-column") ?? false,
+    searchInputPage2: searchInputPage2?.value ?? "",
+    hobbyFilterPage2: hobbyFilterPage2?.value ?? "",
+    hobbyModeFilterPage2: hobbyModeFilterPage2?.value ?? "",
+    userLevelPage2: userLevelPage2?.value ?? "1",
+    seasonFilterPage2: seasonFilterPage2?.value ?? "",
+    eventnameFilterPage2: eventnameFilterPage2?.value ?? "",
+    sortPage2: sortPage2?.value ?? "",
+    viewOneColumnPage2: resultPage2?.classList.contains("one-column") ?? false,
+  };
+  localStorage.setItem(FILTER_STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadFilterState() {
+  const raw = localStorage.getItem(FILTER_STORAGE_KEY);
+  if (!raw) return false;
+  try {
+    const s = JSON.parse(raw);
+    if (searchInput && s.searchInput != null) searchInput.value = s.searchInput;
+    if (hobbyFilter && s.hobbyFilter != null) hobbyFilter.value = s.hobbyFilter;
+    if (userLevelInput && s.userLevel != null)
+      userLevelInput.value = s.userLevel;
+    updatePlace1Options();
+    if (place1Filter && s.place1Filter != null)
+      place1Filter.value = s.place1Filter;
+    updatePlace2Options();
+    if (place2Filter && s.place2Filter != null)
+      place2Filter.value = s.place2Filter;
+    if (seasonFilter && s.seasonFilter != null)
+      seasonFilter.value = s.seasonFilter;
+    if (eventnameFilter && s.eventnameFilter != null)
+      eventnameFilter.value = s.eventnameFilter;
+    if (seasonFilter?.value === "otherevent")
+      eventnameFilter.style.visibility = "visible";
+    if (timeFilter && s.timeFilter != null) timeFilter.value = s.timeFilter;
+    if (weatherFilter && s.weatherFilter != null)
+      weatherFilter.value = s.weatherFilter;
+    if (s.viewOneColumn) {
+      result?.classList.add("one-column");
+      document.getElementById("view1")?.classList.add("active");
+      document.getElementById("view2")?.classList.remove("active");
+    }
+    if (searchInputPage2 && s.searchInputPage2 != null)
+      searchInputPage2.value = s.searchInputPage2;
+    if (hobbyFilterPage2 && s.hobbyFilterPage2 != null)
+      hobbyFilterPage2.value = s.hobbyFilterPage2;
+    if (hobbyModeFilterPage2 && s.hobbyModeFilterPage2 != null)
+      hobbyModeFilterPage2.value = s.hobbyModeFilterPage2;
+    if (userLevelPage2 && s.userLevelPage2 != null)
+      userLevelPage2.value = s.userLevelPage2;
+    if (seasonFilterPage2 && s.seasonFilterPage2 != null)
+      seasonFilterPage2.value = s.seasonFilterPage2;
+    if (eventnameFilterPage2 && s.eventnameFilterPage2 != null)
+      eventnameFilterPage2.value = s.eventnameFilterPage2;
+    if (seasonFilterPage2?.value === "otherevent")
+      eventnameFilterPage2.style.visibility = "visible";
+    if (sortPage2 && s.sortPage2 != null) sortPage2.value = s.sortPage2;
+    if (s.viewOneColumnPage2) {
+      resultPage2?.classList.add("one-column");
+      document.getElementById("view1Page2")?.classList.add("active");
+      document.getElementById("view2Page2")?.classList.remove("active");
+    }
+    return true;
+  } catch (e) {
+    console.warn("フィルター状態のロードに失敗しました", e);
+    return false;
+  }
+}
 
 function saveState() {
   const payload = {
     showAcquired,
     showFiveStar,
+    showAcquiredPage2,
+    showFiveStarPage2,
     creatures: creatures.map((c) => ({
+      name: c.name,
+      acquired: !!c.acquired,
+      fiveStar: !!c.fiveStar,
+    })),
+    page2: page2Creatures.map((c) => ({
       name: c.name,
       acquired: !!c.acquired,
       fiveStar: !!c.fiveStar,
@@ -264,9 +460,21 @@ function loadState() {
     const obj = JSON.parse(raw);
     if (typeof obj.showAcquired === "boolean") showAcquired = obj.showAcquired;
     if (typeof obj.showFiveStar === "boolean") showFiveStar = obj.showFiveStar;
+    if (typeof obj.showAcquiredPage2 === "boolean")
+      showAcquiredPage2 = obj.showAcquiredPage2;
+    if (typeof obj.showFiveStarPage2 === "boolean")
+      showFiveStarPage2 = obj.showFiveStarPage2;
     if (Array.isArray(obj.creatures)) {
       obj.creatures.forEach((stored) => {
         const target = creatures.find((c) => c.name === stored.name);
+        if (!target) return;
+        target.acquired = !!stored.acquired;
+        target.fiveStar = !!stored.fiveStar;
+      });
+    }
+    if (Array.isArray(obj.page2)) {
+      obj.page2.forEach((stored) => {
+        const target = page2Creatures.find((c) => c.name === stored.name);
         if (!target) return;
         target.acquired = !!stored.acquired;
         target.fiveStar = !!stored.fiveStar;
@@ -282,6 +490,27 @@ function updateCounters(shownList) {
   displayCountEl.textContent = `表示：${shownList.length}`;
   acquiredCountEl.textContent = `獲得：${creatures.filter((c) => c.acquired).length}`;
   star5CountEl.textContent = `★5：${creatures.filter((c) => c.fiveStar).length}`;
+}
+
+function updateCountersPage2(shownList) {
+  if (!totalCountPage2El) return;
+  totalCountPage2El.textContent = `全件：${page2Creatures.length}`;
+  displayCountPage2El.textContent = `表示：${shownList.length}`;
+  acquiredCountPage2El.textContent = `獲得：${page2Creatures.filter((c) => c.acquired).length}`;
+  star5CountPage2El.textContent = `★5：${page2Creatures.filter((c) => c.fiveStar).length}`;
+}
+
+function updateToggleButtonsPage2() {
+  if (!acquiredTogglePage2) return;
+  acquiredTogglePage2.classList.toggle("active", showAcquiredPage2);
+  acquiredTogglePage2.setAttribute(
+    "aria-pressed",
+    showAcquiredPage2.toString(),
+  );
+  acquiredTogglePage2.textContent = `獲得 ${showAcquiredPage2 ? "ON" : "OFF"}`;
+  star5TogglePage2.classList.toggle("active", showFiveStarPage2);
+  star5TogglePage2.setAttribute("aria-pressed", showFiveStarPage2.toString());
+  star5TogglePage2.textContent = `★5 ${showFiveStarPage2 ? "ON" : "OFF"}`;
 }
 
 acquiredToggle.addEventListener("click", () => {
@@ -467,19 +696,51 @@ function renderList(list, userLevel) {
   }
 
   // シーズン値ごとにグループ化（フェス → シーズン → 通常 → その他イベントの順）
+  const currentSeasonFilter = seasonFilter?.value || "";
+  const showMultiInNormal = currentSeasonFilter === "normal";
   const festivalSeasonValues = [
     ...new Set(
-      list.filter((c) => isFestivalSeason(c.season)).map((c) => c.season),
+      list
+        .filter(
+          (c) =>
+            isFestivalSeason(c.season) &&
+            !(showMultiInNormal && isMultiSeasonNormal(c.season)),
+        )
+        .map((c) => getPrimarySeasonValue(c.season)),
     ),
   ];
   const regularSeasonValues = [
     ...new Set(
-      list.filter((c) => isRegularSeason(c.season)).map((c) => c.season),
+      list
+        .filter(
+          (c) =>
+            isRegularSeason(c.season) &&
+            !(showMultiInNormal && isMultiSeasonNormal(c.season)),
+        )
+        .map((c) => getPrimarySeasonValue(c.season)),
     ),
   ];
-  const normalGroup = list.filter((c) => c.season === "normal");
+  // 通常グループ：通常フィルター時はisMultiSeasonNormalをlv1末尾に追加
+  let normalGroup;
+  if (showMultiInNormal) {
+    const pureNormal = list.filter((c) => c.season === "normal");
+    const multiNormal = list.filter((c) => isMultiSeasonNormal(c.season));
+    const lv1Items = pureNormal.filter((c) => c.level === 1);
+    const otherItems = pureNormal.filter((c) => c.level !== 1);
+    normalGroup = [...lv1Items, ...multiNormal, ...otherItems];
+  } else {
+    normalGroup = list.filter((c) => c.season === "normal");
+  }
   const otherEventSeasonValues = [
-    ...new Set(list.filter((c) => isOtherEvent(c.season)).map((c) => c.season)),
+    ...new Set(
+      list
+        .filter(
+          (c) =>
+            isOtherEvent(c.season) &&
+            !(showMultiInNormal && isMultiSeasonNormal(c.season)),
+        )
+        .map((c) => getPrimarySeasonValue(c.season)),
+    ),
   ];
 
   // 各趣味で★2換算売値が最高のカードを特定
@@ -496,13 +757,18 @@ function renderList(list, userLevel) {
   };
   const topPriceNames = new Set();
   RANKED_HOBBIES.forEach((hobby) => {
-    const hobbyItems = list.filter((c) => c.hobby === hobby && c.level <= userLevel);
+    const hobbyItems = list.filter(
+      (c) => c.hobby === hobby && c.level <= userLevel,
+    );
     if (hobbyItems.length === 0) return;
     let topPrice = -1;
     let topName = null;
     hobbyItems.forEach((c) => {
       const p = _getStar2DisplayPrice(c);
-      if (p > topPrice) { topPrice = p; topName = c.name; }
+      if (p > topPrice) {
+        topPrice = p;
+        topName = c.name;
+      }
     });
     if (topName) topPriceNames.add(topName);
   });
@@ -610,7 +876,10 @@ function renderList(list, userLevel) {
 
         const price = original > 0 ? original : calculatedPrice;
         const tc = originalTc > 0 ? originalTc : calculatedTc;
-        const showTc = c.season !== "normal" && !isOtherEvent(c.season);
+        const showTc =
+          c.season !== "normal" &&
+          !isOtherEvent(c.season) &&
+          !isMultiSeasonNormal(c.season);
         return `
       <div class="rarity-block">
         <span class="badge">★${star} 売値：${price}G${showTc ? ` / TC：${tc}C` : ""}</span>
@@ -626,7 +895,7 @@ function renderList(list, userLevel) {
         <div class="card-inner">
           <div class="card-front ${cardClass}">
             ${placeBackgroundMarkup}
-            ${c.img ? `<img class="card-img" src="${c.img}" alt="${c.name}">` : ""}
+            ${c.img ? `<img class="card-img" src="${c.img}" alt="${c.name}" loading="eager">` : ""}
             <div class="card-header">
               <span class="card-name">${c.name}</span>
               <span class="card-category">（${c.hobby}）<span class="card-level">Lv.${c.level}</span></span>
@@ -653,21 +922,47 @@ function renderList(list, userLevel) {
   let html = "";
 
   festivalSeasonValues.forEach((season) => {
-    const group = list.filter((c) => c.season === season);
+    const group = list.filter(
+      (c) => getPrimarySeasonValue(c.season) === season,
+    );
     const label = SEASON_LABELS[season] || season;
     html += `<div class="creature-group"><h2>${label}</h2><div class="creature-group-content">${group.map(generateCard).join("")}</div></div>`;
   });
 
   regularSeasonValues.forEach((season) => {
-    const group = list.filter((c) => c.season === season);
+    const group = list.filter(
+      (c) => getPrimarySeasonValue(c.season) === season,
+    );
     const label = SEASON_LABELS[season] || season;
     html += `<div class="creature-group"><h2>${label}</h2><div class="creature-group-content">${group.map(generateCard).join("")}</div></div>`;
   });
 
   otherEventSeasonValues.forEach((season) => {
-    const group = list.filter((c) => c.season === season);
+    const group = list.filter(
+      (c) => getPrimarySeasonValue(c.season) === season,
+    );
     const label = SEASON_LABELS[season] || season;
-    html += `<div class="creature-group"><h2>${label}</h2><div class="creature-group-content">${group.map(generateCard).join("")}</div></div>`;
+    const evName = eventnameFilter.value;
+    let inner = "";
+    if (evName) {
+      // 特定イベント選択時
+      inner = `<p class="season-event-sub">${evName}</p><div class="creature-group-content">${group.map(generateCard).join("")}</div>`;
+    } else {
+      // すべて：イベント名ごとにサブタイトルで分割
+      const eventNames = [
+        ...new Set(group.map((c) => c.eventname).filter(Boolean)),
+      ];
+      const noEventItems = group.filter((c) => !c.eventname);
+      eventNames.forEach((en) => {
+        const sub = group.filter((c) => c.eventname === en);
+        inner += `<p class="season-event-sub">${en}</p><div class="creature-group-content">${sub.map(generateCard).join("")}</div>`;
+      });
+      if (noEventItems.length > 0) {
+        inner += `<div class="creature-group-content">${noEventItems.map(generateCard).join("")}</div>`;
+      }
+    }
+    if (inner)
+      html += `<div class="creature-group"><h2>${label}</h2>${inner}</div>`;
   });
 
   if (normalGroup.length > 0) {
@@ -700,20 +995,57 @@ function getPage2SortValue(item, sortKey) {
   return item.level ?? Number.MAX_SAFE_INTEGER;
 }
 
-const INGREDIENT_IMAGE_FOLDERS = [
-  "img/store-ingredient",
-  "img/gardening",
-  "img/cooking",
-  "img/fish",
-  "img/insect",
-  "img/bird",
-];
+// 食材名 → 画像フォルダの対応表（404を出さずに直接解決するため事前構築）
+const INGREDIENT_IMAGE_MAP = (() => {
+  const map = new Map();
+  const add = (folder, arr) => {
+    (arr || []).forEach((c) => {
+      if (c.name) map.set(c.name, folder);
+    });
+  };
+  add("img/fish", fishingCreatures);
+  add("img/insect", insectCreatures);
+  add("img/bird", birdCreatures);
+  add("img/store-ingredient", storeIngredientCreatures);
+  // page2Creatures は hobby 配列で判定
+  ([...page2Creatures, ...otherEventPage2Creatures] || []).forEach((c) => {
+    if (!c.name) return;
+    const hobbies = Array.isArray(c.hobby) ? c.hobby : [c.hobby];
+    if (hobbies.includes("園芸")) map.set(c.name, "img/gardening");
+    else if (hobbies.includes("料理")) map.set(c.name, "img/cooking");
+  });
+  // データ配列に存在しない汎用食材プレースホルダー
+  const overrides = {
+    野菜: "img/gardening",
+    小麦: "img/gardening",
+    魚: "img/fish",
+    果物: "img/store-ingredient",
+    肉: "img/store-ingredient",
+    キノコ: "img/store-ingredient",
+    ジャム: "img/cooking",
+    海の魚: "img/fish",
+  };
+  Object.entries(overrides).forEach(([name, folder]) => map.set(name, folder));
+  return map;
+})();
 
 function buildIngredientImageCandidates(ingredientName) {
+  const folder = INGREDIENT_IMAGE_MAP.get(ingredientName);
   const encodedName = encodeURIComponent(ingredientName);
-  return INGREDIENT_IMAGE_FOLDERS.map(
-    (folder) => `${folder}/${encodedName}.png`,
-  );
+  if (folder) {
+    // 対応フォルダが確定している場合は1候補のみ（404なし）
+    return [`${folder}/${encodedName}.png`];
+  }
+  // 不明な食材は全フォルダをフォールバック候補として返す
+  const INGREDIENT_IMAGE_FOLDERS = [
+    "img/store-ingredient",
+    "img/fish",
+    "img/gardening",
+    "img/insect",
+    "img/bird",
+    "img/cooking",
+  ];
+  return INGREDIENT_IMAGE_FOLDERS.map((f) => `${f}/${encodedName}.png`);
 }
 
 function renderFoodItemsWithImages(foodItems = []) {
@@ -725,7 +1057,7 @@ function renderFoodItemsWithImages(foodItems = []) {
       const fallbackData = encodeURIComponent(JSON.stringify(candidates));
       return `
         <span class="food-chip">
-          <img class="food-chip-img" src="${candidates[0]}" alt="${foodName}" data-fallbacks="${fallbackData}" data-fallback-index="0" onerror="switchIngredientImageSource(this)">
+          <img class="food-chip-img" src="${candidates[0]}" alt="${foodName}" data-fallbacks="${fallbackData}" data-fallback-index="0" loading="eager" onerror="switchIngredientImageSource(this)">
           <span class="food-chip-text">${foodName}</span>
         </span>
       `;
@@ -904,7 +1236,45 @@ function renderPage2List(targetEl, list, userLevel) {
     return;
   }
 
+  // 趣味カテゴリ × シーズングループごとに最高売値アイテムを特定
+  const _getPage2Category = (item) => {
+    if (isPage2Gardening(item)) return "gardening";
+    if (isPage2StoreIngredient(item)) return "store";
+    return "cooking";
+  };
+  const _getPage2SellForRank = (item) => {
+    if (isPage2StoreIngredient(item)) return item.price?.sell ?? 0;
+    if (!Array.isArray(item.rarityData) || item.rarityData.length === 0)
+      return 0;
+    const s1 = item.rarityData.find((r) => r.star === 1);
+    return s1?.price ?? 0;
+  };
+  const topPriceNamesP2 = new Set();
+  const _p2Groups = new Map();
+  list.forEach((item) => {
+    const cat = _getPage2Category(item);
+    const season = getPrimarySeasonValue(item.season);
+    const key = `${cat}::${season}`;
+    if (!_p2Groups.has(key)) _p2Groups.set(key, []);
+    _p2Groups.get(key).push(item);
+  });
+  _p2Groups.forEach((items) => {
+    const eligible = items.filter((item) => userLevel >= (item.level ?? 1));
+    if (eligible.length === 0) return;
+    let topPrice = -1;
+    let topName = null;
+    eligible.forEach((item) => {
+      const p = _getPage2SellForRank(item);
+      if (p > topPrice) {
+        topPrice = p;
+        topName = item.name;
+      }
+    });
+    if (topName) topPriceNamesP2.add(topName);
+  });
+
   const generateItemCard = (item) => {
+    const isTopPrice = topPriceNamesP2.has(item.name);
     const cardClass = getPage2CardClass(item, userLevel);
     const metaLines = [];
     const isStoreIngredient = isPage2StoreIngredient(item);
@@ -942,7 +1312,9 @@ function renderPage2List(targetEl, list, userLevel) {
               const price = getRarityPriceLikeFishing(item, star);
               const tc = getRarityTcLikeFishing(item, star);
               const showTc =
-                item.season !== "normal" && !isOtherEvent(item.season);
+                item.season !== "normal" &&
+                !isOtherEvent(item.season) &&
+                !isMultiSeasonNormal(item.season);
               return `
       <div class="rarity-block">
         <span class="badge">★${star} 売値：${price}G${showTc ? ` / TC：${tc}C` : ""}</span>
@@ -953,17 +1325,21 @@ function renderPage2List(targetEl, list, userLevel) {
         : '<div class="note">売値データなし</div>';
 
     return `
-        <article class="card card-flip" role="button" tabindex="0" aria-label="${item.name}の詳細カードを裏返す">
+        <article class="card card-flip${isTopPrice ? " card-top-price" : ""}" role="button" tabindex="0" aria-label="${item.name}の詳細カードを裏返す">
           <div class="card-inner">
             <div class="card-front ${cardClass}">
               ${cookingWagonMarkup}
-              ${item.img ? `<img class="card-img" src="${item.img}" alt="${item.name}">` : ""}
+              ${item.img ? `<img class="card-img" src="${item.img}" alt="${item.name}" loading="eager">` : ""}
               <div class="card-header">
                 <span class="card-name">${item.name}</span>
                 <span class="card-category">（${formatPage2HobbyLabel(item)}）<span class="card-level">Lv.${item.level}</span></span>
               </div>
               ${metaLines.length ? `<div class="meta">${metaLines.join("<br>")}</div>` : ""}
               ${foodItemsMarkup}
+              <div class="card-control-row">
+                <label><input type="checkbox" class="card-acquired-checkbox-p2" data-name="${item.name}" ${item.acquired ? "checked" : ""} /> 獲得</label>
+                <label><input type="checkbox" class="card-star5-checkbox-p2" data-name="${item.name}" ${item.fiveStar ? "checked" : ""} /> ★5</label>
+              </div>
             </div>
             <div class="card-back ${cardClass}">
               ${cookingWagonMarkup}
@@ -1002,39 +1378,123 @@ function renderPage2List(targetEl, list, userLevel) {
   };
 
   // シーズン値ごとにグループ化（フェス → シーズン → その他イベント → 通常 の順）
+  const currentSeasonFilterP2 = seasonFilterPage2?.value || "";
+  const showMultiInNormalP2 = currentSeasonFilterP2 === "normal";
   const festivalSeasonValues = [
     ...new Set(
-      list.filter((c) => isFestivalSeason(c.season)).map((c) => c.season),
+      list
+        .filter(
+          (c) =>
+            isFestivalSeason(c.season) &&
+            !(showMultiInNormalP2 && isMultiSeasonNormal(c.season)),
+        )
+        .map((c) => getPrimarySeasonValue(c.season)),
     ),
   ];
   const regularSeasonValues = [
     ...new Set(
-      list.filter((c) => isRegularSeason(c.season)).map((c) => c.season),
+      list
+        .filter(
+          (c) =>
+            isRegularSeason(c.season) &&
+            !(showMultiInNormalP2 && isMultiSeasonNormal(c.season)),
+        )
+        .map((c) => getPrimarySeasonValue(c.season)),
     ),
   ];
-  const normalGroup = list.filter((c) => c.season === "normal");
+  // 通常グループ：通常フィルター時はisMultiSeasonNormalをlv1末尾に追加
+  let normalGroup;
+  if (showMultiInNormalP2) {
+    const pureNormal = list.filter((c) => c.season === "normal");
+    const multiNormal = list.filter((c) => isMultiSeasonNormal(c.season));
+    const lv1Items = pureNormal.filter((c) => c.level === 1);
+    const otherItems = pureNormal.filter((c) => c.level !== 1);
+    normalGroup = [...lv1Items, ...multiNormal, ...otherItems];
+  } else {
+    normalGroup = list.filter((c) => c.season === "normal");
+  }
   const otherEventSeasonValues = [
-    ...new Set(list.filter((c) => isOtherEvent(c.season)).map((c) => c.season)),
+    ...new Set(
+      list
+        .filter(
+          (c) =>
+            isOtherEvent(c.season) &&
+            !(showMultiInNormalP2 && isMultiSeasonNormal(c.season)),
+        )
+        .map((c) => getPrimarySeasonValue(c.season)),
+    ),
   ];
 
   let html = "";
 
   festivalSeasonValues.forEach((season) => {
-    const group = list.filter((c) => c.season === season);
+    const group = list.filter(
+      (c) => getPrimarySeasonValue(c.season) === season,
+    );
     const label = SEASON_LABELS[season] || season;
     html += renderSeasonGroup(label, group);
   });
 
   regularSeasonValues.forEach((season) => {
-    const group = list.filter((c) => c.season === season);
+    const group = list.filter(
+      (c) => getPrimarySeasonValue(c.season) === season,
+    );
     const label = SEASON_LABELS[season] || season;
     html += renderSeasonGroup(label, group);
   });
 
   otherEventSeasonValues.forEach((season) => {
-    const group = list.filter((c) => c.season === season);
+    const group = list.filter(
+      (c) => getPrimarySeasonValue(c.season) === season,
+    );
     const label = SEASON_LABELS[season] || season;
-    html += renderSeasonGroup(label, group);
+    const evName = eventnameFilterPage2.value;
+
+    const buildCategoryParts = (items, subTitle) => {
+      const g = renderCategoryGroup("園芸", items.filter(isPage2Gardening));
+      const c = renderCategoryGroup("料理", items.filter(isPage2Cooking));
+      const s = renderCategoryGroup(
+        "採取・販売食材",
+        items.filter(isPage2StoreIngredient),
+      );
+      const cats = [g, c, s].filter(Boolean).join("");
+      return cats ? `<p class="season-event-sub">${subTitle}</p>${cats}` : "";
+    };
+
+    let categoryParts = "";
+    if (evName) {
+      // 特定イベント選択時
+      categoryParts = buildCategoryParts(group, evName);
+    } else {
+      // すべて：イベント名ごとにサブタイトルで分割
+      const eventNames = [
+        ...new Set(group.map((c) => c.eventname).filter(Boolean)),
+      ];
+      const noEventItems = group.filter((c) => !c.eventname);
+      eventNames.forEach((en) => {
+        categoryParts += buildCategoryParts(
+          group.filter((c) => c.eventname === en),
+          en,
+        );
+      });
+      if (noEventItems.length > 0) {
+        const g = renderCategoryGroup(
+          "園芸",
+          noEventItems.filter(isPage2Gardening),
+        );
+        const c = renderCategoryGroup(
+          "料理",
+          noEventItems.filter(isPage2Cooking),
+        );
+        const s = renderCategoryGroup(
+          "採取・販売食材",
+          noEventItems.filter(isPage2StoreIngredient),
+        );
+        categoryParts += [g, c, s].filter(Boolean).join("");
+      }
+    }
+    if (categoryParts)
+      html += `<div class="creature-group"><h3>${label}</h3>${categoryParts}</div>`;
   });
 
   if (normalGroup.length > 0) {
@@ -1129,18 +1589,16 @@ function filterAndRenderPage2() {
   const secondary = hobbyModeFilterPage2.value;
 
   const filtered = page2Creatures.filter((item) => {
+    if (!showAcquiredPage2 && item.acquired) return false;
+    if (!showFiveStarPage2 && item.fiveStar) return false;
     if (keyword && !item.name.toLowerCase().includes(keyword)) return false;
 
     // シーズン/フェスフィルター（1つのセレクトボックスで一括管理）
     if (season) {
       if (season === "normal") {
-        // 通常アイテムのみ表示（シーズン限定なし）
-        if (item.season !== "normal" && isRegularSeason(item.season))
+        // 通常アイテムのみ表示（配列seasonの通常兼用アイテムも含む）
+        if (item.season !== "normal" && !isMultiSeasonNormal(item.season))
           return false;
-        // フェスは除外
-        if (isFestivalSeason(item.season)) return false;
-        // その他イベントは除外
-        if (isOtherEvent(item.season)) return false;
       } else if (season === "allseason") {
         // 全てのシーズン（normal を除く）
         if (
@@ -1153,19 +1611,28 @@ function filterAndRenderPage2() {
         // 全てのフェスを表示
         if (!isFestivalSeason(item.season)) return false;
       } else if (season === "allotherevent") {
-        // 全てのその他イベントを表示
-        if (!isOtherEvent(item.season)) return false;
+        // 全てのその他イベント + 通常も表示
+        if (!isOtherEvent(item.season) && item.season !== "normal")
+          return false;
       } else if (isRegularSeason(season)) {
-        // 特定シーズン（snowseason など）+ 通常も表示
-        if (item.season !== season && item.season !== "normal") return false;
+        // 特定シーズン（snowseason など）+ 通常も表示（配列seasonも対応）
+        const primarySeason = getPrimarySeasonValue(item.season);
+        if (primarySeason !== season && item.season !== "normal") return false;
       } else if (isFestivalSeason(season)) {
         // 特定フェス（dreamlightfes など）+ 通常も表示
-        if (item.season !== season && item.season !== "normal") return false;
+        const primarySeason = getPrimarySeasonValue(item.season);
+        if (primarySeason !== season && item.season !== "normal") return false;
       } else if (isOtherEvent(season)) {
-        // 特定その他イベント + 通常も表示
-        if (item.season !== season && item.season !== "normal") return false;
+        // その他イベント + 通常も表示
+        if (!isOtherEvent(item.season) && item.season !== "normal")
+          return false;
       }
     }
+
+    // eventnameフィルター（常時適用）
+    const evName = eventnameFilterPage2.value;
+    if (evName && isOtherEvent(item.season) && item.eventname !== evName)
+      return false;
 
     if (primary === "園芸" && !isPage2Gardening(item)) return false;
     if (primary === "料理" && !isPage2Cooking(item)) return false;
@@ -1178,6 +1645,16 @@ function filterAndRenderPage2() {
     return true;
   });
 
+  // 通常アイテムを末尾に移動（シーズン/イベント選択時）
+  const evNameSortP2 = eventnameFilterPage2.value;
+  if ((season && season !== "normal") || evNameSortP2) {
+    filtered.sort((a, b) => {
+      const aN = a.season === "normal" ? 1 : 0;
+      const bN = b.season === "normal" ? 1 : 0;
+      return aN - bN;
+    });
+  }
+
   const sorted = [...filtered].sort((a, b) => {
     const diff = getPage2SortValue(a, sortKey) - getPage2SortValue(b, sortKey);
     if (diff !== 0) return diff;
@@ -1185,6 +1662,7 @@ function filterAndRenderPage2() {
   });
 
   renderPage2List(resultPage2, sorted, userLevel);
+  updateCountersPage2(sorted);
 }
 
 function initPage2() {
@@ -1201,7 +1679,31 @@ function initPage2() {
   }
 
   userLevelPage2Input.addEventListener("change", filterAndRenderPage2);
-  seasonFilterPage2.addEventListener("change", filterAndRenderPage2);
+
+  if (acquiredTogglePage2) {
+    acquiredTogglePage2.addEventListener("click", () => {
+      showAcquiredPage2 = !showAcquiredPage2;
+      if (!showAcquiredPage2) showFiveStarPage2 = false;
+      updateToggleButtonsPage2();
+      saveState();
+      filterAndRenderPage2();
+    });
+    star5TogglePage2.addEventListener("click", () => {
+      showFiveStarPage2 = !showFiveStarPage2;
+      if (showFiveStarPage2 && !showAcquiredPage2) showAcquiredPage2 = true;
+      updateToggleButtonsPage2();
+      saveState();
+      filterAndRenderPage2();
+    });
+    updateToggleButtonsPage2();
+  }
+  seasonFilterPage2.addEventListener("change", () => {
+    const isOther = seasonFilterPage2.value === "otherevent";
+    eventnameFilterPage2.style.visibility = isOther ? "visible" : "hidden";
+    if (!isOther) eventnameFilterPage2.value = "";
+    filterAndRenderPage2();
+  });
+  eventnameFilterPage2.addEventListener("change", filterAndRenderPage2);
   sortPage2Select.addEventListener("change", filterAndRenderPage2);
   searchInputPage2.addEventListener("input", filterAndRenderPage2);
   hobbyFilterPage2.addEventListener("change", () => {
@@ -1212,6 +1714,33 @@ function initPage2() {
 
   updatePage2SubFilterOptions();
   filterAndRenderPage2();
+
+  resultPage2.addEventListener("change", (e) => {
+    const target = e.target;
+    const itemName = target.dataset.name;
+    if (!itemName) return;
+    const item = page2Creatures.find((c) => c.name === itemName);
+    if (!item) return;
+    const card = target.closest(".card");
+    const acq = card?.querySelector(".card-acquired-checkbox-p2");
+    const s5 = card?.querySelector(".card-star5-checkbox-p2");
+    if (target.classList.contains("card-acquired-checkbox-p2")) {
+      item.acquired = target.checked;
+      if (!target.checked) {
+        item.fiveStar = false;
+        if (s5) s5.checked = false;
+      }
+    }
+    if (target.classList.contains("card-star5-checkbox-p2")) {
+      item.fiveStar = target.checked;
+      if (target.checked) {
+        item.acquired = true;
+        if (acq) acq.checked = true;
+      }
+    }
+    saveState();
+    updateCountersPage2(Array.from(resultPage2.querySelectorAll(".card")));
+  });
 }
 
 // =======================
@@ -1223,10 +1752,14 @@ const catSpecialItems = [
   { name: "キャットフード", img: "img/キャットフード.png" },
   { name: "動物汎用エサ", img: "img/動物汎用エサ.png" },
 ];
-const normalFishCandidates = [
-  ...catSpecialItems,
-  ...fishingCreatures.filter((fish) => (fish.season || "normal") === "normal"),
-];
+const normalFishCandidates = catFishList
+  .map((name) => {
+    const special = catSpecialItems.find((s) => s.name === name);
+    if (special) return special;
+    const fish = fishingCreatures.find((f) => f.name === name);
+    return fish || null;
+  })
+  .filter(Boolean);
 const normalFishNameSet = new Set(
   normalFishCandidates.map((fish) => fish.name),
 );
@@ -1366,23 +1899,58 @@ function renderPage3FishList() {
     ? normalFishCandidates.filter((fish) => excludedSet.has(fish.name))
     : normalFishCandidates.filter((fish) => !excludedSet.has(fish.name));
 
-  if (catVisibleCount) {
-    const label = shouldShowExcludedOnly ? "好物じゃない" : "候補";
-    catVisibleCount.textContent = `${label}：${visibleFish.length}匹`;
+  const keyword = catSearchInput?.value.trim().toLowerCase() || "";
+  const catP1 = catPlace1Filter?.value || "";
+  const catP2 = catPlace2Filter?.value || "";
+  const catTime = catTimeFilter?.value || "";
+  const catWeather = catWeatherFilter?.value || "";
+
+  let filteredFish = visibleFish;
+  if (keyword)
+    filteredFish = filteredFish.filter((fish) =>
+      fish.name.toLowerCase().includes(keyword),
+    );
+
+  if (catP1 || catP2 || catTime || catWeather) {
+    filteredFish = filteredFish.filter((fish) => {
+      const fd = fishingCreatures.find((f) => f.name === fish.name);
+      if (!fd) return false;
+      if (catP1 && !fd.places1?.includes(catP1)) return false;
+      if (catP2 && !fd.places2?.includes(catP2)) return false;
+      if (catTime && !fd.times?.includes(catTime)) return false;
+      if (catWeather) {
+        const w = fd.weathers || [];
+        if (catWeather === "rainbow_only") {
+          if (w.length !== 1 || w[0] !== "虹") return false;
+        } else if (catWeather === "exclude_sunny") {
+          if (w.includes("晴れ")) return false;
+        } else if (catWeather === "exclude_rain") {
+          if (w.includes("雨(雪)")) return false;
+        }
+      }
+      return true;
+    });
   }
 
-  if (visibleFish.length === 0) {
+  if (catVisibleCount) {
+    const label = shouldShowExcludedOnly ? "好物じゃない" : "候補";
+    catVisibleCount.textContent = `${label}：${filteredFish.length}匹`;
+  }
+
+  if (filteredFish.length === 0) {
     resultPage3.innerHTML =
-      '<p class="cat-empty">表示できる魚がありません。リセットで戻せます。</p>';
+      '<p class="cat-empty">表示できる魚がありません。</p>';
     return;
   }
 
-  resultPage3.innerHTML = visibleFish
+  resultPage3.innerHTML = filteredFish
     .map((fish) => {
       const isFavorite = favoriteSet.has(fish.name);
       const isExcluded = excludedSet.has(fish.name);
+      const hasFishData = fishingCreatures.some((f) => f.name === fish.name);
       return `
       <article class="cat-fish-card ${isFavorite ? "cat-fish-card-favorite" : ""}">
+        ${hasFishData ? '<span class="cat-fish-tap-badge">Tap</span>' : ""}
         ${fish.img ? `<img class="cat-fish-img" src="${fish.img}" alt="${fish.name}" loading="lazy" onerror="this.remove()">` : ""}
         <div class="cat-fish-name">${fish.name}</div>
         ${
@@ -1409,6 +1977,77 @@ function renderPage3FishList() {
     `;
     })
     .join("");
+}
+
+function showFishLocationPopup(fishName, places1, places2, times, weathers) {
+  const existing = document.getElementById("fishLocationOverlay");
+  if (existing) existing.remove();
+
+  const tagsHtml = (items) =>
+    items.map((p) => `<span class="fish-location-tag">${p}</span>`).join("");
+
+  const formatTime = (t) => {
+    switch (t) {
+      case "00-06":
+        return "00:00〜06:00";
+      case "06-12":
+        return "06:00〜12:00";
+      case "12-18":
+        return "12:00〜18:00";
+      case "18-00":
+        return "18:00〜00:00";
+      default:
+        return t;
+    }
+  };
+
+  const timesSection =
+    times && times.length
+      ? `<div class="fish-location-section">
+        <div class="fish-location-label">時間</div>
+        <div class="fish-location-tags">${tagsHtml(times.map(formatTime))}</div>
+      </div>`
+      : "";
+
+  const weathersSection =
+    weathers && weathers.length
+      ? `<div class="fish-location-section">
+        <div class="fish-location-label">天候</div>
+        <div class="fish-location-tags">${tagsHtml(weathers)}</div>
+      </div>`
+      : "";
+
+  const overlay = document.createElement("div");
+  overlay.id = "fishLocationOverlay";
+  overlay.className = "fish-location-overlay";
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.innerHTML = `
+    <div class="fish-location-modal">
+      <div class="fish-location-title">${fishName}</div>
+      <div class="fish-location-section">
+        <div class="fish-location-label">場所1</div>
+        <div class="fish-location-tags">${tagsHtml(places1)}</div>
+      </div>
+      <div class="fish-location-section">
+        <div class="fish-location-label">場所2</div>
+        <div class="fish-location-tags">${tagsHtml(places2)}</div>
+      </div>
+      ${timesSection}
+      ${weathersSection}
+      <button class="fish-location-close" type="button">閉じる</button>
+    </div>
+  `;
+
+  const close = () => overlay.remove();
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) close();
+  });
+  overlay
+    .querySelector(".fish-location-close")
+    .addEventListener("click", close);
+
+  document.body.appendChild(overlay);
 }
 
 function initPage3() {
@@ -1449,12 +2088,33 @@ function initPage3() {
     savePage3State();
   });
 
+  if (catSearchInput) {
+    catSearchInput.addEventListener("input", renderPage3FishList);
+  }
+
   catResetBtn.addEventListener("click", () => {
     const current = getActiveCatState();
     current.excludedFishNames = [];
     current.favoriteFishNames = [];
     renderPage3FishList();
     savePage3State();
+  });
+
+  resultPage3.addEventListener("click", (event) => {
+    if (event.target.closest("label") || event.target.closest("input")) return;
+    const card = event.target.closest(".cat-fish-card");
+    if (!card) return;
+    const fishName = card.querySelector(".cat-fish-name")?.textContent?.trim();
+    if (!fishName) return;
+    const fishData = fishingCreatures.find((f) => f.name === fishName);
+    if (!fishData || !fishData.places1 || !fishData.places2) return;
+    showFishLocationPopup(
+      fishName,
+      fishData.places1,
+      fishData.places2,
+      fishData.times,
+      fishData.weathers,
+    );
   });
 
   resultPage3.addEventListener("change", (event) => {
@@ -1518,7 +2178,6 @@ function initPage3() {
   place2Filter,
   timeFilter,
   weatherFilter,
-  weatherMode,
 ].forEach((el) =>
   el.addEventListener("change", () => {
     if (el === hobbyFilter) {
@@ -1526,10 +2185,15 @@ function initPage3() {
       updatePlace2Options();
     } else if (el === place1Filter) {
       updatePlace2Options();
+    } else if (el === seasonFilter) {
+      const isOther = seasonFilter.value === "otherevent";
+      eventnameFilter.style.visibility = isOther ? "visible" : "hidden";
+      if (!isOther) eventnameFilter.value = "";
     }
     filterCreatures();
   }),
 );
+eventnameFilter.addEventListener("change", filterCreatures);
 searchInput.addEventListener("input", filterCreatures);
 
 // =======================
@@ -1551,6 +2215,7 @@ function init() {
   loadState();
   saveState(); // 移行後は新キーを確実に更新
   updateToggleButtons();
+  updateToggleButtonsPage2();
   normalizeBirdRarityData();
 
   // hobby / time / weather
@@ -1562,15 +2227,12 @@ function init() {
     hobbyFilter.appendChild(opt);
   });
 
-  // 時間・天候の先頭に「すべて」を追加
+  // 時間の先頭に「すべて」を追加
   timeFilter.innerHTML = '<option value="">すべて</option>';
-  weatherFilter.innerHTML = '<option value="">すべて</option>';
 
   const times = new Set();
-  const weathers = new Set();
   creatures.forEach((c) => {
     c.times?.forEach((t) => times.add(t));
-    c.weathers?.forEach((w) => weathers.add(w));
   });
   Array.from(times)
     .sort()
@@ -1589,27 +2251,7 @@ function init() {
                 : t;
       timeFilter.appendChild(opt);
     });
-  // 天候の優先順
-  const priorityWeather = ["晴れ", "雨(雪)", "虹"];
-  const sortedWeathers = priorityWeather.filter((w) => weathers.has(w));
-  sortedWeathers.forEach((w) => {
-    const opt = document.createElement("option");
-    opt.value = w;
-    opt.textContent = w;
-    weatherFilter.appendChild(opt);
-  });
-
-  // weatherMode（ラベルは「を含む」）
-  [
-    ["any", "を含む"],
-    ["only", "のみ"],
-    ["exclude", "以外"],
-  ].forEach(([v, l]) => {
-    const opt = document.createElement("option");
-    opt.value = v;
-    opt.textContent = l;
-    weatherMode.appendChild(opt);
-  });
+  // 天候（固定選択肢のためHTML側に定義済み。動的構築不要）
 
   // シーズンとフェスの出現する values を収集
   const seasons = new Set(creatures.map((c) => c.season || "normal"));
@@ -1667,11 +2309,45 @@ function init() {
     seasonFilter.appendChild(opt);
   });
 
-  // 初期値をドリームライトフェスに設定
-  if (sortedFestivals.includes("dreamlightfes")) {
-    seasonFilter.value = "dreamlightfes";
+  // eventnameフィルター初期化
+  const page1OtherEventItems = creatures.filter((c) => isOtherEvent(c.season));
+  const page2OtherEventItems = page2Creatures.filter((item) =>
+    isOtherEvent(item.season),
+  );
+
+  const page1Eventnames = [
+    ...new Set(page1OtherEventItems.map((c) => c.eventname).filter(Boolean)),
+  ];
+  const page2Eventnames = [
+    ...new Set(
+      page2OtherEventItems.map((item) => item.eventname).filter(Boolean),
+    ),
+  ];
+
+  // page1: othereventがなければ選択肢も消しプルダウンは常に非表示
+  eventnameFilter.innerHTML = '<option value="">すべて</option>';
+  page1Eventnames.forEach((name) => {
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    eventnameFilter.appendChild(opt);
+  });
+  if (page1Eventnames.length === 0) {
+    eventnameFilter.style.visibility = "hidden";
+    // 「その他イベント」選択肢をseasonFilterから除去
+    Array.from(seasonFilter.options).forEach((opt) => {
+      if (opt.value === "otherevent") opt.remove();
+    });
   }
 
+  // page2: 通常通り
+  eventnameFilterPage2.innerHTML = '<option value="">すべて</option>';
+  page2Eventnames.forEach((name) => {
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    eventnameFilterPage2.appendChild(opt);
+  });
   // ページ2用シーズンフィルター初期化
   seasonFilterPage2.innerHTML = '<option value="">すべて</option>';
 
@@ -1696,16 +2372,161 @@ function init() {
     seasonFilterPage2.appendChild(opt);
   });
 
-  // 初期値をドリームライトフェスに設定
-  if (sortedFestivals.includes("dreamlightfes")) {
-    seasonFilterPage2.value = "dreamlightfes";
-  }
-
   updatePlace1Options();
   updatePlace2Options();
+  const hadSavedState = loadFilterState();
+
+  // 保存済み状態がない場合のみデフォルトシーズンを適用
+  if (!hadSavedState) {
+    if (sortedRegularSeasons.includes("normal")) {
+      seasonFilter.value = "normal";
+      eventnameFilter.style.visibility = "hidden";
+    }
+    if (page2Eventnames.includes("MALTESEコラボ")) {
+      seasonFilterPage2.value = "otherevent";
+      eventnameFilterPage2.value = "MALTESEコラボ";
+      eventnameFilterPage2.style.visibility = "visible";
+    } else if (sortedRegularSeasons.includes("normal")) {
+      seasonFilterPage2.value = "normal";
+      eventnameFilterPage2.style.visibility = "hidden";
+    }
+  }
+
   filterCreatures();
   initPage2();
+
+  // にゃんこフィルター選択肢を構築（釣りデータから）
+  if (catPlace1Filter && catPlace2Filter && catTimeFilter && catWeatherFilter) {
+    const catFishData = fishingCreatures.filter((f) =>
+      normalFishNameSet.has(f.name),
+    );
+
+    // 場所1
+    const catPlaces1 = new Set();
+    catFishData.forEach((f) => f.places1?.forEach((p) => catPlaces1.add(p)));
+    const priorityOrder = [
+      "森林",
+      "温泉山",
+      "花畑",
+      "漁村",
+      "中心街",
+      "郊外",
+      "ホーム",
+      "水辺",
+      "★特殊",
+    ];
+    priorityOrder
+      .filter((p) => catPlaces1.has(p))
+      .forEach((p) => {
+        const opt = document.createElement("option");
+        opt.value = p;
+        opt.textContent = p;
+        catPlace1Filter.appendChild(opt);
+      });
+
+    // 場所2（場所1連動は省略、全候補を表示）
+    const catPlaces2 = new Set();
+    catFishData.forEach((f) => f.places2?.forEach((p) => catPlaces2.add(p)));
+    const priorityOrder2 = [
+      "コジカ塔",
+      "不思議な松林",
+      "ジャンプステージ",
+      "森の島",
+      "遺跡",
+      "火山湖",
+      "温泉",
+      "石海岸の崖",
+      "クジラ山",
+      "風車の花畑",
+      "パープルビーチ",
+      "灯台",
+      "波止場",
+      "漁村広場",
+      "漁村東桟橋",
+      "巨木の川",
+      "静川",
+      "霞川",
+      "浅水川",
+      "郊外の湖",
+      "森の湖",
+      "温泉山の湖",
+      "草原の湖",
+      "東海",
+      "旧海",
+      "クジラ海",
+      "そよ風の海",
+      "海釣り",
+      "虫コイコイ",
+      "巣ごもり",
+      "虫寄せ装置",
+      "ブランクの頭",
+    ];
+    priorityOrder2
+      .filter((p) => catPlaces2.has(p))
+      .forEach((p) => {
+        const opt = document.createElement("option");
+        opt.value = p;
+        opt.textContent = p;
+        catPlace2Filter.appendChild(opt);
+      });
+
+    // 時間
+    const catTimes = new Set();
+    catFishData.forEach((f) => f.times?.forEach((t) => catTimes.add(t)));
+    Array.from(catTimes)
+      .sort()
+      .forEach((t) => {
+        const opt = document.createElement("option");
+        opt.value = t;
+        opt.textContent =
+          t === "00-06"
+            ? "00:00〜06:00"
+            : t === "06-12"
+              ? "06:00〜12:00"
+              : t === "12-18"
+                ? "12:00〜18:00"
+                : t === "18-00"
+                  ? "18:00〜00:00"
+                  : t;
+        catTimeFilter.appendChild(opt);
+      });
+
+    // 天候（固定選択肢のためHTML側に定義済み。動的構築不要）
+
+    // イベントリスナー
+    [catPlace1Filter, catPlace2Filter, catTimeFilter, catWeatherFilter].forEach(
+      (el) => {
+        el.addEventListener("change", renderPage3FishList);
+      },
+    );
+  }
+
   initPage3();
+
+  // 全フィルター変更時に自動保存
+  [
+    hobbyFilter,
+    userLevelInput,
+    seasonFilter,
+    eventnameFilter,
+    timeFilter,
+    place1Filter,
+    place2Filter,
+    weatherFilter,
+    hobbyFilterPage2,
+    hobbyModeFilterPage2,
+    userLevelPage2,
+    seasonFilterPage2,
+    eventnameFilterPage2,
+    sortPage2,
+  ].forEach((el) => el?.addEventListener("change", saveFilterState));
+  searchInput?.addEventListener("input", saveFilterState);
+  searchInputPage2?.addEventListener("input", saveFilterState);
+
+  // 検索リセットボタン
+  resetFilterBtn?.addEventListener("click", resetFiltersPage1);
+  resetFilterBtnPage2?.addEventListener("click", resetFiltersPage2);
+  resetFilterBtnCat?.addEventListener("click", resetFiltersCat);
 }
 
 // =======================

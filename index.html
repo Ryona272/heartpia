@@ -81,9 +81,17 @@
             placeholder="名前で検索…"
             aria-label="検索"
           />
+          <button id="resetFilterBtn" type="button" class="reset-filter-btn">検索リセット</button>
         </div>
 
         <section class="controls" aria-label="フィルター">
+          <div>
+            <label for="hobbyFilter">趣味：</label>
+            <select id="hobbyFilter">
+              <option value="">すべて</option>
+            </select>
+          </div>
+
           <div>
             <label for="userLevel">趣味レベル：</label>
             <select id="userLevel">
@@ -100,21 +108,19 @@
             </select>
           </div>
 
+          <div id="eventnameFilterWrap" hidden style="display:none"></div>
+
           <div>
             <label for="seasonFilter">シーズン：</label>
             <select id="seasonFilter">
               <option value="">すべて</option>
             </select>
-          </div>
-
-          <div>
-            <label for="hobbyFilter">趣味：</label>
-            <select id="hobbyFilter">
+            <select id="eventnameFilter" aria-label="イベント絞り込み" style="visibility:hidden">
               <option value="">すべて</option>
             </select>
           </div>
 
-          <div>
+          <div class="controls-place-row">
             <label for="place1Filter">場所1：</label>
             <select id="place1Filter"></select>
           </div>
@@ -131,8 +137,12 @@
 
           <div>
             <label for="weatherFilter">天候：</label>
-            <select id="weatherFilter"></select>
-            <select id="weatherMode" aria-label="天候条件"></select>
+            <select id="weatherFilter">
+              <option value="">すべて</option>
+              <option value="rainbow_only">虹のみ</option>
+              <option value="exclude_sunny">晴れ以外</option>
+              <option value="exclude_rain">雨以外</option>
+            </select>
           </div>
         </section>
 
@@ -142,6 +152,25 @@
       <!-- ▼ 情報ページ -->
       <section id="page-info" class="page" aria-labelledby="info-title">
         <h2 id="info-title">ハートピアスローライフ 園芸・料理・販売食材図鑑</h2>
+
+        <div class="view-switch" role="toolbar" aria-label="表示切替">
+          <div class="view-buttons">
+            <button id="view1Page2" aria-pressed="false">1列</button>
+            <button id="view2Page2" class="active" aria-pressed="true">2列</button>
+          </div>
+          <div class="status-buttons" aria-label="表示切替フィルター">
+            <button id="acquiredTogglePage2" class="filter-toggle active" aria-pressed="true">獲得 ON</button>
+            <button id="star5TogglePage2" class="filter-toggle active" aria-pressed="true">★5 ON</button>
+          </div>
+        </div>
+
+        <div class="status-summary">
+          <span id="totalCountPage2">全件：0</span>
+          <span id="displayCountPage2">表示：0</span>
+          <span id="acquiredCountPage2">獲得：0</span>
+          <span id="star5CountPage2">★5：0</span>
+        </div>
+
         <div class="search-box">
           <input
             type="text"
@@ -149,9 +178,25 @@
             placeholder="名前で検索…"
             aria-label="ページ2検索"
           />
+          <button id="resetFilterBtnPage2" type="button" class="reset-filter-btn">検索リセット</button>
         </div>
 
         <section class="controls controls-page2" aria-label="ページ2フィルター">
+          <div>
+            <label for="hobbyFilterPage2">趣味：</label>
+            <select id="hobbyFilterPage2">
+              <option value="">すべて</option>
+              <option value="園芸">園芸</option>
+              <option value="料理">料理</option>
+              <option value="採取・販売">採取・販売</option>
+            </select>
+            <select id="hobbyModeFilterPage2" aria-label="表示種別">
+              <option value="">すべて</option>
+            </select>
+          </div>
+
+          <div id="eventnameFilterPage2Wrap" hidden style="display:none"></div>
+
           <div>
             <label for="userLevelPage2">趣味レベル：</label>
             <select id="userLevelPage2">
@@ -173,17 +218,7 @@
             <select id="seasonFilterPage2">
               <option value="">すべて</option>
             </select>
-          </div>
-
-          <div>
-            <label for="hobbyFilterPage2">表示：</label>
-            <select id="hobbyFilterPage2">
-              <option value="">すべて</option>
-              <option value="園芸">園芸</option>
-              <option value="料理">料理</option>
-              <option value="採取・販売">採取・販売</option>
-            </select>
-            <select id="hobbyModeFilterPage2" aria-label="表示種別">
+            <select id="eventnameFilterPage2" aria-label="イベント絞り込み" style="visibility:hidden">
               <option value="">すべて</option>
             </select>
           </div>
@@ -259,6 +294,40 @@
             <button id="catResetBtn" type="button">この猫をリセット</button>
             <span id="catVisibleCount">候補：0匹</span>
           </div>
+
+          <div class="cat-search-row">
+            <input
+              id="catSearchInput"
+              type="search"
+              placeholder="魚名で検索…"
+              aria-label="魚名で検索"
+            />
+            <button id="resetFilterBtnCat" type="button" class="reset-filter-btn">検索リセット</button>
+          </div>
+
+          <div class="controls cat-filter-controls">
+            <div class="controls-place-row">
+              <label for="catPlace1Filter">場所1：</label>
+              <select id="catPlace1Filter"><option value="">すべて</option></select>
+            </div>
+            <div>
+              <label for="catPlace2Filter">場所2：</label>
+              <select id="catPlace2Filter"><option value="">すべて</option></select>
+            </div>
+            <div>
+              <label for="catTimeFilter">時間：</label>
+              <select id="catTimeFilter"><option value="">すべて</option></select>
+            </div>
+            <div>
+              <label for="catWeatherFilter">天候：</label>
+              <select id="catWeatherFilter">
+                <option value="">すべて</option>
+                <option value="rainbow_only">虹のみ</option>
+                <option value="exclude_sunny">晴れ以外</option>
+                <option value="exclude_rain">雨以外</option>
+              </select>
+            </div>
+          </div>
         </section>
 
         <section
@@ -298,6 +367,8 @@
         そのた
       </button>
     </nav>
+
+    <button id="backToTop" aria-label="先頭に戻る" hidden>▲</button>
 
     <script>
       const assetVer = window.assetVer || Date.now();

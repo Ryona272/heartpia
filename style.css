@@ -20,6 +20,7 @@ html {
   -webkit-text-size-adjust: 100%;
   font-size: 16px;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 *,
 *::before,
@@ -65,6 +66,12 @@ body::before {
 }
 
 /* タブメニュー */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
 .nav-tabs {
   display: flex;
   background: var(--nav-bg);
@@ -92,6 +99,8 @@ body::before {
   text-align: center;
   color: #5f4a22;
   box-shadow: 0 2px 0 rgba(138, 110, 62, 0.25);
+  font-size: clamp(11px, 2.5vw, 16px);
+  white-space: nowrap;
 }
 
 .nav-tabs .tab:active {
@@ -278,6 +287,27 @@ body::before {
   flex-wrap: wrap;
 }
 
+.cat-search-row {
+  margin-top: 8px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#catSearchInput {
+  width: 100%;
+  max-width: 320px;
+  min-height: 38px;
+  border-radius: 9px;
+  border: 1px solid rgba(175, 148, 93, 0.45);
+  background: #fffef8;
+  color: #4b4027;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
 #catNameInput {
   min-height: 38px;
   border-radius: 9px;
@@ -320,6 +350,22 @@ body::before {
   flex-direction: column;
   gap: 6px;
   align-items: center;
+  position: relative;
+}
+
+.cat-fish-tap-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(192, 127, 53, 0.75);
+  border-radius: 999px;
+  padding: 1px 6px;
+  line-height: 1.4;
+  pointer-events: none;
+  letter-spacing: 0.04em;
 }
 
 .cat-fish-img {
@@ -389,6 +435,79 @@ body::before {
   color: #8b1a30;
 }
 
+/* 釣れる場所ポップアップ */
+.fish-location-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(46, 56, 64, 0.45);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.fish-location-modal {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg-paper);
+  border-radius: 18px 18px 0 0;
+  padding: 20px 20px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 -4px 24px var(--shadow);
+}
+
+.fish-location-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #4e3f1f;
+  text-align: center;
+}
+
+.fish-location-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fish-location-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #7a6030;
+  letter-spacing: 0.04em;
+}
+
+.fish-location-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.fish-location-tag {
+  background: #f4edd5;
+  border: 1px solid rgba(192, 127, 53, 0.4);
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-size: 0.8rem;
+  color: #5a3d10;
+  font-weight: 700;
+}
+
+.fish-location-close {
+  align-self: center;
+  margin-top: 4px;
+  padding: 8px 28px;
+  border-radius: 999px;
+  border: none;
+  background: var(--tab-active);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
 .cat-empty {
   margin: 0;
   color: #5e4e2d;
@@ -410,6 +529,9 @@ body::before {
 
 .search-box {
   margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 #searchInput,
@@ -420,6 +542,22 @@ body::before {
   border: 1px solid rgba(172, 146, 99, 0.4);
   background: #fffef8;
   font-size: 14px;
+}
+
+.reset-filter-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(172, 146, 99, 0.5);
+  background: #fffef8;
+  color: #6b5c3e;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.reset-filter-btn:hover {
+  background: #f5eed8;
 }
 
 #searchInput:focus,
@@ -433,13 +571,17 @@ button:focus-visible,
 
 .controls {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 10px;
   margin-bottom: 12px;
   padding: 10px;
   border-radius: 12px;
   border: 1px solid rgba(188, 161, 108, 0.3);
   background: rgba(255, 253, 245, 0.82);
+}
+
+.controls .controls-place-row {
+  grid-column-start: 1;
 }
 
 .controls label {
@@ -471,17 +613,36 @@ button:focus-visible,
 /* 結果（グリッド：デフォルト2列） */
 .result {
   display: grid;
-  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--gap);
   align-items: start;
+}
+
+/* Gridの子要素はデフォルトmin-width:autoではみ出すため0に */
+.result > *,
+.creature-group-content > * {
+  min-width: 0;
 }
 
 .result.one-column {
   grid-template-columns: 1fr;
 }
 
+.result.one-column .creature-group-content {
+  grid-template-columns: 1fr;
+}
+
+#resultPage2.one-column .creature-group-content {
+  grid-template-columns: 1fr;
+}
+
 .creature-group {
-  margin-bottom: 24px;
+  margin-bottom: 32px;
+  background: rgba(255, 253, 244, 0.7);
+  border: 1px solid rgba(193, 164, 101, 0.22);
+  border-radius: 12px;
+  padding: 14px 14px 16px;
+  box-shadow: 0 2px 8px rgba(46, 56, 64, 0.06);
 }
 
 .result > .creature-group {
@@ -489,25 +650,55 @@ button:focus-visible,
 }
 
 .creature-group h2 {
-  margin: 12px 0 8px;
-  padding-bottom: 8px;
-  font-size: 18px;
-  color: #333;
-  border-bottom: 2px solid var(--tab-active);
+  margin: 0 0 12px;
+  padding: 6px 10px 6px 12px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff9ee;
+  background: linear-gradient(90deg, var(--tab-active), #e8ad6a);
+  border-radius: 8px;
+  border: none;
+  letter-spacing: 0.04em;
+}
+
+.creature-group h3 {
+  margin: 0 0 12px;
+  padding: 5px 10px 5px 12px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff9ee;
+  background: linear-gradient(90deg, var(--tab-active), #e8ad6a);
+  border-radius: 8px;
+  letter-spacing: 0.04em;
+}
+
+.season-event-sub {
+  margin: 20px 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--tab-active);
+  padding: 3px 8px;
+  border-left: 3px solid var(--tab-active);
+  background: rgba(219, 151, 82, 0.08);
+  border-radius: 0 6px 6px 0;
+}
+
+.season-event-sub:first-of-type {
+  margin-top: 0;
 }
 
 .creature-group-content {
   display: grid;
-  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--gap);
   align-items: start;
 
   .page2-subgroup {
-    margin-top: 12px;
+    margin-top: 8px;
   }
 
   .page2-subgroup-title {
-    margin: 0 0 8px;
+    margin: 0 0 4px;
     font-size: 16px;
     color: #333;
   }
@@ -545,7 +736,6 @@ button:focus-visible,
 }
 
 .card-flip {
-  perspective: 1100px;
   cursor: pointer;
   position: relative;
 }
@@ -570,34 +760,27 @@ button:focus-visible,
   opacity: 0;
 }
 .card-inner {
-  position: relative;
-  -webkit-transform-style: preserve-3d;
+  display: grid;
+  grid-template-areas: "card";
   width: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.62s cubic-bezier(0.22, 0.62, 0.3, 1.03);
-  transition: transform 0.6s ease;
   border-radius: var(--radius);
 }
 
-/* 回転 */
+/* 回転なし：3D変換を廃止してクロスフェードに変更（全端末のぼやけ対策） */
 .card-flip.flipped .card-inner {
-  transform: rotateY(180deg);
+  /* 3D不使用 */
 }
 
-/* 表面・裏面 */
+/* 表面・裏面：同一グリッドセルに重ねる（absolute廃止→サブピクセルずれなし） */
 .card-front,
 .card-back {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  grid-area: card;
+  position: relative; /* card-place-bgのabsolute基準 */
   box-sizing: border-box;
-  position: relative;
   border-radius: var(--radius);
   background: var(--card-surface);
   padding: 12px;
   overflow: hidden;
-  box-shadow: 0 8px 24px var(--shadow);
   border: 1px solid rgba(173, 151, 104, 0.2);
   box-shadow: 0 6px 18px var(--shadow);
   flex-direction: column;
@@ -625,16 +808,25 @@ button:focus-visible,
   z-index: 0;
 }
 
-/* 裏面は回転させて重ねる */
+/* 裏面：通常は非表示 */
 .card-back {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  -webkit-transform: rotateY(180deg) translateZ(0);
-  transform: rotateY(180deg) translateZ(0);
-  transform: rotateY(180deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 表面だけフェードアウト。裏面は即表示でぼやけを防ぐ */
+.card-front {
+  transition: opacity 0.2s ease;
+}
+
+.card-flip.flipped .card-front {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.card-flip.flipped .card-back {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* 画像 */
@@ -675,18 +867,17 @@ button:focus-visible,
 .food-items {
   display: flex;
   gap: 4px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  overflow-y: hidden;
+  flex-wrap: wrap;
+  overflow: visible;
   min-width: 0;
-  padding-bottom: 2px;
 }
 
 .food-chip {
   position: relative;
-  flex: 0 0 auto;
-  width: 60px;
-  height: 60px;
+  flex: 1 1 52px;
+  min-width: 36px;
+  max-width: 64px;
+  aspect-ratio: 1;
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid rgba(0, 0, 0, 0.12);
@@ -785,7 +976,7 @@ button:focus-visible,
 }
 
 .card-flip.flipped .card-inner:hover {
-  transform: rotateY(180deg) translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
 
 .status-buttons {
@@ -1011,8 +1202,20 @@ button.is-pressed,
 /* レスポンシブ：スマホ中心（モバイルファースト調整） */
 @media (max-width: 600px) {
   body {
-    padding: 12px 12px 84px;
+    padding: 8px 8px 84px;
   } /* 下部ナビのスペース確保 */
+
+  #page-zukan,
+  #page-info,
+  #page-cat,
+  #page-settings {
+    padding: 10px;
+    overflow: hidden;
+  }
+
+  .view-buttons {
+    display: none;
+  }
 
   /* 上部ナビは隠して下部ナビを固定表示 */
   .top-nav {
@@ -1038,7 +1241,7 @@ button.is-pressed,
   .nav-tabs .tab {
     flex: 1;
     padding: 12px 6px;
-    font-size: 14px;
+    font-size: clamp(10px, 3.5vw, 14px);
     border-radius: 10px;
     min-height: 48px;
   }
@@ -1077,6 +1280,12 @@ button.is-pressed,
     gap: 8px;
     margin-bottom: 12px;
   }
+  /* シーズン行のselect2つを縦並びに */
+  .controls div > select + select {
+    display: block;
+    width: 100%;
+    margin-top: 4px;
+  }
   .controls label {
     font-size: 13px;
     display: block;
@@ -1093,6 +1302,10 @@ button.is-pressed,
   .result {
     grid-template-columns: 1fr !important;
     gap: 12px;
+  }
+  .creature-group {
+    padding: 10px 10px 12px;
+    margin-bottom: 20px;
   }
   .creature-group-content {
     grid-template-columns: 1fr;
@@ -1132,6 +1345,37 @@ button.is-pressed,
   p,
   .card-name {
     line-height: 1.6;
+  }
+}
+
+/* 先頭に戻るボタン */
+#backToTop {
+  position: fixed;
+  bottom: 80px;
+  right: 16px;
+  z-index: 1200;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: var(--tab-active);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px var(--shadow);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  font-family: inherit;
+}
+
+#backToTop:not([hidden]) {
+  opacity: 1;
+}
+
+@media (min-width: 601px) {
+  #backToTop {
+    bottom: 24px;
   }
 }
 
