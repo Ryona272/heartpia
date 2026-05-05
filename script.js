@@ -310,12 +310,12 @@ function filterCreatures() {
       if (weather === "rainbow_only") {
         if (!(w.length === 1 && w[0] === "虹")) return false;
       } else if (weather === "exclude_sunny") {
-        const isRainbowOnly = w.length === 1 && w[0] === "虹";
-        if (!w.includes("雨(雪)") && (!w.includes("虹") || isRainbowOnly))
+        const match = ["雨(雪)", "虹"];
+        if (w.length !== match.length || !match.every((x) => w.includes(x)))
           return false;
       } else if (weather === "exclude_rain") {
-        const isRainbowOnly = w.length === 1 && w[0] === "虹";
-        if (!w.includes("晴れ") && (!w.includes("虹") || isRainbowOnly))
+        const match = ["晴れ", "虹"];
+        if (w.length !== match.length || !match.every((x) => w.includes(x)))
           return false;
       }
     }
@@ -1933,12 +1933,12 @@ function renderPage3FishList() {
         if (catWeather === "rainbow_only") {
           if (w.length !== 1 || w[0] !== "虹") return false;
         } else if (catWeather === "exclude_sunny") {
-          const isRainbowOnly = w.length === 1 && w[0] === "虹";
-          if (!w.includes("雨(雪)") && (!w.includes("虹") || isRainbowOnly))
+          const match = ["雨(雪)", "虹"];
+          if (w.length !== match.length || !match.every((x) => w.includes(x)))
             return false;
         } else if (catWeather === "exclude_rain") {
-          const isRainbowOnly = w.length === 1 && w[0] === "虹";
-          if (!w.includes("晴れ") && (!w.includes("虹") || isRainbowOnly))
+          const match = ["晴れ", "虹"];
+          if (w.length !== match.length || !match.every((x) => w.includes(x)))
             return false;
         }
       }
