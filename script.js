@@ -183,6 +183,33 @@ const place1ToExcludedPlace2Map = {
     "巨木の川",
   ],
   漁村: ["東海", "旧海", "クジラ海", "浅水川", "霞川", "静川", "巨木の川"],
+  海: [
+    "郊外の湖",
+    "森の湖",
+    "温泉山の湖",
+    "草原の湖",
+    "浅水川",
+    "霞川",
+    "静川",
+    "巨木の川",
+    "「虫コイコイ」",
+    "「巣ごもり」",
+    "「虫寄せ装置」",
+    "「ブランクの頭」",
+    "「スプリンター・ビー」",
+    "「アクターバト」",
+  ],
+};
+
+// 場所2のイベントクエスト場所 → 対応シーズンのマップ
+// （「海釣り」「虫コイコイ」「巣ごもり」は通常season扱いなので含めない）
+const PLACE2_SEASON_TAGS = {
+  "「氷晶の魚」":                  ["snowseason"],
+  "「氷晶の蝶」":                  ["snowseason"],
+  "「冬季採録」":                   ["snowseason"],
+  "「タコ・エンターテインメント」": ["snowseason", "dreamlightfes"],
+  "「スプリンター・ビー」":         ["dreamlightfes"],
+  "「アクターバト」":               ["dreamlightfes"],
 };
 
 // =======================
@@ -660,6 +687,23 @@ function updatePlace2Options() {
     });
   }
 
+  // シーズンに基づくイベントクエスト場所のフィルタリング
+  const currentSeason = seasonFilter?.value || "";
+  if (currentSeason !== "") {
+    Object.entries(PLACE2_SEASON_TAGS).forEach(([place, tags]) => {
+      if (!places.has(place)) return;
+      let shouldShow;
+      if (currentSeason === "normal" || currentSeason === "otherevent") {
+        // 通常のみ / その他イベント → snowseason・dreamlightfes 場所は除外
+        shouldShow = false;
+      } else {
+        // 特定シーズン選択時：そのシーズンのタグを持つものだけ表示
+        shouldShow = tags.includes(currentSeason);
+      }
+      if (!shouldShow) places.delete(place);
+    });
+  }
+
   // 優先度順の配列
   const priorityOrder2 = [
     "コジカ塔",
@@ -692,6 +736,12 @@ function updatePlace2Options() {
     "「海釣り」",
     "「虫コイコイ」",
     "「巣ごもり」",
+    "「氷晶の魚」",
+    "「氷晶の蝶」",
+    "「冬季採録」",
+    "「タコ・エンターテインメント」",
+    "「スプリンター・ビー」",
+    "「アクターバト」",
     "「虫寄せ装置」",
     "「ブランクの頭」",
   ];
@@ -2222,6 +2272,7 @@ function initPage3() {
       const isOther = seasonFilter.value === "otherevent";
       eventnameFilter.style.visibility = isOther ? "visible" : "hidden";
       if (!isOther) eventnameFilter.value = "";
+      updatePlace2Options();
     }
     filterCreatures();
   }),
