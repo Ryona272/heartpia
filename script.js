@@ -307,7 +307,11 @@ function filterCreatures() {
     if (time && !c.times?.includes(time)) return false;
     if (weather) {
       const w = c.weathers || [];
-      if (weather === "rainbow_only") {
+      if (weather === "all_three") {
+        const match = ["晴れ", "雨(雪)", "虹"];
+        if (w.length !== match.length || !match.every((x) => w.includes(x)))
+          return false;
+      } else if (weather === "rainbow_only") {
         if (!(w.length === 1 && w[0] === "虹")) return false;
       } else if (weather === "exclude_sunny") {
         const match = ["雨(雪)", "虹"];
@@ -317,6 +321,10 @@ function filterCreatures() {
         const match = ["晴れ", "虹"];
         if (w.length !== match.length || !match.every((x) => w.includes(x)))
           return false;
+      } else if (weather === "include_sunny") {
+        if (!w.includes("晴れ")) return false;
+      } else if (weather === "include_rain") {
+        if (!w.includes("雨(雪)")) return false;
       }
     }
     // グローバル toggles: OFF にすると該当済みを非表示
