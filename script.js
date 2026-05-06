@@ -2823,8 +2823,41 @@ function init() {
     return;
   }
 
-  var stateRaw = parsed.state || null;
-  var page3Raw = parsed.page3 || null;
+  // 旧形式（.state/.page3）または全キーダンプどちらも対応
+  var stateRaw = parsed["heartpia-state-v2"] || parsed["heartpia-state"] || parsed.state || null;
+  var page3Raw = parsed["heartpia-page3-cat-state-v1"] || parsed.page3 || null;
+
+  // 全キーダンプの場合、creatures配列を持つ値を探してstateとして使う
+  if (!stateRaw) {
+    var keys = Object.keys(parsed);
+    for (var ki = 0; ki < keys.length; ki++) {
+      var val = parsed[keys[ki]];
+      if (typeof val === "string") {
+        try {
+          var tmp = JSON.parse(val);
+          if (tmp && Array.isArray(tmp.creatures) && tmp.creatures.length > 0) {
+            stateRaw = val;
+            break;
+          }
+        } catch (e) { /* skip */ }
+      }
+    }
+  }
+  if (!page3Raw) {
+    var keys2 = Object.keys(parsed);
+    for (var ki2 = 0; ki2 < keys2.length; ki2++) {
+      var val2 = parsed[keys2[ki2]];
+      if (typeof val2 === "string") {
+        try {
+          var tmp2 = JSON.parse(val2);
+          if (tmp2 && Array.isArray(tmp2.catStates) && tmp2.catStates.length > 0) {
+            page3Raw = val2;
+            break;
+          }
+        } catch (e) { /* skip */ }
+      }
+    }
+  }
 
   var summaryLines = [];
   var hasAnything = false;
