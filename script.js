@@ -204,12 +204,12 @@ const place1ToExcludedPlace2Map = {
 // 場所2のイベントクエスト場所 → 対応シーズンのマップ
 // （「海釣り」「虫コイコイ」「巣ごもり」は通常season扱いなので含めない）
 const PLACE2_SEASON_TAGS = {
-  "「氷晶の魚」":                  ["snowseason"],
-  "「氷晶の蝶」":                  ["snowseason"],
-  "「冬季採録」":                   ["snowseason"],
-  "「タコ・エンターテインメント」": ["snowseason", "dreamlightfes"],
-  "「スプリンター・ビー」":         ["dreamlightfes"],
-  "「アクターバト」":               ["dreamlightfes"],
+  "「氷晶の魚」": ["snowseason"],
+  "「氷晶の蝶」": ["snowseason"],
+  "「冬季採録」": ["snowseason"],
+  "「タコ・エンターテインメント」": ["dreamlightfes"],
+  "「スプリンター・ビー」": ["dreamlightfes"],
+  "「アクターバト」": ["dreamlightfes"],
 };
 
 // =======================
