@@ -234,13 +234,68 @@ body::before {
   line-height: 1.6;
 }
 
+.import-step-label {
+  font-weight: 700;
+  color: #6b5c3e !important;
+  margin-top: 12px !important;
+}
+
 .import-note {
   color: #9a7a3e !important;
   font-size: 12px !important;
 }
 
+.import-code-wrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 6px 0 12px;
+}
+
+.import-code {
+  display: block;
+  flex: 1;
+  background: #f5eed8;
+  border: 1px solid rgba(193, 164, 101, 0.4);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 11px;
+  font-family: monospace;
+  color: #4a3a1e;
+  word-break: break-all;
+  user-select: all;
+  line-height: 1.5;
+}
+
+.import-copy-btn {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.import-paste-wrap {
+  margin: 6px 0;
+}
+
+.import-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(193, 164, 101, 0.5);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-family: monospace;
+  color: #4a3a1e;
+  background: #fffef8;
+  resize: vertical;
+}
+
+.import-textarea:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
 .import-btn {
-  margin-top: 6px;
+  margin-top: 4px;
   font-size: 14px;
   padding: 10px 20px;
 }

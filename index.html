@@ -358,14 +358,26 @@
 
         <section class="import-section" aria-label="旧サイトからのデータ引き継ぎ">
           <h3>旧サイトからのデータ引き継ぎ</h3>
-          <p>
-            以前の URL（heartpiazukan.ryice-boardgames.com）に保存されていた<br />
-            生物図鑑・園芸料理の「獲得」「★5」記録と、にゃんこの名前・好物データを<br />
-            現在のサイトに引き継げます。
+          <p>以前の URL（heartpiazukan.ryice-boardgames.com）の「獲得」「★5」記録と、にゃんこの名前・好物データを引き継げます。</p>
+
+          <p class="import-step-label">① 旧サイトでデータをコピーする</p>
+          <p class="import-note">
+            <a href="https://heartpiazukan.ryice-boardgames.com/" target="_blank" rel="noopener">旧サイトを開き</a>、
+            ブラウザの「F12 → コンソール」に下のコードを貼り付けて Enter を押してください。<br />
+            表示されたテキストをすべてコピーします。
           </p>
+          <div class="import-code-wrap">
+            <code id="exportSnippet" class="import-code">(function(){var d={state:localStorage.getItem('heartpia-state-v2')||localStorage.getItem('heartpia-state'),page3:localStorage.getItem('heartpia-page3-cat-state-v1')};prompt('\u30c7\u30fc\u30bf\u3092\u30b3\u30d4\u30fc\u3057\u3066\u304f\u3060\u3055\u3044',JSON.stringify(d));})();</code>
+            <button id="copySnippetBtn" type="button" class="reset-filter-btn import-copy-btn">コピー</button>
+          </div>
+
+          <p class="import-step-label">② ここに貼り付けてインポートする</p>
           <p class="import-note">※ 現在のデータは上書きされます。引き継ぎ前に内容を確認してください。</p>
+          <div class="import-paste-wrap">
+            <textarea id="importDataInput" class="import-textarea" rows="3" placeholder="コピーしたテキストをここに貼り付け…" aria-label="引き継ぎデータ入力"></textarea>
+          </div>
           <button id="importFromOldSiteBtn" type="button" class="reset-filter-btn import-btn">
-            旧サイトからデータを取得する
+            データを引き継ぐ
           </button>
           <p id="importStatus" class="import-status" aria-live="polite"></p>
         </section>
