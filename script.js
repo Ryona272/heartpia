@@ -2438,9 +2438,7 @@ function init() {
         catPlace1Filter.appendChild(opt);
       });
 
-    // 場所2（場所1連動は省略、全候補を表示）
-    const catPlaces2 = new Set();
-    catFishData.forEach((f) => f.places2?.forEach((p) => catPlaces2.add(p)));
+    // 場所2（場所1連動で更新）
     const priorityOrder2 = [
       "コジカ塔",
       "不思議な松林",
@@ -2475,14 +2473,42 @@ function init() {
       "虫寄せ装置",
       "ブランクの頭",
     ];
-    priorityOrder2
-      .filter((p) => catPlaces2.has(p))
-      .forEach((p) => {
-        const opt = document.createElement("option");
-        opt.value = p;
-        opt.textContent = p;
-        catPlace2Filter.appendChild(opt);
-      });
+
+    function buildCatPlace2Options(selectedPlace1) {
+      const prevValue = catPlace2Filter.value;
+      // 先頭の空オプション以外を削除
+      while (catPlace2Filter.options.length > 1) {
+        catPlace2Filter.remove(1);
+      }
+      const filtered = selectedPlace1
+        ? catFishData.filter((f) => f.places1?.includes(selectedPlace1))
+        : catFishData;
+      const catPlaces2 = new Set();
+      filtered.forEach((f) => f.places2?.forEach((p) => catPlaces2.add(p)));
+      // 生物図鑑と同様に place1ToExcludedPlace2Map で除外
+      if (selectedPlace1) {
+        const excluded = place1ToExcludedPlace2Map[selectedPlace1] || [];
+        excluded.forEach((p) => catPlaces2.delete(p));
+      }
+      priorityOrder2
+        .filter((p) => catPlaces2.has(p))
+        .forEach((p) => {
+          const opt = document.createElement("option");
+          opt.value = p;
+          opt.textContent = p;
+          catPlace2Filter.appendChild(opt);
+        });
+      // 以前の値が引き続き有効なら維持、そうでなければリセット
+      if (
+        Array.from(catPlace2Filter.options).some((o) => o.value === prevValue)
+      ) {
+        catPlace2Filter.value = prevValue;
+      } else {
+        catPlace2Filter.value = "";
+      }
+    }
+
+    buildCatPlace2Options(catPlace1Filter.value);
 
     // 時間
     const catTimes = new Set();
@@ -2515,20 +2541,25 @@ function init() {
         return {};
       }
     })();
-    if (savedCatFilters.catPlace1Filter != null)
+    if (savedCatFilters.catPlace1Filter != null) {
       catPlace1Filter.value = savedCatFilters.catPlace1Filter;
+      buildCatPlace2Options(catPlace1Filter.value);
+    }
     if (savedCatFilters.catPlace2Filter != null)
       catPlace2Filter.value = savedCatFilters.catPlace2Filter;
     if (savedCatFilters.catTimeFilter != null)
       catTimeFilter.value = savedCatFilters.catTimeFilter;
 
     // イベントリスナー
-    [catPlace1Filter, catPlace2Filter, catTimeFilter, catWeatherFilter].forEach(
-      (el) => {
-        el.addEventListener("change", renderPage3FishList);
-        el.addEventListener("change", saveFilterState);
-      },
-    );
+    catPlace1Filter.addEventListener("change", () => {
+      buildCatPlace2Options(catPlace1Filter.value);
+      renderPage3FishList();
+      saveFilterState();
+    });
+    [catPlace2Filter, catTimeFilter, catWeatherFilter].forEach((el) => {
+      el.addEventListener("change", renderPage3FishList);
+      el.addEventListener("change", saveFilterState);
+    });
   }
 
   initPage3();
