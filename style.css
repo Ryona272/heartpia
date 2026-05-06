@@ -214,6 +214,44 @@ body::before {
   border: 1px solid rgba(193, 164, 101, 0.24);
 }
 
+.import-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(193, 164, 101, 0.35);
+}
+
+.import-section h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #6b5c3e;
+  margin: 0 0 8px;
+}
+
+.import-section p {
+  font-size: 13px;
+  color: #7a6b4f;
+  margin: 0 0 6px;
+  line-height: 1.6;
+}
+
+.import-note {
+  color: #9a7a3e !important;
+  font-size: 12px !important;
+}
+
+.import-btn {
+  margin-top: 6px;
+  font-size: 14px;
+  padding: 10px 20px;
+}
+
+.import-status {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #6b5c3e;
+  min-height: 20px;
+}
+
 #page-cat {
   background:
     linear-gradient(

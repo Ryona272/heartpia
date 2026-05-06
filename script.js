@@ -2741,4 +2741,164 @@ function init() {
   );
 })();
 
+// =======================
+// 旧サイトからのデータ引き継ぎ
+// =======================
+(function setupImportFromOldSite() {
+  const btn = document.getElementById("importFromOldSiteBtn");
+  const statusEl = document.getElementById("importStatus");
+  if (!btn || !statusEl) return;
+
+  const OLD_ORIGIN = "https://heartpiazukan.ryice-boardgames.com";
+  const EXPORT_URL = OLD_ORIGIN + "/data-export.html";
+  const TIMEOUT_MS = 12000;
+
+  btn.addEventListener("click", function () {
+    btn.disabled = true;
+    statusEl.textContent = "旧サイトに接続中…";
+
+    var iframe = document.createElement("iframe");
+    iframe.src = EXPORT_URL;
+    iframe.style.cssText = "display:none;width:0;height:0;border:none;";
+    iframe.setAttribute("sandbox", "allow-scripts allow-same-origin");
+    document.body.appendChild(iframe);
+
+    var resolved = false;
+
+    var timeoutId = setTimeout(function () {
+      if (!resolved) {
+        resolved = true;
+        cleanup();
+        statusEl.textContent =
+          "旧サイトへの接続がタイムアウトしました。旧サイトに data-export.html が配置されているか確認してください。";
+        btn.disabled = false;
+      }
+    }, TIMEOUT_MS);
+
+    function cleanup() {
+      window.removeEventListener("message", onMessage);
+      clearTimeout(timeoutId);
+      if (iframe.parentNode) {
+        iframe.parentNode.removeChild(iframe);
+      }
+    }
+
+    function onMessage(event) {
+      if (event.origin !== OLD_ORIGIN) return;
+      if (!event.data || event.data.type !== "heartpia-export") return;
+      if (resolved) return;
+      resolved = true;
+      cleanup();
+
+      var exportedData = event.data.data || {};
+      var stateRaw = exportedData.state || null;
+      var page3Raw = exportedData.page3 || null;
+
+      // ── 引き継ぎ内容のサマリーを生成 ──
+      var summaryLines = [];
+      var hasAnything = false;
+
+      if (stateRaw) {
+        try {
+          var stateObj = JSON.parse(stateRaw);
+          var creatureAcquired = (stateObj.creatures || []).filter(
+            function (c) {
+              return c.acquired;
+            },
+          ).length;
+          var creatureStar5 = (stateObj.creatures || []).filter(function (c) {
+            return c.fiveStar;
+          }).length;
+          var page2Acquired = (stateObj.page2 || []).filter(function (c) {
+            return c.acquired;
+          }).length;
+          var page2Star5 = (stateObj.page2 || []).filter(function (c) {
+            return c.fiveStar;
+          }).length;
+          if (creatureAcquired > 0 || creatureStar5 > 0) {
+            summaryLines.push(
+              "生物図鑑：獲得 " +
+                creatureAcquired +
+                " 件・★5 " +
+                creatureStar5 +
+                " 件",
+            );
+            hasAnything = true;
+          }
+          if (page2Acquired > 0 || page2Star5 > 0) {
+            summaryLines.push(
+              "園芸・料理：獲得 " +
+                page2Acquired +
+                " 件・★5 " +
+                page2Star5 +
+                " 件",
+            );
+            hasAnything = true;
+          }
+        } catch (e) {
+          /* parse error – skip */
+        }
+      }
+
+      if (page3Raw) {
+        try {
+          var page3Obj = JSON.parse(page3Raw);
+          var catsWithData = (page3Obj.catStates || []).filter(function (c, i) {
+            var defaultName = "猫" + (i + 1);
+            return (
+              (typeof c.name === "string" &&
+                c.name.trim() !== "" &&
+                c.name.trim() !== defaultName) ||
+              (Array.isArray(c.favoriteFishNames) &&
+                c.favoriteFishNames.length > 0) ||
+              (Array.isArray(c.excludedFishNames) &&
+                c.excludedFishNames.length > 0)
+            );
+          });
+          if (catsWithData.length > 0) {
+            summaryLines.push(
+              "にゃんこ：" + catsWithData.length + " 匹分の名前・好物データ",
+            );
+            hasAnything = true;
+          }
+        } catch (e) {
+          /* parse error – skip */
+        }
+      }
+
+      if (!hasAnything) {
+        statusEl.textContent =
+          "旧サイトに引き継ぎ対象のデータが見つかりませんでした。";
+        btn.disabled = false;
+        return;
+      }
+
+      var confirmMsg =
+        "以下のデータを引き継ぎますか？\n（現在のデータは上書きされます）\n\n" +
+        summaryLines.join("\n");
+
+      if (!window.confirm(confirmMsg)) {
+        statusEl.textContent = "キャンセルしました。";
+        btn.disabled = false;
+        return;
+      }
+
+      // ── localStorage に書き込み ──
+      if (stateRaw) {
+        localStorage.setItem("heartpia-state-v2", stateRaw);
+      }
+      if (page3Raw) {
+        localStorage.setItem("heartpia-page3-cat-state-v1", page3Raw);
+      }
+
+      statusEl.textContent = "引き継ぎ完了！ページを再読み込みします…";
+      setTimeout(function () {
+        location.reload();
+      }, 1200);
+    }
+
+    window.addEventListener("message", onMessage);
+  });
+})();
+
 init();
