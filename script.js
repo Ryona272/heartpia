@@ -2817,14 +2817,18 @@ function init() {
   var encoded = hash.slice("#import=".length);
   var parsed;
   try {
-    parsed = JSON.parse(decodeURIComponent(atob(encoded)));
+    parsed = JSON.parse(decodeURIComponent(escape(atob(encoded))));
   } catch (e) {
     console.warn("インポートデータのデコードに失敗しました", e);
     return;
   }
 
   // 旧形式（.state/.page3）または全キーダンプどちらも対応
-  var stateRaw = parsed["heartpia-state-v2"] || parsed["heartpia-state"] || parsed.state || null;
+  var stateRaw =
+    parsed["heartpia-state-v2"] ||
+    parsed["heartpia-state"] ||
+    parsed.state ||
+    null;
   var page3Raw = parsed["heartpia-page3-cat-state-v1"] || parsed.page3 || null;
 
   // 全キーダンプの場合、creatures配列を持つ値を探してstateとして使う
@@ -2839,7 +2843,9 @@ function init() {
             stateRaw = val;
             break;
           }
-        } catch (e) { /* skip */ }
+        } catch (e) {
+          /* skip */
+        }
       }
     }
   }
@@ -2850,11 +2856,17 @@ function init() {
       if (typeof val2 === "string") {
         try {
           var tmp2 = JSON.parse(val2);
-          if (tmp2 && Array.isArray(tmp2.catStates) && tmp2.catStates.length > 0) {
+          if (
+            tmp2 &&
+            Array.isArray(tmp2.catStates) &&
+            tmp2.catStates.length > 0
+          ) {
             page3Raw = val2;
             break;
           }
-        } catch (e) { /* skip */ }
+        } catch (e) {
+          /* skip */
+        }
       }
     }
   }
