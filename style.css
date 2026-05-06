@@ -245,6 +245,48 @@ body::before {
   font-size: 12px !important;
 }
 
+.import-bookmarklet-wrap {
+  margin: 6px 0 14px;
+}
+
+.import-bookmarklet-btn {
+  display: inline-block;
+  font-size: 14px;
+  padding: 10px 20px;
+  cursor: grab;
+  user-select: none;
+  background: #f0e8cc;
+  border-color: rgba(193, 164, 101, 0.7);
+}
+
+.import-bookmarklet-btn:hover {
+  background: #e8dbb8;
+}
+
+.import-open-btn {
+  display: inline-block;
+  font-size: 14px;
+  padding: 10px 20px;
+  text-decoration: none;
+}
+
+.import-manual-details {
+  margin-top: 16px;
+  border-top: 1px dashed rgba(193, 164, 101, 0.35);
+  padding-top: 12px;
+}
+
+.import-manual-details summary {
+  font-size: 13px;
+  color: #9a7a3e;
+  cursor: pointer;
+  user-select: none;
+}
+
+.import-manual-body {
+  margin-top: 10px;
+}
+
 .import-code-wrap {
   display: flex;
   align-items: flex-start;

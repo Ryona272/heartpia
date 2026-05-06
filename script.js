@@ -2750,7 +2750,104 @@ function init() {
 })();
 
 // =======================
-// 旧サイトからのデータ引き継ぎ
+// URLハッシュ経由の自動インポート（ブックマークレット連携）
+// =======================
+(function checkHashImport() {
+  var hash = window.location.hash;
+  if (!hash.startsWith("#import=")) return;
+
+  // ハッシュをすぐにURLから消す
+  history.replaceState(
+    null,
+    "",
+    window.location.pathname + window.location.search,
+  );
+
+  var encoded = hash.slice("#import=".length);
+  var parsed;
+  try {
+    parsed = JSON.parse(decodeURIComponent(atob(encoded)));
+  } catch (e) {
+    console.warn("インポートデータのデコードに失敗しました", e);
+    return;
+  }
+
+  var stateRaw = parsed.state || null;
+  var page3Raw = parsed.page3 || null;
+
+  var summaryLines = [];
+  var hasAnything = false;
+
+  if (stateRaw) {
+    try {
+      var stateObj = JSON.parse(stateRaw);
+      var ca = (stateObj.creatures || []).filter(function (c) {
+        return c.acquired;
+      }).length;
+      var cs = (stateObj.creatures || []).filter(function (c) {
+        return c.fiveStar;
+      }).length;
+      var pa = (stateObj.page2 || []).filter(function (c) {
+        return c.acquired;
+      }).length;
+      var ps = (stateObj.page2 || []).filter(function (c) {
+        return c.fiveStar;
+      }).length;
+      if (ca > 0 || cs > 0) {
+        summaryLines.push("生物図鑑：獲得 " + ca + " 件・★5 " + cs + " 件");
+        hasAnything = true;
+      }
+      if (pa > 0 || ps > 0) {
+        summaryLines.push("園芸・料理：獲得 " + pa + " 件・★5 " + ps + " 件");
+        hasAnything = true;
+      }
+    } catch (e) {
+      /* skip */
+    }
+  }
+
+  if (page3Raw) {
+    try {
+      var p3 = JSON.parse(page3Raw);
+      var cwd = (p3.catStates || []).filter(function (c, i) {
+        var def = "猫" + (i + 1);
+        return (
+          (typeof c.name === "string" &&
+            c.name.trim() &&
+            c.name.trim() !== def) ||
+          (Array.isArray(c.favoriteFishNames) &&
+            c.favoriteFishNames.length > 0) ||
+          (Array.isArray(c.excludedFishNames) && c.excludedFishNames.length > 0)
+        );
+      }).length;
+      if (cwd > 0) {
+        summaryLines.push("にゃんこ：" + cwd + " 匹分の名前・好物データ");
+        hasAnything = true;
+      }
+    } catch (e) {
+      /* skip */
+    }
+  }
+
+  if (!hasAnything) {
+    alert("旧サイトに引き継ぎ対象のデータが見つかりませんでした。");
+    return;
+  }
+
+  var confirmMsg =
+    "以下のデータを引き継ぎますか？\n（現在のデータは上書きされます）\n\n" +
+    summaryLines.join("\n");
+  if (!window.confirm(confirmMsg)) return;
+
+  if (stateRaw) localStorage.setItem("heartpia-state-v2", stateRaw);
+  if (page3Raw) localStorage.setItem("heartpia-page3-cat-state-v1", page3Raw);
+
+  alert("引き継ぎ完了！ページを再読み込みします。");
+  location.reload();
+})();
+
+// =======================
+// 旧サイトからのデータ引き継ぎ（手動貼り付け）
 // =======================
 (function setupImportFromOldSite() {
   const btn = document.getElementById("importFromOldSiteBtn");

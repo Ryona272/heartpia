@@ -360,26 +360,37 @@
           <h3>旧サイトからのデータ引き継ぎ</h3>
           <p>以前の URL（heartpiazukan.ryice-boardgames.com）の「獲得」「★5」記録と、にゃんこの名前・好物データを引き継げます。</p>
 
-          <p class="import-step-label">① 旧サイトでデータをコピーする</p>
-          <p class="import-note">
-            <a href="https://heartpiazukan.ryice-boardgames.com/" target="_blank" rel="noopener">旧サイトを開き</a>、
-            ブラウザの「F12 → コンソール」に下のコードを貼り付けて Enter を押してください。<br />
-            表示されたテキストをすべてコピーします。
-          </p>
-          <div class="import-code-wrap">
-            <code id="exportSnippet" class="import-code">(function(){var d={state:localStorage.getItem('heartpia-state-v2')||localStorage.getItem('heartpia-state'),page3:localStorage.getItem('heartpia-page3-cat-state-v1')};prompt('\u30c7\u30fc\u30bf\u3092\u30b3\u30d4\u30fc\u3057\u3066\u304f\u3060\u3055\u3044',JSON.stringify(d));})();</code>
-            <button id="copySnippetBtn" type="button" class="reset-filter-btn import-copy-btn">コピー</button>
+          <p class="import-step-label">① ブックマークに登録する（初回のみ）</p>
+          <p class="import-note">下のボタンをブラウザのブックマークバーにドラッグ＆ドロップしてください。</p>
+          <div class="import-bookmarklet-wrap">
+            <a id="bookmarkletLink"
+              href="javascript:(function(){var d={state:localStorage.getItem('heartpia-state-v2')||localStorage.getItem('heartpia-state'),page3:localStorage.getItem('heartpia-page3-cat-state-v1')};if(!d.state&amp;&amp;!d.page3){alert('\u30c7\u30fc\u30bf\u304c\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f');return;}try{var enc=btoa(unescape(encodeURIComponent(JSON.stringify(d))));location.href='https://ryona272.github.io/heartpia/#import='+enc;}catch(e){alert('\u30a8\u30e9\u30fc: '+e.message);}})();"
+              class="reset-filter-btn import-bookmarklet-btn"
+              onclick="alert('\u30ea\u30f3\u30af\u3092\u30af\u30ea\u30c3\u30af\u3067\u306f\u306a\u304f\u3001\u30d6\u30c3\u30af\u30de\u30fc\u30af\u30d0\u30fc\u306b\u30c9\u30e9\u30c3\u30b0\u3057\u3066\u767b\u9332\u3057\u3066\u304f\u3060\u3055\u3044'); return false;"
+            >📌 旧サイトデータ取得</a>
           </div>
 
-          <p class="import-step-label">② ここに貼り付けてインポートする</p>
-          <p class="import-note">※ 現在のデータは上書きされます。引き継ぎ前に内容を確認してください。</p>
-          <div class="import-paste-wrap">
-            <textarea id="importDataInput" class="import-textarea" rows="3" placeholder="コピーしたテキストをここに貼り付け…" aria-label="引き継ぎデータ入力"></textarea>
-          </div>
-          <button id="importFromOldSiteBtn" type="button" class="reset-filter-btn import-btn">
-            データを引き継ぐ
-          </button>
+          <p class="import-step-label">② 旧サイトでブックマークをクリックする</p>
+          <p class="import-note">旧サイトを開いて、登録したブックマークをクリックするだけ。自動でこのページに戻ってきてデータが反映されます。</p>
+          <a href="https://heartpiazukan.ryice-boardgames.com/" target="_blank" rel="noopener" class="reset-filter-btn import-open-btn">旧サイトを開く →</a>
+
           <p id="importStatus" class="import-status" aria-live="polite"></p>
+
+          <details class="import-manual-details">
+            <summary>手動で貼り付けてインポートする（上手くいかない場合）</summary>
+            <div class="import-manual-body">
+              <p class="import-note">旧サイトのブラウザコンソール（F12）に下のコードを貼り付けて Enter。表示されたテキストをコピーして下のエリアに貼り付けてください。</p>
+              <div class="import-code-wrap">
+                <code id="exportSnippet" class="import-code">(function(){var d={state:localStorage.getItem('heartpia-state-v2')||localStorage.getItem('heartpia-state'),page3:localStorage.getItem('heartpia-page3-cat-state-v1')};prompt('\u30c7\u30fc\u30bf\u3092\u30b3\u30d4\u30fc\u3057\u3066\u304f\u3060\u3055\u3044',JSON.stringify(d));})();</code>
+                <button id="copySnippetBtn" type="button" class="reset-filter-btn import-copy-btn">コピー</button>
+              </div>
+              <div class="import-paste-wrap">
+                <textarea id="importDataInput" class="import-textarea" rows="3" placeholder="コピーしたテキストをここに貼り付け…" aria-label="引き継ぎデータ入力"></textarea>
+              </div>
+              <p class="import-note">※ 現在のデータは上書きされます。</p>
+              <button id="importFromOldSiteBtn" type="button" class="reset-filter-btn import-btn">データを引き継ぐ</button>
+            </div>
+          </details>
         </section>
       </section>
     </main>
