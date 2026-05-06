@@ -1944,6 +1944,10 @@ function renderPage3FishList() {
           const match = ["晴れ", "虹"];
           if (w.length !== match.length || !match.every((x) => w.includes(x)))
             return false;
+        } else if (catWeather === "include_sunny") {
+          if (!w.includes("晴れ")) return false;
+        } else if (catWeather === "include_rain") {
+          if (!w.includes("雨(雪)")) return false;
         }
       }
       return true;
