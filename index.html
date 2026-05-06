@@ -358,21 +358,10 @@
 
         <section class="import-section" aria-label="旧サイトからのデータ引き継ぎ">
           <h3>旧サイトからのデータ引き継ぎ</h3>
-          <p>以前の URL（heartpiazukan.ryice-boardgames.com）の「獲得」「★5」記録と、にゃんこの名前・好物データを引き継げます。</p>
+          <p>以前の URL（heartpiazukan.ryice-boardgames.com）の「獲得」「★5」記録と、にゃんこの名前・好物データを引き継げます。スマホでも1タップで完了します。</p>
 
-          <p class="import-step-label">① ブックマークに登録する（初回のみ）</p>
-          <p class="import-note">下のボタンをブラウザのブックマークバーにドラッグ＆ドロップしてください。</p>
-          <div class="import-bookmarklet-wrap">
-            <a id="bookmarkletLink"
-              href="javascript:(function(){var d={state:localStorage.getItem('heartpia-state-v2')||localStorage.getItem('heartpia-state'),page3:localStorage.getItem('heartpia-page3-cat-state-v1')};if(!d.state&amp;&amp;!d.page3){alert('\u30c7\u30fc\u30bf\u304c\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f');return;}try{var enc=btoa(unescape(encodeURIComponent(JSON.stringify(d))));location.href='https://ryona272.github.io/heartpia/#import='+enc;}catch(e){alert('\u30a8\u30e9\u30fc: '+e.message);}})();"
-              class="reset-filter-btn import-bookmarklet-btn"
-              onclick="alert('\u30ea\u30f3\u30af\u3092\u30af\u30ea\u30c3\u30af\u3067\u306f\u306a\u304f\u3001\u30d6\u30c3\u30af\u30de\u30fc\u30af\u30d0\u30fc\u306b\u30c9\u30e9\u30c3\u30b0\u3057\u3066\u767b\u9332\u3057\u3066\u304f\u3060\u3055\u3044'); return false;"
-            >📌 旧サイトデータ取得</a>
-          </div>
-
-          <p class="import-step-label">② 旧サイトでブックマークをクリックする</p>
-          <p class="import-note">旧サイトを開いて、登録したブックマークをクリックするだけ。自動でこのページに戻ってきてデータが反映されます。</p>
-          <a href="https://heartpiazukan.ryice-boardgames.com/" target="_blank" rel="noopener" class="reset-filter-btn import-open-btn">旧サイトを開く →</a>
+          <p class="import-note">下のボタンをタップするだけで、自動で引き継ぎが完了します。</p>
+          <a href="https://heartpiazukan.ryice-boardgames.com/export.html" target="_blank" rel="noopener" class="reset-filter-btn import-open-btn">旧サイトからデータを引き継ぐ →</a>
 
           <p id="importStatus" class="import-status" aria-live="polite"></p>
 
