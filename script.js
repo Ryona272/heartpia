@@ -1930,7 +1930,11 @@ function renderPage3FishList() {
       if (catTime && !fd.times?.includes(catTime)) return false;
       if (catWeather) {
         const w = fd.weathers || [];
-        if (catWeather === "rainbow_only") {
+        if (catWeather === "all_three") {
+          const match = ["晴れ", "雨(雪)", "虹"];
+          if (w.length !== match.length || !match.every((x) => w.includes(x)))
+            return false;
+        } else if (catWeather === "rainbow_only") {
           if (w.length !== 1 || w[0] !== "虹") return false;
         } else if (catWeather === "exclude_sunny") {
           const match = ["雨(雪)", "虹"];
