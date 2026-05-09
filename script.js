@@ -66,7 +66,7 @@ const PLACE1_BACKGROUND_IMAGE_NAMES = new Set([
 ]);
 
 // フェス判定用定数
-const FESTIVAL_SEASON_VALUES = new Set(["dreamlightfes"]);
+const FESTIVAL_SEASON_VALUES = new Set(["dreamlightfes", "blockfes"]);
 
 // その他イベント判定用定数
 const OTHER_EVENT_SEASON_VALUES = new Set(["otherevent"]);
@@ -76,6 +76,7 @@ const SEASON_LABELS = {
   normal: "通常",
   snowseason: "スノーシーズン",
   dreamlightfes: "ドリームライトフェス",
+  blockfes: "ブロック市街地フェス",
   otherevent: "その他イベント",
 };
 
@@ -210,23 +211,25 @@ const PLACE2_SEASON_TAGS = {
   "「タコ・エンターテインメント」": ["dreamlightfes"],
   "「スプリンター・ビー」": ["dreamlightfes"],
   "「アクターバト」": ["dreamlightfes"],
+  "「(特殊)積み木魚」": ["blockfes"],
+  "「(特殊)積み木虫」": ["blockfes"],
 };
 
 // =======================
 // 検索リセット
 // =======================
 function applyDefaultSeasons() {
-  // page1: 通常のみ
+  // page1: ブロック市街地フェス
   if (seasonFilter) {
-    seasonFilter.value = "normal";
+    seasonFilter.value = "blockfes";
     if (eventnameFilter) eventnameFilter.style.visibility = "hidden";
   }
-  // page2: MALTESEコラボ（otherevent）
+  // page2: ブロック市街地フェス
   if (seasonFilterPage2) {
-    seasonFilterPage2.value = "otherevent";
+    seasonFilterPage2.value = "blockfes";
     if (eventnameFilterPage2) {
-      eventnameFilterPage2.value = "MALTESEコラボ";
-      eventnameFilterPage2.style.visibility = "visible";
+      eventnameFilterPage2.value = "";
+      eventnameFilterPage2.style.visibility = "hidden";
     }
   }
 }
@@ -240,7 +243,7 @@ function resetFiltersPage1() {
   if (timeFilter) timeFilter.value = "";
   if (weatherFilter) weatherFilter.value = "";
   if (seasonFilter) {
-    seasonFilter.value = "normal";
+    seasonFilter.value = "blockfes";
     if (eventnameFilter) eventnameFilter.style.visibility = "hidden";
   }
   saveFilterState();
@@ -252,10 +255,10 @@ function resetFiltersPage2() {
   if (hobbyFilterPage2) hobbyFilterPage2.value = "";
   if (userLevelPage2Input) userLevelPage2Input.value = "1";
   if (seasonFilterPage2) {
-    seasonFilterPage2.value = "otherevent";
+    seasonFilterPage2.value = "blockfes";
     if (eventnameFilterPage2) {
-      eventnameFilterPage2.value = "MALTESEコラボ";
-      eventnameFilterPage2.style.visibility = "visible";
+      eventnameFilterPage2.value = "";
+      eventnameFilterPage2.style.visibility = "hidden";
     }
   }
   if (sortPage2Select) sortPage2Select.value = "level";
@@ -742,6 +745,8 @@ function updatePlace2Options() {
     "「タコ・エンターテインメント」",
     "「スプリンター・ビー」",
     "「アクターバト」",
+    "「(特殊)積み木魚」",
+    "「(特殊)積み木虫」",
     "「虫寄せ装置」",
     "「ブランクの頭」",
   ];
@@ -1229,6 +1234,7 @@ const COOKING_WAGON_IMAGE_BY_TYPE = {
   stove: "img/コンロ.png",
   "penguin-stove": "img/ペンギンコンロ.png",
   "popcorn-wagon": "img/ポップコーン移動ワゴン.png",
+  "block-wagon": "img/積み木移動ワゴン.png",
 };
 
 function getPage2CookingWagonImage(item) {
@@ -2365,7 +2371,7 @@ function init() {
   // シーズンフィルター初期化（シーズンとフェスを一括管理）
   seasonFilter.innerHTML = '<option value="">すべて</option>';
   const seasonPriority = ["normal", "snowseason"];
-  const festivalPriority = ["dreamlightfes"];
+  const festivalPriority = ["dreamlightfes", "blockfes"];
   const otherEventPriority = ["otherevent"];
   const sortedRegularSeasons = seasonPriority.filter((s) =>
     regularSeasons.has(s),
@@ -2462,15 +2468,14 @@ function init() {
 
   // 保存済み状態がない場合のみデフォルトシーズンを適用
   if (!hadSavedState) {
-    if (sortedRegularSeasons.includes("normal")) {
+    if (sortedFestivals.includes("blockfes")) {
+      seasonFilter.value = "blockfes";
+      eventnameFilter.style.visibility = "hidden";
+      seasonFilterPage2.value = "blockfes";
+      eventnameFilterPage2.style.visibility = "hidden";
+    } else if (sortedRegularSeasons.includes("normal")) {
       seasonFilter.value = "normal";
       eventnameFilter.style.visibility = "hidden";
-    }
-    if (page2Eventnames.includes("MALTESEコラボ")) {
-      seasonFilterPage2.value = "otherevent";
-      eventnameFilterPage2.value = "MALTESEコラボ";
-      eventnameFilterPage2.style.visibility = "visible";
-    } else if (sortedRegularSeasons.includes("normal")) {
       seasonFilterPage2.value = "normal";
       eventnameFilterPage2.style.visibility = "hidden";
     }

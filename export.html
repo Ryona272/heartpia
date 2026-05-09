@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>データ移行中...</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #f0f4ff;
+    }
+    .box {
+      text-align: center;
+      padding: 2em;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      max-width: 360px;
+      width: 90%;
+    }
+    h1 { font-size: 1.2em; color: #333; }
+    p { color: #666; font-size: 0.95em; }
+    .btn {
+      display: inline-block;
+      margin-top: 1em;
+      padding: 0.7em 1.6em;
+      background: #5b8dee;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn:hover { background: #3a6fd8; }
+    #msg { color: #888; font-size: 0.85em; margin-top: 1em; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>📦 データ移行</h1>
+    <p>このサイトの記録データを<br>新しい図鑑サイトへ引き継ぎます。</p>
+    <button class="btn" id="goBtn" onclick="doExport()">移行スタート</button>
+    <div id="msg"></div>
+  </div>
+
+  <script>
+    function doExport() {
+      var msg = document.getElementById('msg');
+
+      // localStorageの全キーをダンプ
+      var data = {};
+      var count = localStorage.length;
+      for (var i = 0; i < count; i++) {
+        var key = localStorage.key(i);
+        if (key !== null) {
+          data[key] = localStorage.getItem(key);
+        }
+      }
+
+      if (Object.keys(data).length === 0) {
+        msg.innerHTML = 'このサイトに保存されたデータが見つかりませんでした。<br><small>（localStorage が空です）</small>';
+        return;
+      }
+      var json = JSON.stringify(data);
+      var b64 = btoa(unescape(encodeURIComponent(json)));
+      var url = 'https://ryona272.github.io/heartpia/#import=' + b64;
+
+      msg.textContent = '新しいサイトへ移動します...';
+      document.getElementById('goBtn').disabled = true;
+
+      setTimeout(function() {
+        location.href = url;
+      }, 600);
+    }
+  </script>
+</body>
+</html>

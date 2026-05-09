@@ -181,23 +181,27 @@ body::before {
 }
 
 #page-info {
-  background:
-    linear-gradient(
-      140deg,
-      rgba(255, 248, 226, 0.9),
-      rgba(255, 255, 255, 0.95)
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      rgba(212, 191, 147, 0.09),
-      rgba(212, 191, 147, 0.09) 10px,
-      transparent 10px,
-      transparent 20px
-    );
+  background-color: var(--bg-paper);
   border-radius: var(--radius);
-  padding: 18px;
   box-shadow: 0 16px 36px var(--shadow);
-  border: 1px solid rgba(193, 164, 101, 0.24);
+  padding: 18px;
+  background-image:
+    linear-gradient(120deg, rgba(235, 239, 216, 0.9), transparent 38%),
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 255, 255, 0.72),
+      transparent 50%
+    ),
+    url("img/back2.png");
+  background-repeat: no-repeat;
+  background-position:
+    0 0,
+    0 0,
+    right 16px top 16px;
+  background-size: auto 15rem;
+  background-clip: border-box;
+  background-origin: padding-box;
+  border: 1px solid rgba(193, 164, 101, 0.28);
 }
 
 #page-settings {
@@ -350,17 +354,27 @@ body::before {
 }
 
 #page-cat {
-  background:
-    linear-gradient(
-      150deg,
-      rgba(255, 246, 226, 0.95),
-      rgba(255, 254, 247, 0.96)
-    ),
-    radial-gradient(circle at 10% 0%, rgba(255, 214, 156, 0.3), transparent 42%);
+  background-color: var(--bg-paper);
   border-radius: var(--radius);
-  padding: 18px;
   box-shadow: 0 16px 36px var(--shadow);
-  border: 1px solid rgba(193, 164, 101, 0.24);
+  padding: 18px;
+  background-image:
+    linear-gradient(120deg, rgba(235, 239, 216, 0.9), transparent 38%),
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 255, 255, 0.72),
+      transparent 50%
+    ),
+    url("img/back3.png");
+  background-repeat: no-repeat;
+  background-position:
+    0 0,
+    0 0,
+    right 16px top 16px;
+  background-size: auto 10rem;
+  background-clip: border-box;
+  background-origin: padding-box;
+  border: 1px solid rgba(193, 164, 101, 0.28);
 }
 
 .cat-help {
@@ -1004,6 +1018,7 @@ button:focus-visible,
   gap: 4px;
   flex-wrap: wrap;
   overflow: visible;
+  flex: 1;
   min-width: 0;
 }
 
