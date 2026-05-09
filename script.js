@@ -1413,10 +1413,14 @@ function renderPage2List(targetEl, list, userLevel) {
               </div>
               ${metaLines.length ? `<div class="meta">${metaLines.join("<br>")}</div>` : ""}
               ${foodItemsMarkup}
-              <div class="card-control-row">
+              ${
+                isStoreIngredient
+                  ? ""
+                  : `<div class="card-control-row">
                 <label><input type="checkbox" class="card-acquired-checkbox-p2" data-name="${item.name}" ${item.acquired ? "checked" : ""} /> 獲得</label>
                 <label><input type="checkbox" class="card-star5-checkbox-p2" data-name="${item.name}" ${item.fiveStar ? "checked" : ""} /> ★5</label>
-              </div>
+              </div>`
+              }
             </div>
             <div class="card-back ${cardClass}">
               ${cookingWagonMarkup}
@@ -1816,7 +1820,7 @@ function initPage2() {
       }
     }
     saveState();
-    updateCountersPage2(Array.from(resultPage2.querySelectorAll(".card")));
+    filterAndRenderPage2();
   });
 }
 
