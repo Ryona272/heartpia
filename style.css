@@ -1204,6 +1204,50 @@ button.is-pressed,
   margin-top: auto;
 }
 
+/* 釣り生物カードの用途アイコン */
+.fish-use-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.fish-use-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.72rem;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.fish-use-icon--cooking {
+  background: #d0eeff;
+  color: #00508a;
+  border: 1px solid #70c0f0;
+}
+
+.fish-use-icon--sea {
+  background: #d0eeff;
+  color: #00508a;
+  border: 1px solid #70c0f0;
+}
+
+.fish-use-icon--cat {
+  background: #d0eeff;
+  color: #00508a;
+  border: 1px solid #70c0f0;
+}
+
+.fish-use-icon--fav {
+  background: linear-gradient(180deg, #fff1f4, #ffe4ea);
+  color: #8b0a2a;
+  border: 1px solid rgba(220, 80, 100, 0.6);
+  font-weight: 700;
+}
+
 .card-control-row label {
   display: inline-flex;
   align-items: center;

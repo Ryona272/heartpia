@@ -982,6 +982,39 @@ function renderList(list, userLevel) {
               <span class="card-category">（${c.hobby}）<span class="card-level">Lv.${c.level}</span></span>
             </div>
             ${metaLines.length ? `<div class="meta">${metaLines.join("<br>")}</div>` : ""}
+            ${
+              c.hobby === "釣り"
+                ? (() => {
+                    const icons = [];
+                    if (cookingFishNameSet.has(c.name))
+                      icons.push(
+                        `<span class="fish-use-icon fish-use-icon--cooking" title="料理「魚」食材">🐟 魚-食材</span>`,
+                      );
+                    if (cookingSeaFishNameSet.has(c.name))
+                      icons.push(
+                        `<span class="fish-use-icon fish-use-icon--sea" title="料理「海の魚」食材">🌊 海の魚-食材</span>`,
+                      );
+                    if (normalFishNameSet.has(c.name))
+                      icons.push(
+                        `<span class="fish-use-icon fish-use-icon--cat" title="にゃんこ">🐱 猫-エサ</span>`,
+                      );
+                    catStates.forEach((cat) => {
+                      if (
+                        Array.isArray(cat.favoriteFishNames) &&
+                        cat.favoriteFishNames.includes(c.name)
+                      ) {
+                        const label = (cat.name || "猫").trim() || "猫";
+                        icons.push(
+                          `<span class="fish-use-icon fish-use-icon--fav" title="${label}の好物">🐱 ${label}-好物</span>`,
+                        );
+                      }
+                    });
+                    return icons.length
+                      ? `<div class="fish-use-icons">${icons.join("")}</div>`
+                      : "";
+                  })()
+                : ""
+            }
             <div class="card-control-row">
               <label><input type="checkbox" class="card-acquired-checkbox" data-name="${c.name}" ${c.acquired ? "checked" : ""} /> 獲得</label>
               <label><input type="checkbox" class="card-star5-checkbox" data-name="${c.name}" ${c.fiveStar ? "checked" : ""} /> ★5</label>
@@ -1335,7 +1368,10 @@ function renderPage2List(targetEl, list, userLevel) {
   const _p2Groups = new Map();
   list.forEach((item) => {
     const cat = _getPage2Category(item);
-    const season = getPrimarySeasonValue(item.season);
+    // normalを含む複合seasonアイテムは通常グループに統合して金縁を1つにする
+    const season = isMultiSeasonNormal(item.season)
+      ? "normal"
+      : getPrimarySeasonValue(item.season);
     const key = `${cat}::${season}`;
     if (!_p2Groups.has(key)) _p2Groups.set(key, []);
     _p2Groups.get(key).push(item);
@@ -1851,6 +1887,8 @@ const normalFishCandidates = catFishList
 const normalFishNameSet = new Set(
   normalFishCandidates.map((fish) => fish.name),
 );
+const cookingFishNameSet = new Set(cookingFishList);
+const cookingSeaFishNameSet = new Set(cookingSeaFishList);
 
 function createDefaultCatState(index) {
   return {
@@ -2068,8 +2106,8 @@ function renderPage3FishList() {
             好物じゃない
           </label>
           <label class="cat-fish-toggle">
-            <input type="checkbox" class="cat-fish-favorite-checkbox" data-fish-name="${fish.name}">
-            好物♡
+            <input type="checkbox" class="cat-fish-favorite-checkbox" data-fish-name="${fish.name}" ${favoriteSet.size >= 3 ? "disabled" : ""}>
+            好物♡${favoriteSet.size >= 3 ? "（上限）" : ""}
           </label>
         </div>`
         }
@@ -2245,6 +2283,10 @@ function initPage3() {
 
     if (target.classList.contains("cat-fish-favorite-checkbox")) {
       if (target.checked) {
+        if (favorite.size >= 3) {
+          target.checked = false;
+          return;
+        }
         favorite.add(fishName);
         excluded.delete(fishName);
       } else {
@@ -2264,6 +2306,8 @@ function initPage3() {
     updateCat5ExcludedToggleUi();
     renderPage3FishList();
     savePage3State();
+    // 好物アイコンを生物図鑑に反映
+    filterCreatures();
   });
 }
 
