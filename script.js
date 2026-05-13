@@ -542,10 +542,15 @@ function updateCounters(shownList) {
 
 function updateCountersPage2(shownList) {
   if (!totalCountPage2El) return;
-  totalCountPage2El.textContent = `全件：${page2Creatures.length}`;
-  displayCountPage2El.textContent = `表示：${shownList.length}`;
-  acquiredCountPage2El.textContent = `獲得：${page2Creatures.filter((c) => c.acquired).length}`;
-  star5CountPage2El.textContent = `★5：${page2Creatures.filter((c) => c.fiveStar).length}`;
+  const EXCLUDED_NAMES = new Set(["不気味な食べ物", "不気味な飲み物"]);
+  const forAcquiredCount = (arr) =>
+    arr.filter(
+      (c) => !EXCLUDED_NAMES.has(c.name) && !isPage2StoreIngredient(c),
+    );
+  totalCountPage2El.textContent = `全件：${page2Creatures.filter((c) => !isPage2StoreIngredient(c)).length}`;
+  displayCountPage2El.textContent = `表示：${shownList.filter((c) => !isPage2StoreIngredient(c)).length}`;
+  acquiredCountPage2El.textContent = `獲得：${forAcquiredCount(page2Creatures).filter((c) => c.acquired).length}`;
+  star5CountPage2El.textContent = `★5：${forAcquiredCount(page2Creatures).filter((c) => c.fiveStar).length}`;
 }
 
 function updateToggleButtonsPage2() {
@@ -771,7 +776,7 @@ function renderList(list, userLevel) {
     return;
   }
 
-  // シーズン値ごとにグループ化（フェス → シーズン → 通常 → その他イベントの順）
+  // シーズン値ごとにグループ化（シーズン → フェス → その他イベント → 通常 の順）
   const currentSeasonFilter = seasonFilter?.value || "";
   const showMultiInNormal = currentSeasonFilter === "normal";
   const festivalSeasonValues = [
@@ -997,7 +1002,7 @@ function renderList(list, userLevel) {
   // グループごとにセクションを作成
   let html = "";
 
-  festivalSeasonValues.forEach((season) => {
+  regularSeasonValues.forEach((season) => {
     const group = list.filter(
       (c) => getPrimarySeasonValue(c.season) === season,
     );
@@ -1005,7 +1010,7 @@ function renderList(list, userLevel) {
     html += `<div class="creature-group"><h2>${label}</h2><div class="creature-group-content">${group.map(generateCard).join("")}</div></div>`;
   });
 
-  regularSeasonValues.forEach((season) => {
+  festivalSeasonValues.forEach((season) => {
     const group = list.filter(
       (c) => getPrimarySeasonValue(c.season) === season,
     );
@@ -1414,7 +1419,9 @@ function renderPage2List(targetEl, list, userLevel) {
               ${metaLines.length ? `<div class="meta">${metaLines.join("<br>")}</div>` : ""}
               ${foodItemsMarkup}
               ${
-                isStoreIngredient
+                isStoreIngredient ||
+                item.name === "不気味な食べ物" ||
+                item.name === "不気味な飲み物"
                   ? ""
                   : `<div class="card-control-row">
                 <label><input type="checkbox" class="card-acquired-checkbox-p2" data-name="${item.name}" ${item.acquired ? "checked" : ""} /> 獲得</label>
@@ -1458,7 +1465,7 @@ function renderPage2List(targetEl, list, userLevel) {
     return `<div class="creature-group"><h3>${seasonLabel}</h3>${categoryHtml}</div>`;
   };
 
-  // シーズン値ごとにグループ化（フェス → シーズン → その他イベント → 通常 の順）
+  // シーズン値ごとにグループ化（シーズン → フェス → その他イベント → 通常 の順）
   const currentSeasonFilterP2 = seasonFilterPage2?.value || "";
   const showMultiInNormalP2 = currentSeasonFilterP2 === "normal";
   const festivalSeasonValues = [
@@ -1508,7 +1515,7 @@ function renderPage2List(targetEl, list, userLevel) {
 
   let html = "";
 
-  festivalSeasonValues.forEach((season) => {
+  regularSeasonValues.forEach((season) => {
     const group = list.filter(
       (c) => getPrimarySeasonValue(c.season) === season,
     );
@@ -1516,7 +1523,7 @@ function renderPage2List(targetEl, list, userLevel) {
     html += renderSeasonGroup(label, group);
   });
 
-  regularSeasonValues.forEach((season) => {
+  festivalSeasonValues.forEach((season) => {
     const group = list.filter(
       (c) => getPrimarySeasonValue(c.season) === season,
     );

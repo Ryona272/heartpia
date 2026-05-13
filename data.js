@@ -2612,6 +2612,19 @@ const cookingCreatures = [
     note: "「ミックスジャム」の材料を変えることでレシピを獲得",
   },
   {
+    name: "フィッシュアンドチップス",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["魚", "魚", "ジャガイモ", "ジャガイモ"],
+    rarityData: [{ star: 1, price: 310 }],
+    staminaRecovery: 40,
+    buff: "なし",
+    note: [
+      "マッシモからレシピを購入",
+      "食用として認識されている魚ならなんでも(貝やエビ、ピグミータコは対象外)",
+    ],
+  },
+  {
     name: "不気味な食べ物",
     hobby: ["料理"],
     level: 1,
@@ -2662,19 +2675,6 @@ const cookingCreatures = [
     staminaRecovery: 40,
     buff: "元気いっぱい",
     note: "「ミックスジャム」の材料を変えることでレシピを獲得",
-  },
-  {
-    name: "フィッシュアンドチップス",
-    hobby: ["料理", "食材"],
-    level: 1,
-    food: ["魚", "魚", "ジャガイモ", "ジャガイモ"],
-    rarityData: [{ star: 1, price: 310 }],
-    staminaRecovery: 40,
-    buff: "なし",
-    note: [
-      "マッシモからレシピを購入",
-      "食用として認識されている魚ならなんでも(貝やエビ、ピグミータコは対象外)",
-    ],
   },
   {
     name: "チーズケーキ",
