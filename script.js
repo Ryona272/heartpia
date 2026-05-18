@@ -2086,9 +2086,27 @@ function renderPage3FishList() {
       const isFavorite = favoriteSet.has(fish.name);
       const isExcluded = excludedSet.has(fish.name);
       const hasFishData = fishingCreatures.some((f) => f.name === fish.name);
+      const fishData = fishingCreatures.find((f) => f.name === fish.name);
+      const waterTags = [];
+      if (fishData?.places1?.includes("海"))
+        waterTags.push(
+          `<span class="fish-water-tag fish-water-tag--sea">🌊 海</span>`,
+        );
+      if (fishData?.places1?.includes("川"))
+        waterTags.push(
+          `<span class="fish-water-tag fish-water-tag--river">≋ 川</span>`,
+        );
+      if (fishData?.places1?.includes("湖"))
+        waterTags.push(
+          `<span class="fish-water-tag fish-water-tag--lake">💧 湖</span>`,
+        );
+      const waterBadge = waterTags.length
+        ? `<div class="fish-water-badge">${waterTags.join("")}</div>`
+        : "";
       return `
       <article class="cat-fish-card ${isFavorite ? "cat-fish-card-favorite" : ""}">
         ${hasFishData ? '<span class="cat-fish-tap-badge">Tap</span>' : ""}
+        ${waterBadge}
         ${fish.img ? `<img class="cat-fish-img" src="${fish.img}" alt="${fish.name}" loading="lazy" onerror="this.remove()">` : ""}
         <div class="cat-fish-name">${fish.name}</div>
         ${
