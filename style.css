@@ -1436,7 +1436,8 @@ button.is-pressed,
   #page-zukan,
   #page-info,
   #page-cat,
-  #page-settings {
+  #page-settings,
+  #page-test {
     padding: 10px;
     overflow: hidden;
   }
@@ -1573,6 +1574,64 @@ button.is-pressed,
   p,
   .card-name {
     line-height: 1.6;
+  }
+
+  /* テストページ スマホ対応 */
+  #page-test .controls {
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .test-level-row {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .test-level-label {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .test-level-items {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .test-level-item {
+    min-width: 52px;
+    flex: 1 1 52px;
+  }
+
+  .test-level-item label {
+    font-size: 0.75rem;
+  }
+
+  #page-test .controls > div:not(.test-level-row) {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  #testTime,
+  #testWeather {
+    flex: 1;
+    width: auto;
+    font-size: 16px;
+    padding: 8px;
+  }
+
+  .test-goal-row {
+    gap: 6px;
+  }
+
+  .test-goal-btn {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .test-chip {
+    width: calc(50% - 4px);
   }
 }
 
@@ -1790,6 +1849,37 @@ button.is-pressed,
   width: 130px;
   flex-shrink: 0;
   box-shadow: 0 1px 4px rgba(46, 56, 64, 0.06);
+  transition: box-shadow 0.15s ease;
+}
+
+.test-chip--tappable {
+  cursor: pointer;
+}
+
+.test-chip--tappable:active {
+  box-shadow: 0 0 0 2px rgba(193, 164, 101, 0.45);
+}
+
+.test-chip-places {
+  display: none;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px dashed rgba(193, 164, 101, 0.3);
+  font-size: 10px;
+  color: #7a6b4f;
+  line-height: 1.4;
+  word-break: break-all;
+}
+
+.test-chip.expanded .test-chip-places {
+  display: flex;
+}
+
+.test-chip.expanded {
+  width: auto;
+  min-width: 130px;
 }
 
 .test-chip-img {

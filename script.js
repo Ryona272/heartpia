@@ -2549,6 +2549,13 @@ function initPageTest() {
   loadTestSettings();
   if (selectedGoal) renderTestResults();
 
+  // チップタップで場所を展開
+  testResultEl.addEventListener("click", (e) => {
+    const chip = e.target.closest(".test-chip--tappable");
+    if (!chip) return;
+    chip.classList.toggle("expanded");
+  });
+
   // ★5売値を計算
   function getStar5Price(c) {
     if (!Array.isArray(c.rarityData) || c.rarityData.length === 0) return 0;
@@ -2560,6 +2567,19 @@ function initPageTest() {
     }
     const s1 = c.rarityData.find((r) => r.star === 1);
     return s1 ? Math.floor(s1.price * 8) : 0;
+  }
+
+  // ★1売値を計算（現実的な稼ぎの基準）
+  function getStar1Price(c) {
+    if (!Array.isArray(c.rarityData) || c.rarityData.length === 0) return 0;
+    if (c.hobby === "野鳥観察") {
+      // 野鳥は★2が取れる前提（★1の4倍）
+      const s2 = c.rarityData.find((r) => r.star === 2);
+      const s1 = c.rarityData.find((r) => r.star === 1);
+      return s2?.price ?? (s1 ? s1.price * 4 : 0);
+    }
+    const s1 = c.rarityData.find((r) => r.star === 1);
+    return s1?.price ?? 0;
   }
 
   // ★2換算売値を計算（ランキング表示用）
@@ -2671,16 +2691,33 @@ function initPageTest() {
     const imgTag = c.img
       ? `<img class="test-chip-img" src="${c.img}" alt="" loading="lazy" onerror="this.style.display='none'">`
       : "";
+    const hobbyLabel = Array.isArray(c.hobby) ? c.hobby.join("-") : c.hobby;
+    let placesHtml = "";
+    let tappable = false;
+    if (Array.isArray(c.places1) && c.places1.length > 0) {
+      tappable = true;
+      const p1 = c.places1.join("・");
+      const p2 =
+        Array.isArray(c.places2) && c.places2.length > 0
+          ? c.places2.join("・")
+          : "";
+      placesHtml =
+        `<div class="test-chip-places">` +
+        `<span class="test-chip-place1">📍 ${p1}</span>` +
+        (p2 ? `<span class="test-chip-place2">🗺 ${p2}</span>` : "") +
+        `</div>`;
+    }
     return (
-      `<div class="test-chip ${colorClass}">` +
+      `<div class="test-chip ${colorClass}${tappable ? " test-chip--tappable" : ""}"${tappable ? ' role="button" tabindex="0"' : ""}>` +
       imgTag +
       `<div class="test-chip-body">` +
       `<span class="test-chip-name">${c.name}</span>` +
-      `<span class="test-chip-hobby">${c.hobby}</span>` +
+      `<span class="test-chip-hobby">${hobbyLabel}</span>` +
       (priceLabel ? `<span class="test-chip-price">${priceLabel}</span>` : "") +
       (badges.length
         ? `<div class="test-chip-badges">${badges.join("")}</div>`
         : "") +
+      placesHtml +
       `</div></div>`
     );
   }
@@ -2727,26 +2764,145 @@ function initPageTest() {
     // ── 目的別アドバイス ──
     switch (selectedGoal) {
       case "money": {
-        const allUnlocked = [
-          ...creatures.filter(
-            (c) =>
-              c.season === "normal" && c.level <= (creatureLvls[c.hobby] ?? 1),
-          ),
+        const allUnlocked = [...filtered, ...filteredPage2];
+
+        // 趣味キーを取得（creatures は string、page2 は array）
+        const getItemHobbyKey = (c) =>
+          Array.isArray(c.hobby) ? c.hobby[0] : c.hobby;
+
+        // 趣味ごとのベースライン: 趣味レベル1で取れるアイテムの平均価格
+        const allForBaseline = [
+          ...creatures.filter((c) => c.season === "normal"),
           ...page2Creatures.filter(
-            (item) =>
-              item.season === "normal" &&
-              !isPage2StoreIngredient(item) &&
-              (isPage2Gardening(item)
-                ? (item.level ?? 1) <= gardenLevel
-                : (item.level ?? 1) <= cookingLevel),
+            (c) => c.season === "normal" && !isPage2StoreIngredient(c),
           ),
         ];
-        const topOverall = [...allUnlocked]
-          .sort((a, b) => getStar5Price(b) - getStar5Price(a))
+        const baselines = {};
+        ["釣り", "虫捕り", "野鳥観察", "園芸", "料理"].forEach((key) => {
+          const hobbyItems = allForBaseline.filter(
+            (c) => getItemHobbyKey(c) === key && (c.level ?? 1) <= 1,
+          );
+          const prices = hobbyItems
+            .map((c) => {
+              if (!Array.isArray(c.rarityData) || c.rarityData.length === 0)
+                return 0;
+              if (c.hobby === "野鳥観察") {
+                const s2 = c.rarityData.find((r) => r.star === 2);
+                const s1 = c.rarityData.find((r) => r.star === 1);
+                return s2?.price ?? (s1 ? s1.price * 4 : 0);
+              }
+              return c.rarityData.find((r) => r.star === 1)?.price ?? 0;
+            })
+            .filter((p) => p > 0);
+          baselines[key] =
+            prices.length > 0
+              ? prices.reduce((a, b) => a + b, 0) / prices.length
+              : 1;
+        });
+
+        // 生物・料理は★1価格ベース（★5は確約できないため）÷ 趣味Lv1アイテムの平均価格
+        const getScore = (c) =>
+          getStar1Price(c) / (baselines[getItemHobbyKey(c)] || 1);
+
+        // 園芸プランター数（趣味レベルによる）
+        const getGardenFoodPlanters = (lv) => {
+          if (lv >= 10) return 40;
+          if (lv >= 7) return 30;
+          if (lv >= 4) return 20;
+          return 10;
+        };
+        const getGardenFlowerPlanters = (lv) => {
+          if (lv >= 10) return 60;
+          if (lv >= 8) return 40;
+          if (lv >= 5) return 24;
+          if (lv >= 3) return 12;
+          return 0;
+        };
+        const getGardenQuantity = (item) =>
+          isPage2GardeningFlower(item)
+            ? getGardenFlowerPlanters(gardenLevel)
+            : getGardenFoodPlanters(gardenLevel);
+
+        // 園芸効率スコア: 花は★5価格（チェーンメカニクスで量産可）、食材は★1価格（確実収入）
+        const getGardenEfficiency = (item) => {
+          const qty = getGardenQuantity(item);
+          if (qty === 0) return 0;
+          const price = isPage2GardeningFlower(item)
+            ? getStar5Price(item)
+            : getStar1Price(item);
+          return (price * qty) / (item.time || 1);
+        };
+
+        const topNormalized = [...allUnlocked]
+          .sort((a, b) => getScore(b) - getScore(a))
           .slice(0, 10);
+
+        const gardenUnlocked = filteredPage2.filter(
+          (item) => isPage2Gardening(item) && getGardenQuantity(item) > 0,
+        );
+        const gardenFood = gardenUnlocked.filter(
+          (item) => !isPage2GardeningFlower(item),
+        );
+        const gardenFlower = gardenUnlocked.filter((item) =>
+          isPage2GardeningFlower(item),
+        );
+        const topGardenFood = [...gardenFood]
+          .sort((a, b) => getGardenEfficiency(b) - getGardenEfficiency(a))
+          .slice(0, 5);
+        const topGardenFlower = [...gardenFlower]
+          .sort((a, b) => getGardenEfficiency(b) - getGardenEfficiency(a))
+          .slice(0, 5);
+
+        const gardenLabel = (c) => {
+          const qty = getGardenQuantity(c);
+          const eff = getGardenEfficiency(c);
+          return `${Math.round(eff).toLocaleString()}G/h (${qty}個)`;
+        };
+
+        let gardenContent = "";
+        if (topGardenFood.length > 0) {
+          gardenContent += `<p class="test-cat-label">🥕 食材 Top 5</p>`;
+          gardenContent += renderChips(topGardenFood, gardenLabel);
+        }
+        if (topGardenFlower.length > 0) {
+          gardenContent += `<p class="test-cat-label">🌸 花 Top 5</p>`;
+          gardenContent += renderChips(topGardenFlower, gardenLabel);
+        }
+        if (!gardenContent) {
+          gardenContent =
+            '<p class="test-empty">解放済みの園芸アイテムがありません。</p>';
+        }
+
+        // ① 生物（釣り・虫捕り・野鳥観察）
+        const topCreatures = [...filtered]
+          .sort((a, b) => getScore(b) - getScore(a))
+          .slice(0, 10);
+
+        // ③ 料理
+        const cookingUnlocked = filteredPage2.filter(
+          (item) => !isPage2Gardening(item),
+        );
+        const topCooking = [...cookingUnlocked]
+          .sort((a, b) => getScore(b) - getScore(a))
+          .slice(0, 10);
+
         html += renderSection(
-          `💰 お金を稼ぐ ─ ★5価値が高い通常種（全体 Top 10）`,
-          renderChips(topOverall, (c) => `★5: ${fmt(getStar5Price(c))}`),
+          `🐟 ① 生物 相対スコア Top 10（趣味Lv1取得品の平均価格比）`,
+          renderChips(
+            topCreatures,
+            (c) => `${getScore(c).toFixed(1)}倍 / ★1: ${fmt(getStar1Price(c))}`,
+          ),
+        );
+        html += renderSection(
+          `🌿 ② 園芸 効率ランキング（花: ★5価格・食材: ★1価格 × 個数 ÷ 育成時間）`,
+          gardenContent,
+        );
+        html += renderSection(
+          `🍳 ③ 料理 相対スコア Top 10（料理Lv1作成品の平均価格比）`,
+          renderChips(
+            topCooking,
+            (c) => `${getScore(c).toFixed(1)}倍 / ★1: ${fmt(getStar1Price(c))}`,
+          ),
         );
         break;
       }
