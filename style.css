@@ -1632,3 +1632,291 @@ button.is-pressed,
     background-position: 100% 100%;
   }
 }
+
+/* =======================
+   テストページ（行動アドバイザー）
+   ======================= */
+
+#page-test {
+  background:
+    linear-gradient(155deg, rgba(255, 248, 231, 0.98), rgba(255, 255, 255, 0.96)),
+    radial-gradient(circle at 0% 0%, rgba(223, 207, 171, 0.22), transparent 45%);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: 0 16px 36px var(--shadow);
+  border: 1px solid rgba(193, 164, 101, 0.24);
+}
+
+.test-desc {
+  font-size: 13px;
+  color: #7a6b4f;
+  margin: 0 0 12px;
+}
+
+#page-test .controls {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* 趣味レベル行 */
+.test-level-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.test-level-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #5f4a22;
+  white-space: nowrap;
+}
+
+.test-level-items {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+  flex: 1;
+}
+
+.test-level-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+}
+
+.test-level-item label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #67532b;
+  line-height: 1;
+  white-space: nowrap;
+  margin-bottom: 4px;
+}
+
+.test-level-item select {
+  width: 100%;
+  min-width: 34px;
+  font-size: 12px;
+  padding: 2px 2px;
+  text-align: center;
+}
+
+#page-test .controls > div:not(.test-level-row) {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+#page-test .controls > div:not(.test-level-row) label {
+  display: inline;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+#testTime,
+#testWeather {
+  width: auto;
+  min-height: 32px;
+}
+
+.test-goal-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.test-goal-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #5f4a22;
+}
+
+.test-result {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.test-placeholder {
+  color: #aaa;
+  font-size: 14px;
+  text-align: center;
+  padding: 24px 0;
+  margin: 0;
+}
+
+.test-section {
+  background: #fffef9;
+  border-radius: 12px;
+  padding: 14px;
+  border: 1px solid rgba(193, 164, 101, 0.2);
+  box-shadow: 0 3px 10px rgba(46, 56, 64, 0.06);
+}
+
+.test-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #5f4a22;
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(193, 164, 101, 0.25);
+}
+
+.test-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.test-chip {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  background: var(--card-surface);
+  border: 1px solid rgba(193, 164, 101, 0.22);
+  border-radius: 10px;
+  padding: 6px 8px;
+  width: 130px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(46, 56, 64, 0.06);
+}
+
+.test-chip-img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.test-chip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.test-chip-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #3a2e1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.test-chip-hobby {
+  font-size: 10px;
+  color: #8a7a5a;
+}
+
+.test-chip-price {
+  font-size: 11px;
+  color: #7a4e1a;
+  font-weight: 700;
+}
+
+.test-chip-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.test-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: default;
+}
+
+.test-badge--acquired {
+  background: #d4edcc;
+  color: #3a6a28;
+}
+
+.test-badge--star5 {
+  background: #fde9a2;
+  color: #7a5a00;
+}
+
+.test-badge--master {
+  background: #d6c8f5;
+  color: #4a2a8a;
+}
+
+.test-empty {
+  font-size: 13px;
+  color: #aaa;
+  font-style: italic;
+  margin: 0;
+}
+
+.test-cat-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #6b5c3e;
+  margin: 8px 0 4px;
+}
+
+/* ===== テストページ チップ ホビー別カラー ===== */
+.test-chip.chip-fishing {
+  background: linear-gradient(180deg, #77adda, #c2e0f7);
+  border-color: rgba(13, 71, 161, 0.2);
+}
+.test-chip.chip-fishing .test-chip-name { color: #0d47a1; }
+.test-chip.chip-fishing .test-chip-hobby { color: #1565c0; }
+
+.test-chip.chip-insect {
+  background: linear-gradient(180deg, #7eca81, #c5efcf);
+  border-color: rgba(27, 94, 32, 0.2);
+}
+.test-chip.chip-insect .test-chip-name { color: #1b5e20; }
+.test-chip.chip-insect .test-chip-hobby { color: #2e7d32; }
+
+.test-chip.chip-bird {
+  background: linear-gradient(180deg, #edbd74, #ebd6a9);
+  border-color: rgba(245, 86, 23, 0.2);
+}
+.test-chip.chip-bird .test-chip-name { color: #c84a00; }
+.test-chip.chip-bird .test-chip-hobby { color: #bf360c; }
+
+.test-chip.chip-gardening {
+  background: linear-gradient(180deg, #9fdc68, #e6f7c9);
+  border-color: rgba(53, 98, 28, 0.2);
+}
+.test-chip.chip-gardening .test-chip-name { color: #35621c; }
+.test-chip.chip-gardening .test-chip-hobby { color: #558b2f; }
+
+.test-chip.chip-ingredient {
+  background: linear-gradient(180deg, #7ec8ff, #dff3ff);
+  border-color: rgba(13, 79, 122, 0.2);
+}
+.test-chip.chip-ingredient .test-chip-name { color: #0d4f7a; }
+.test-chip.chip-ingredient .test-chip-hobby { color: #1565c0; }
+
+.test-chip.chip-cooking {
+  background: linear-gradient(180deg, #ffd45a, #ffefb4);
+  border-color: rgba(131, 87, 0, 0.2);
+}
+.test-chip.chip-cooking .test-chip-name { color: #835700; }
+.test-chip.chip-cooking .test-chip-hobby { color: #a06700; }
+

@@ -12,10 +12,12 @@ const searchInput = document.getElementById("searchInput");
 const result = document.getElementById("result");
 const acquiredToggle = document.getElementById("acquiredToggle");
 const star5Toggle = document.getElementById("star5Toggle");
+const masterToggle = document.getElementById("masterToggle");
 const totalCountEl = document.getElementById("totalCount");
 const displayCountEl = document.getElementById("displayCount");
 const acquiredCountEl = document.getElementById("acquiredCount");
 const star5CountEl = document.getElementById("star5Count");
+const masterCountEl = document.getElementById("masterCount");
 const userLevelPage2Input = document.getElementById("userLevelPage2");
 const seasonFilterPage2 = document.getElementById("seasonFilterPage2");
 const sortPage2Select = document.getElementById("sortPage2");
@@ -25,10 +27,12 @@ const hobbyModeFilterPage2 = document.getElementById("hobbyModeFilterPage2");
 const resultPage2 = document.getElementById("resultPage2");
 const acquiredTogglePage2 = document.getElementById("acquiredTogglePage2");
 const star5TogglePage2 = document.getElementById("star5TogglePage2");
+const masterTogglePage2 = document.getElementById("masterTogglePage2");
 const totalCountPage2El = document.getElementById("totalCountPage2");
 const displayCountPage2El = document.getElementById("displayCountPage2");
 const acquiredCountPage2El = document.getElementById("acquiredCountPage2");
 const star5CountPage2El = document.getElementById("star5CountPage2");
+const masterCountPage2El = document.getElementById("masterCountPage2");
 const catTabsEl = document.getElementById("catTabs");
 const catNameInput = document.getElementById("catNameInput");
 const catResetBtn = document.getElementById("catResetBtn");
@@ -55,8 +59,10 @@ const eventnameFilterPage2 = document.getElementById("eventnameFilterPage2");
 
 let showAcquired = true;
 let showFiveStar = true;
+let showMaster = true;
 let showAcquiredPage2 = true;
 let showFiveStarPage2 = true;
+let showMasterPage2 = true;
 
 const PLACE1_BACKGROUND_IMAGE_NAMES = new Set([
   "森林",
@@ -360,6 +366,7 @@ function filterCreatures() {
     // グローバル toggles: OFF にすると該当済みを非表示
     if (!showAcquired && c.acquired) return false;
     if (!showFiveStar && c.fiveStar) return false;
+    if (!showMaster && c.master) return false;
 
     if (keyword && !c.name.toLowerCase().includes(keyword)) return false;
     return true;
@@ -386,6 +393,10 @@ function updateToggleButtons() {
   star5Toggle.classList.toggle("active", showFiveStar);
   star5Toggle.setAttribute("aria-pressed", showFiveStar.toString());
   star5Toggle.textContent = `★5 ${showFiveStar ? "ON" : "OFF"}`;
+
+  masterToggle.classList.toggle("active", showMaster);
+  masterToggle.setAttribute("aria-pressed", showMaster.toString());
+  masterToggle.textContent = `マスター ${showMaster ? "ON" : "OFF"}`;
 }
 
 const STORAGE_KEY = "heartpia-state-v2";
@@ -482,17 +493,21 @@ function saveState() {
   const payload = {
     showAcquired,
     showFiveStar,
+    showMaster,
     showAcquiredPage2,
     showFiveStarPage2,
+    showMasterPage2,
     creatures: creatures.map((c) => ({
       name: c.name,
       acquired: !!c.acquired,
       fiveStar: !!c.fiveStar,
+      master: !!c.master,
     })),
     page2: page2Creatures.map((c) => ({
       name: c.name,
       acquired: !!c.acquired,
       fiveStar: !!c.fiveStar,
+      master: !!c.master,
     })),
   };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
@@ -508,16 +523,20 @@ function loadState() {
     const obj = JSON.parse(raw);
     if (typeof obj.showAcquired === "boolean") showAcquired = obj.showAcquired;
     if (typeof obj.showFiveStar === "boolean") showFiveStar = obj.showFiveStar;
+    if (typeof obj.showMaster === "boolean") showMaster = obj.showMaster;
     if (typeof obj.showAcquiredPage2 === "boolean")
       showAcquiredPage2 = obj.showAcquiredPage2;
     if (typeof obj.showFiveStarPage2 === "boolean")
       showFiveStarPage2 = obj.showFiveStarPage2;
+    if (typeof obj.showMasterPage2 === "boolean")
+      showMasterPage2 = obj.showMasterPage2;
     if (Array.isArray(obj.creatures)) {
       obj.creatures.forEach((stored) => {
         const target = creatures.find((c) => c.name === stored.name);
         if (!target) return;
         target.acquired = !!stored.acquired;
         target.fiveStar = !!stored.fiveStar;
+        target.master = !!stored.master;
       });
     }
     if (Array.isArray(obj.page2)) {
@@ -526,6 +545,7 @@ function loadState() {
         if (!target) return;
         target.acquired = !!stored.acquired;
         target.fiveStar = !!stored.fiveStar;
+        target.master = !!stored.master;
       });
     }
   } catch (e) {
@@ -538,6 +558,7 @@ function updateCounters(shownList) {
   displayCountEl.textContent = `表示：${shownList.length}`;
   acquiredCountEl.textContent = `獲得：${creatures.filter((c) => c.acquired).length}`;
   star5CountEl.textContent = `★5：${creatures.filter((c) => c.fiveStar).length}`;
+  masterCountEl.textContent = `マスター：${creatures.filter((c) => c.master).length}`;
 }
 
 function updateCountersPage2(shownList) {
@@ -551,6 +572,7 @@ function updateCountersPage2(shownList) {
   displayCountPage2El.textContent = `表示：${shownList.filter((c) => !isPage2StoreIngredient(c)).length}`;
   acquiredCountPage2El.textContent = `獲得：${forAcquiredCount(page2Creatures).filter((c) => c.acquired).length}`;
   star5CountPage2El.textContent = `★5：${forAcquiredCount(page2Creatures).filter((c) => c.fiveStar).length}`;
+  masterCountPage2El.textContent = `マスター：${forAcquiredCount(page2Creatures).filter((c) => c.master).length}`;
 }
 
 function updateToggleButtonsPage2() {
@@ -564,6 +586,9 @@ function updateToggleButtonsPage2() {
   star5TogglePage2.classList.toggle("active", showFiveStarPage2);
   star5TogglePage2.setAttribute("aria-pressed", showFiveStarPage2.toString());
   star5TogglePage2.textContent = `★5 ${showFiveStarPage2 ? "ON" : "OFF"}`;
+  masterTogglePage2.classList.toggle("active", showMasterPage2);
+  masterTogglePage2.setAttribute("aria-pressed", showMasterPage2.toString());
+  masterTogglePage2.textContent = `マスター ${showMasterPage2 ? "ON" : "OFF"}`;
 }
 
 acquiredToggle.addEventListener("click", () => {
@@ -571,6 +596,7 @@ acquiredToggle.addEventListener("click", () => {
 
   if (!showAcquired) {
     showFiveStar = false;
+    showMaster = false;
   }
 
   updateToggleButtons();
@@ -590,6 +616,18 @@ star5Toggle.addEventListener("click", () => {
   filterCreatures();
 });
 
+masterToggle.addEventListener("click", () => {
+  showMaster = !showMaster;
+
+  if (showMaster && !showAcquired) {
+    showAcquired = true;
+  }
+
+  updateToggleButtons();
+  saveState();
+  filterCreatures();
+});
+
 result.addEventListener("change", (e) => {
   const target = e.target;
   const cardName = target.dataset.name;
@@ -601,6 +639,7 @@ result.addEventListener("change", (e) => {
   const card = target.closest(".card");
   const acquiredCheckbox = card?.querySelector(".card-acquired-checkbox");
   const star5Checkbox = card?.querySelector(".card-star5-checkbox");
+  const masterCheckbox = card?.querySelector(".card-master-checkbox");
 
   if (target.classList.contains("card-acquired-checkbox")) {
     creature.acquired = target.checked;
@@ -608,11 +647,22 @@ result.addEventListener("change", (e) => {
     if (!target.checked) {
       creature.fiveStar = false;
       if (star5Checkbox) star5Checkbox.checked = false;
+      creature.master = false;
+      if (masterCheckbox) masterCheckbox.checked = false;
     }
   }
 
   if (target.classList.contains("card-star5-checkbox")) {
     creature.fiveStar = target.checked;
+
+    if (target.checked) {
+      creature.acquired = true;
+      if (acquiredCheckbox) acquiredCheckbox.checked = true;
+    }
+  }
+
+  if (target.classList.contains("card-master-checkbox")) {
+    creature.master = target.checked;
 
     if (target.checked) {
       creature.acquired = true;
@@ -1018,6 +1068,7 @@ function renderList(list, userLevel) {
             <div class="card-control-row">
               <label><input type="checkbox" class="card-acquired-checkbox" data-name="${c.name}" ${c.acquired ? "checked" : ""} /> 獲得</label>
               <label><input type="checkbox" class="card-star5-checkbox" data-name="${c.name}" ${c.fiveStar ? "checked" : ""} /> ★5</label>
+              ${c.season === "normal" ? `<label><input type="checkbox" class="card-master-checkbox" data-name="${c.name}" ${c.master ? "checked" : ""} /> マスター</label>` : ""}
             </div>
           </div>
           <div class="card-back ${cardClass}">
@@ -1462,6 +1513,7 @@ function renderPage2List(targetEl, list, userLevel) {
                   : `<div class="card-control-row">
                 <label><input type="checkbox" class="card-acquired-checkbox-p2" data-name="${item.name}" ${item.acquired ? "checked" : ""} /> 獲得</label>
                 <label><input type="checkbox" class="card-star5-checkbox-p2" data-name="${item.name}" ${item.fiveStar ? "checked" : ""} /> ★5</label>
+                ${item.season === "normal" ? `<label><input type="checkbox" class="card-master-checkbox-p2" data-name="${item.name}" ${item.master ? "checked" : ""} /> マスター</label>` : ""}
               </div>`
               }
             </div>
@@ -1715,6 +1767,7 @@ function filterAndRenderPage2() {
   const filtered = page2Creatures.filter((item) => {
     if (!showAcquiredPage2 && item.acquired) return false;
     if (!showFiveStarPage2 && item.fiveStar) return false;
+    if (!showMasterPage2 && item.master) return false;
     if (keyword && !item.name.toLowerCase().includes(keyword)) return false;
 
     // シーズン/フェスフィルター（1つのセレクトボックスで一括管理）
@@ -1807,7 +1860,10 @@ function initPage2() {
   if (acquiredTogglePage2) {
     acquiredTogglePage2.addEventListener("click", () => {
       showAcquiredPage2 = !showAcquiredPage2;
-      if (!showAcquiredPage2) showFiveStarPage2 = false;
+      if (!showAcquiredPage2) {
+        showFiveStarPage2 = false;
+        showMasterPage2 = false;
+      }
       updateToggleButtonsPage2();
       saveState();
       filterAndRenderPage2();
@@ -1815,6 +1871,13 @@ function initPage2() {
     star5TogglePage2.addEventListener("click", () => {
       showFiveStarPage2 = !showFiveStarPage2;
       if (showFiveStarPage2 && !showAcquiredPage2) showAcquiredPage2 = true;
+      updateToggleButtonsPage2();
+      saveState();
+      filterAndRenderPage2();
+    });
+    masterTogglePage2.addEventListener("click", () => {
+      showMasterPage2 = !showMasterPage2;
+      if (showMasterPage2 && !showAcquiredPage2) showAcquiredPage2 = true;
       updateToggleButtonsPage2();
       saveState();
       filterAndRenderPage2();
@@ -1848,15 +1911,25 @@ function initPage2() {
     const card = target.closest(".card");
     const acq = card?.querySelector(".card-acquired-checkbox-p2");
     const s5 = card?.querySelector(".card-star5-checkbox-p2");
+    const masterP2 = card?.querySelector(".card-master-checkbox-p2");
     if (target.classList.contains("card-acquired-checkbox-p2")) {
       item.acquired = target.checked;
       if (!target.checked) {
         item.fiveStar = false;
         if (s5) s5.checked = false;
+        item.master = false;
+        if (masterP2) masterP2.checked = false;
       }
     }
     if (target.classList.contains("card-star5-checkbox-p2")) {
       item.fiveStar = target.checked;
+      if (target.checked) {
+        item.acquired = true;
+        if (acq) acq.checked = true;
+      }
+    }
+    if (target.classList.contains("card-master-checkbox-p2")) {
+      item.master = target.checked;
       if (target.checked) {
         item.acquired = true;
         if (acq) acq.checked = true;
@@ -2374,6 +2447,400 @@ function normalizeBirdRarityData() {
   });
 }
 
+// =======================
+// ページ4（テスト：行動アドバイザー）
+// =======================
+function initPageTest() {
+  const STORAGE_KEY_TEST = "heartpia-test-settings-v1";
+  const testResultEl = document.getElementById("testResult");
+  const testLevelFishEl = document.getElementById("testLevelFish");
+  const testLevelInsectEl = document.getElementById("testLevelInsect");
+  const testLevelBirdEl = document.getElementById("testLevelBird");
+  const testLevelGardenEl = document.getElementById("testLevelGarden");
+  const testLevelCookingEl = document.getElementById("testLevelCooking");
+  const testTimeEl = document.getElementById("testTime");
+  const testWeatherEl = document.getElementById("testWeather");
+  if (
+    !testResultEl ||
+    !testLevelFishEl ||
+    !testLevelInsectEl ||
+    !testLevelBirdEl ||
+    !testLevelGardenEl ||
+    !testLevelCookingEl ||
+    !testTimeEl ||
+    !testWeatherEl
+  )
+    return;
+
+  let selectedGoal = null;
+
+  // localStorage 読み込み
+  function loadTestSettings() {
+    try {
+      const s = JSON.parse(localStorage.getItem(STORAGE_KEY_TEST) || "{}");
+      if (s.levelFish) testLevelFishEl.value = s.levelFish;
+      if (s.levelInsect) testLevelInsectEl.value = s.levelInsect;
+      if (s.levelBird) testLevelBirdEl.value = s.levelBird;
+      if (s.levelGarden) testLevelGardenEl.value = s.levelGarden;
+      if (s.levelCooking) testLevelCookingEl.value = s.levelCooking;
+      if (s.time) testTimeEl.value = s.time;
+      if (s.weather) testWeatherEl.value = s.weather;
+      if (s.goal) {
+        const btn = document.querySelector(
+          `.test-goal-btn[data-goal="${s.goal}"]`,
+        );
+        if (btn) {
+          btn.classList.add("active");
+          btn.setAttribute("aria-pressed", "true");
+          selectedGoal = s.goal;
+        }
+      }
+    } catch (e) {}
+  }
+
+  // localStorage 保存
+  function saveTestSettings() {
+    localStorage.setItem(
+      STORAGE_KEY_TEST,
+      JSON.stringify({
+        levelFish: testLevelFishEl.value,
+        levelInsect: testLevelInsectEl.value,
+        levelBird: testLevelBirdEl.value,
+        levelGarden: testLevelGardenEl.value,
+        levelCooking: testLevelCookingEl.value,
+        time: testTimeEl.value,
+        weather: testWeatherEl.value,
+        goal: selectedGoal || "",
+      }),
+    );
+  }
+
+  // 目的ボタン（単一選択）
+  document.querySelectorAll(".test-goal-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".test-goal-btn").forEach((b) => {
+        b.classList.remove("active");
+        b.setAttribute("aria-pressed", "false");
+      });
+      btn.classList.add("active");
+      btn.setAttribute("aria-pressed", "true");
+      selectedGoal = btn.dataset.goal;
+      saveTestSettings();
+      renderTestResults();
+    });
+  });
+
+  // 状況変更時に再描画・保存
+  [
+    testLevelFishEl,
+    testLevelInsectEl,
+    testLevelBirdEl,
+    testLevelGardenEl,
+    testLevelCookingEl,
+    testTimeEl,
+    testWeatherEl,
+  ].forEach((el) => {
+    el.addEventListener("change", () => {
+      saveTestSettings();
+      if (selectedGoal) renderTestResults();
+    });
+  });
+
+  loadTestSettings();
+  if (selectedGoal) renderTestResults();
+
+  // ★5売値を計算
+  function getStar5Price(c) {
+    if (!Array.isArray(c.rarityData) || c.rarityData.length === 0) return 0;
+    if (c.hobby === "野鳥観察") {
+      const s2 = c.rarityData.find((r) => r.star === 2);
+      const s1 = c.rarityData.find((r) => r.star === 1);
+      const base = s2?.price ?? (s1 ? s1.price * 4 : 0);
+      return base * 8;
+    }
+    const s1 = c.rarityData.find((r) => r.star === 1);
+    return s1 ? Math.floor(s1.price * 8) : 0;
+  }
+
+  // ★2換算売値を計算（ランキング表示用）
+  function getStar2Price(c) {
+    if (!Array.isArray(c.rarityData) || c.rarityData.length === 0) return 0;
+    if (c.hobby === "野鳥観察") {
+      const s2 = c.rarityData.find((r) => r.star === 2);
+      const s1 = c.rarityData.find((r) => r.star === 1);
+      return s2?.price ?? (s1 ? s1.price * 4 : 0);
+    }
+    const s1 = c.rarityData.find((r) => r.star === 1);
+    return s1 ? Math.floor(s1.price * 1.5) : 0;
+  }
+
+  // 状況フィルター
+  function getFilteredCreatures() {
+    const lvls = {
+      釣り: Number(testLevelFishEl.value) || 1,
+      虫捕り: Number(testLevelInsectEl.value) || 1,
+      野鳥観察: Number(testLevelBirdEl.value) || 1,
+    };
+    const time = testTimeEl.value;
+    const weather = testWeatherEl.value;
+    return creatures.filter((c) => {
+      if (c.season !== "normal") return false;
+      if (c.level > (lvls[c.hobby] ?? 1)) return false;
+      if (time && !c.times?.includes(time)) return false;
+      if (weather) {
+        const w = c.weathers || [];
+        if (weather === "all_three") {
+          const match = ["晴れ", "雨(雪)", "虹"];
+          if (w.length !== match.length || !match.every((x) => w.includes(x)))
+            return false;
+        } else if (weather === "rainbow_only") {
+          if (!(w.length === 1 && w[0] === "虹")) return false;
+        } else if (weather === "exclude_sunny") {
+          const match = ["雨(雪)", "虹"];
+          if (w.length !== match.length || !match.every((x) => w.includes(x)))
+            return false;
+        } else if (weather === "exclude_rain") {
+          const match = ["晴れ", "虹"];
+          if (w.length !== match.length || !match.every((x) => w.includes(x)))
+            return false;
+        } else if (weather === "include_sunny") {
+          if (!w.includes("晴れ")) return false;
+        } else if (weather === "include_rain") {
+          if (!w.includes("雨(雪)")) return false;
+        }
+      }
+      return true;
+    });
+  }
+
+  // 数値をG表記にフォーマット
+  function fmt(n) {
+    return n > 0 ? `${n.toLocaleString()}G` : "";
+  }
+
+  // 状況テキストを組み立て
+  function buildSituationText() {
+    const timeLabels = {
+      "00-06": "深夜(0〜6時)",
+      "06-12": "午前(6〜12時)",
+      "12-18": "午後(12〜18時)",
+      "18-00": "夜(18〜0時)",
+    };
+    const weatherLabels = {
+      all_three: "晴れ , 雨(雪) , 虹",
+      exclude_sunny: "雨(雪) , 虹",
+      exclude_rain: "晴れ , 虹",
+      rainbow_only: "虹のみ",
+      include_sunny: "晴れを含む",
+      include_rain: "雨(雪)を含む",
+    };
+    const parts = [];
+    if (testTimeEl.value)
+      parts.push(timeLabels[testTimeEl.value] || testTimeEl.value);
+    if (testWeatherEl.value)
+      parts.push(weatherLabels[testWeatherEl.value] || testWeatherEl.value);
+    return parts.length ? parts.join(" / ") : "全時間・全天候";
+  }
+
+  // ホビー別チップ色クラスを返す
+  function getChipColorClass(c) {
+    if (c.hobby === "釣り") return "chip-fishing";
+    if (c.hobby === "虫捕り") return "chip-insect";
+    if (c.hobby === "野鳥観察") return "chip-bird";
+    if (isPage2Gardening(c)) return "chip-gardening";
+    if (isPage2StoreIngredient(c)) return "chip-ingredient";
+    return "chip-cooking";
+  }
+
+  // チップ1件を描画
+  function renderChip(c, priceLabel) {
+    const colorClass = getChipColorClass(c);
+    const badges = [];
+    if (c.acquired)
+      badges.push(
+        '<span class="test-badge test-badge--acquired" title="獲得済">📖</span>',
+      );
+    if (c.fiveStar)
+      badges.push(
+        '<span class="test-badge test-badge--star5" title="★5済">⭐</span>',
+      );
+    if (c.master)
+      badges.push(
+        '<span class="test-badge test-badge--master" title="マスター">🏆</span>',
+      );
+    const imgTag = c.img
+      ? `<img class="test-chip-img" src="${c.img}" alt="" loading="lazy" onerror="this.style.display='none'">`
+      : "";
+    return (
+      `<div class="test-chip ${colorClass}">` +
+      imgTag +
+      `<div class="test-chip-body">` +
+      `<span class="test-chip-name">${c.name}</span>` +
+      `<span class="test-chip-hobby">${c.hobby}</span>` +
+      (priceLabel ? `<span class="test-chip-price">${priceLabel}</span>` : "") +
+      (badges.length
+        ? `<div class="test-chip-badges">${badges.join("")}</div>`
+        : "") +
+      `</div></div>`
+    );
+  }
+
+  // チップグリッドを描画
+  function renderChips(items, priceFn) {
+    if (items.length === 0)
+      return '<p class="test-empty">該当する生き物がいません。</p>';
+    return `<div class="test-chips">${items.map((c) => renderChip(c, priceFn ? priceFn(c) : "")).join("")}</div>`;
+  }
+
+  // セクション1件を描画
+  function renderSection(title, content) {
+    return `<div class="test-section"><h3 class="test-section-title">${title}</h3>${content}</div>`;
+  }
+
+  // 結果全体を描画
+  function renderTestResults() {
+    if (!selectedGoal) return;
+    const filtered = getFilteredCreatures();
+    const fishLevel = Number(testLevelFishEl.value) || 1;
+    const insectLevel = Number(testLevelInsectEl.value) || 1;
+    const birdLevel = Number(testLevelBirdEl.value) || 1;
+    const gardenLevel = Number(testLevelGardenEl.value) || 1;
+    const cookingLevel = Number(testLevelCookingEl.value) || 1;
+    const creatureLvls = {
+      釣り: fishLevel,
+      虫捕り: insectLevel,
+      野鳥観察: birdLevel,
+    };
+    const situationText = buildSituationText();
+    let html = "";
+
+    // 園芸・料理（通常種・趣味Lv以下）※販売食材は除外
+    const filteredPage2 = page2Creatures.filter(
+      (item) =>
+        item.season === "normal" &&
+        !isPage2StoreIngredient(item) &&
+        (isPage2Gardening(item)
+          ? (item.level ?? 1) <= gardenLevel
+          : (item.level ?? 1) <= cookingLevel),
+    );
+
+    // ── 目的別アドバイス ──
+    switch (selectedGoal) {
+      case "money": {
+        const allUnlocked = [
+          ...creatures.filter(
+            (c) =>
+              c.season === "normal" && c.level <= (creatureLvls[c.hobby] ?? 1),
+          ),
+          ...page2Creatures.filter(
+            (item) =>
+              item.season === "normal" &&
+              !isPage2StoreIngredient(item) &&
+              (isPage2Gardening(item)
+                ? (item.level ?? 1) <= gardenLevel
+                : (item.level ?? 1) <= cookingLevel),
+          ),
+        ];
+        const topOverall = [...allUnlocked]
+          .sort((a, b) => getStar5Price(b) - getStar5Price(a))
+          .slice(0, 10);
+        html += renderSection(
+          `💰 お金を稼ぐ ─ ★5価値が高い通常種（全体 Top 10）`,
+          renderChips(topOverall, (c) => `★5: ${fmt(getStar5Price(c))}`),
+        );
+        break;
+      }
+      case "collect": {
+        const unacquired = [...filtered, ...filteredPage2].filter(
+          (c) => !c.acquired,
+        );
+        html += renderSection(
+          `📖 コレクション完成 ─ 今取れる未獲得（${unacquired.length}種）`,
+          renderChips(unacquired),
+        );
+        const allUnacquired = [
+          ...creatures.filter(
+            (c) =>
+              c.season === "normal" &&
+              !c.acquired &&
+              c.level <= (creatureLvls[c.hobby] ?? 1),
+          ),
+          ...page2Creatures.filter(
+            (item) =>
+              item.season === "normal" &&
+              !item.acquired &&
+              !isPage2StoreIngredient(item) &&
+              (isPage2Gardening(item)
+                ? (item.level ?? 1) <= gardenLevel
+                : (item.level ?? 1) <= cookingLevel),
+          ),
+        ];
+        html += renderSection(
+          `📖 未獲得（全体）（${allUnacquired.length}種）`,
+          renderChips(allUnacquired),
+        );
+        break;
+      }
+      case "star5": {
+        const notStar5 = [...filtered, ...filteredPage2].filter(
+          (c) => !c.fiveStar,
+        );
+        html += renderSection(
+          `⭐ ★5を増やす ─ 今取れる★5未達（${notStar5.length}種）`,
+          renderChips(notStar5, (c) => `★5: ${fmt(getStar5Price(c))}`),
+        );
+        break;
+      }
+      case "master": {
+        const notMaster = [...filtered, ...filteredPage2].filter(
+          (c) => c.season === "normal" && !c.master,
+        );
+        html += renderSection(
+          `🏆 マスターを増やす ─ 今取れるマスター未達の通常種（${notMaster.length}種）`,
+          renderChips(notMaster),
+        );
+        break;
+      }
+      case "cat": {
+        const catFood = filtered.filter((c) => normalFishNameSet.has(c.name));
+        const activeCat = getActiveCatState();
+        const favSet = new Set(activeCat.favoriteFishNames || []);
+        const favFood = catFood.filter((c) => favSet.has(c.name));
+        const otherFood = catFood.filter((c) => !favSet.has(c.name));
+        let catContent = "";
+        if (favFood.length > 0) {
+          catContent += `<p class="test-cat-label">⭐ ${activeCat.name || "猫"}の好物</p>`;
+          catContent += `<div class="test-chips">${favFood.map((c) => renderChip(c, "")).join("")}</div>`;
+        }
+        if (otherFood.length > 0) {
+          catContent += `<p class="test-cat-label">エサになる魚（好物以外）</p>`;
+          catContent += `<div class="test-chips">${otherFood.map((c) => renderChip(c, "")).join("")}</div>`;
+        }
+        if (!catContent) {
+          catContent =
+            '<p class="test-empty">今の状況でエサになる魚はいません。</p>';
+        }
+        html += renderSection(
+          `🐱 にゃんこのエサ ─ 今取れるエサになる魚（${catFood.length}種）`,
+          catContent,
+        );
+        break;
+      }
+    }
+
+    // ── 末尾：今の状況で捕れる生き物 ──
+    html += renderSection(
+      `📍 ${situationText}で捕れる生き物（${filtered.length}種）`,
+      renderChips(filtered, (c) => fmt(getStar2Price(c))),
+    );
+
+    testResultEl.innerHTML = html;
+  }
+}
+
+// =======================
+// メイン初期化
+// =======================
 function init() {
   loadState();
   saveState(); // 移行後は新キーを確実に更新
@@ -2714,6 +3181,7 @@ function init() {
   }
 
   initPage3();
+  initPageTest();
 
   // 全フィルター変更時に自動保存
   [
