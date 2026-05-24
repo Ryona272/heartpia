@@ -50,6 +50,13 @@ const resultPage3 = document.getElementById("resultPage3");
 const resetFilterBtn = document.getElementById("resetFilterBtn");
 const resetFilterBtnPage2 = document.getElementById("resetFilterBtnPage2");
 const resetFilterBtnCat = document.getElementById("resetFilterBtnCat");
+const dogTabsEl = document.getElementById("dogTabs");
+const dogNameInput = document.getElementById("dogNameInput");
+const dogResetBtn = document.getElementById("dogResetBtn");
+const dogVisibleCount = document.getElementById("dogVisibleCount");
+const dogSearchInput = document.getElementById("dogSearchInput");
+const resultPageDog = document.getElementById("resultPageDog");
+const resultPageWild = document.getElementById("resultPageWild");
 const eventnameFilterWrap = document.getElementById("eventnameFilterWrap");
 const eventnameFilter = document.getElementById("eventnameFilter");
 const eventnameFilterPage2Wrap = document.getElementById(
@@ -71,10 +78,10 @@ const PLACE1_BACKGROUND_IMAGE_NAMES = new Set([
   "花畑",
 ]);
 
-// フェス判定用定数
+// フェス判定用定数（フェス系シーズン値のセット）
 const FESTIVAL_SEASON_VALUES = new Set(["dreamlightfes", "blockfes"]);
 
-// その他イベント判定用定数
+// その他イベント判定用定数（イベント系シーズン値のセット）
 const OTHER_EVENT_SEASON_VALUES = new Set(["otherevent"]);
 
 // シーズン・フェスのラベルマップ
@@ -86,7 +93,11 @@ const SEASON_LABELS = {
   otherevent: "その他イベント",
 };
 
-// 配列seasonの場合、"normal"以外の最初の値をプライマリとして返す
+/**
+ * seasonが配列の場合（例：["snowseason","normal"]）、
+ * "normal"以外の最初の要素をプライマリシーズンとして返す。
+ * 文字列の場合はそのまま返す。
+ */
 function getPrimarySeasonValue(seasonValue) {
   if (Array.isArray(seasonValue)) {
     return seasonValue.find((v) => v !== "normal") ?? "normal";
@@ -94,14 +105,20 @@ function getPrimarySeasonValue(seasonValue) {
   return seasonValue;
 }
 
+/** プライマリシーズン値がフェス系かどうかを判定する */
 function isFestivalSeason(seasonValue) {
   return FESTIVAL_SEASON_VALUES.has(getPrimarySeasonValue(seasonValue));
 }
 
+/** プライマリシーズン値がその他イベント系かどうかを判定する */
 function isOtherEvent(seasonValue) {
   return OTHER_EVENT_SEASON_VALUES.has(getPrimarySeasonValue(seasonValue));
 }
 
+/**
+ * プライマリシーズン値が「通常でもフェスでもその他イベントでもない」
+ * 特定シーズン（snowseason など）かどうかを判定する
+ */
 function isRegularSeason(seasonValue) {
   const primary = getPrimarySeasonValue(seasonValue);
   return (
@@ -113,23 +130,33 @@ function isRegularSeason(seasonValue) {
 }
 
 // seasonが配列で"normal"を含むアイテム（通常フィルターでも表示するが、プライマリ枠に表示）
+// 例：["snowseason","normal"] → 通常フィルター時にも表示しつつ、snowseasonの枠にも入る
 function isMultiSeasonNormal(seasonValue) {
   return Array.isArray(seasonValue) && seasonValue.includes("normal");
 }
 
+/**
+ * カード背景画像として使う場所1の名前を返す。
+ * 優先順：① 現在選択中の場所1 → ② 背景画像セットに含まれる場所 → ③ 汎用名以外の場所
+ * @param {string[]} places1 - このクリーチャーの場所1リスト
+ * @returns {string} 背景画像名（空文字の場合は背景なし）
+ */
 function getPlace1BackgroundName(places1 = []) {
   if (!Array.isArray(places1) || places1.length === 0) return "";
 
+  // フィルターで選択中の場所1が含まれればそれを使う
   const selectedPlace1 = place1Filter.value;
   if (selectedPlace1 && places1.includes(selectedPlace1)) {
     return selectedPlace1;
   }
 
+  // 背景画像がある場所を優先
   const availablePlace = places1.find((place) =>
     PLACE1_BACKGROUND_IMAGE_NAMES.has(place),
   );
   if (availablePlace) return availablePlace;
 
+  // 汎用的な場所名（水辺・郊外など）は背景に適さないためスキップ
   return (
     places1.find(
       (place) => !["水辺", "郊外", "ホーム", "中心街", "★特殊"].includes(place),
@@ -224,6 +251,8 @@ const PLACE2_SEASON_TAGS = {
 // =======================
 // 検索リセット
 // =======================
+
+/** ページ1・2のシーズンフィルターをデフォルト値（blockfes）に設定する */
 function applyDefaultSeasons() {
   // page1: ブロック市街地フェス
   if (seasonFilter) {
@@ -240,6 +269,7 @@ function applyDefaultSeasons() {
   }
 }
 
+/** ページ1（生物図鑑）の全フィルターを初期値に戻す */
 function resetFiltersPage1() {
   if (searchInput) searchInput.value = "";
   if (hobbyFilter) hobbyFilter.value = "";
@@ -256,6 +286,7 @@ function resetFiltersPage1() {
   filterCreatures();
 }
 
+/** ページ2（園芸・料理）の全フィルターを初期値に戻す */
 function resetFiltersPage2() {
   if (searchInputPage2) searchInputPage2.value = "";
   if (hobbyFilterPage2) hobbyFilterPage2.value = "";
@@ -272,6 +303,7 @@ function resetFiltersPage2() {
   filterAndRenderPage2();
 }
 
+/** ページ3（にゃんこ）の全フィルターを初期値に戻す */
 function resetFiltersCat() {
   if (catSearchInput) catSearchInput.value = "";
   if (catPlace1Filter) catPlace1Filter.value = "";
@@ -284,6 +316,11 @@ function resetFiltersCat() {
 // =======================
 // フィルター処理
 // =======================
+
+/**
+ * 現在の全フィルター値を読み取り、creatures配列を絞り込んで renderList() を呼び出す。
+ * 「獲得非ON」「★5非ON」などのグローバルトグル状態も適用する。
+ */
 function filterCreatures() {
   const userLevel = Number(userLevelInput.value) || 1;
   const season = seasonFilter.value;
@@ -385,6 +422,10 @@ function filterCreatures() {
   renderList(filtered, userLevel);
 }
 
+/**
+ * 獲得/★5/マスタートグルボタンのUI状態（クラス・テキスト・aria-pressed）を
+ * 内部変数 showAcquired / showFiveStar / showMaster に合わせて更新する
+ */
 function updateToggleButtons() {
   acquiredToggle.classList.toggle("active", showAcquired);
   acquiredToggle.setAttribute("aria-pressed", showAcquired.toString());
@@ -402,7 +443,12 @@ function updateToggleButtons() {
 const STORAGE_KEY = "heartpia-state-v2";
 const LEGACY_STORAGE_KEY = "heartpia-state";
 const FILTER_STORAGE_KEY = "heartpia-filters-v1";
+const PAGE3_STORAGE_KEY = "heartpia-page3-cat-state-v1";
 
+/**
+ * 現在の全フィルター状態を localStorage（FILTER_STORAGE_KEY）に保存する。
+ * ページリロード後に同じ状態を復元するために使う。
+ */
 function saveFilterState() {
   const state = {
     searchInput: searchInput?.value ?? "",
@@ -431,6 +477,11 @@ function saveFilterState() {
   localStorage.setItem(FILTER_STORAGE_KEY, JSON.stringify(state));
 }
 
+/**
+ * localStorageからフィルター状態を読み込んで各入力エレメントに復元する。
+ * 座標連動も考慮して場所1→場所2の順に再構築する。
+ * @returns {boolean} 保存値があれば true、なければ false
+ */
 function loadFilterState() {
   const raw = localStorage.getItem(FILTER_STORAGE_KEY);
   if (!raw) return false;
@@ -489,6 +540,10 @@ function loadFilterState() {
   }
 }
 
+/**
+ * 各クリーチャーの獲得/★5/マスター状態と
+ * トグル表示状態を localStorage（STORAGE_KEY）に保存する。
+ */
 function saveState() {
   const payload = {
     showAcquired,
@@ -513,6 +568,11 @@ function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
 }
 
+/**
+ * localStorageから各クリーチャーの獲得/★5/マスター状態と
+ * トグル表示状態を復元する。
+ * 旧ストレージキー（LEGACY_STORAGE_KEY）もフォールバックとして対応する。
+ */
 function loadState() {
   let raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) {
@@ -553,6 +613,10 @@ function loadState() {
   }
 }
 
+/**
+ * ページ1のカウンター表示（全件数・表示件数・獲得数・★5数・マスター数）を更新する。
+ * @param {Array} shownList - 現在表示中のクリーチャー配列
+ */
 function updateCounters(shownList) {
   totalCountEl.textContent = `全件：${creatures.length}`;
   displayCountEl.textContent = `表示：${shownList.length}`;
@@ -561,6 +625,11 @@ function updateCounters(shownList) {
   masterCountEl.textContent = `マスター：${creatures.filter((c) => c.master).length}`;
 }
 
+/**
+ * ページ2のカウンター表示を更新する。
+ * 「不気味な食べ物」「不気味な飲み物」と販売食材は獲得カウントから除外する。
+ * @param {Array} shownList - 現在表示中のページ2アイテム配列
+ */
 function updateCountersPage2(shownList) {
   if (!totalCountPage2El) return;
   const EXCLUDED_NAMES = new Set(["不気味な食べ物", "不気味な飲み物"]);
@@ -575,6 +644,10 @@ function updateCountersPage2(shownList) {
   masterCountPage2El.textContent = `マスター：${forAcquiredCount(page2Creatures).filter((c) => c.master).length}`;
 }
 
+/**
+ * ページ2の獲得/★5/マスタートグルボタンのUI状態を
+ * 内部変数 showAcquiredPage2 / showFiveStarPage2 / showMasterPage2 に合わせて更新する
+ */
 function updateToggleButtonsPage2() {
   if (!acquiredTogglePage2) return;
   acquiredTogglePage2.classList.toggle("active", showAcquiredPage2);
@@ -591,6 +664,7 @@ function updateToggleButtonsPage2() {
   masterTogglePage2.textContent = `マスター ${showMasterPage2 ? "ON" : "OFF"}`;
 }
 
+// 獲得トグルをOFFにすると、★5・マスタートグルも連動してOFFになる
 acquiredToggle.addEventListener("click", () => {
   showAcquired = !showAcquired;
 
@@ -604,6 +678,7 @@ acquiredToggle.addEventListener("click", () => {
   filterCreatures();
 });
 
+// ★5トグルをONにすると、獲得トグルも連動してONになる
 star5Toggle.addEventListener("click", () => {
   showFiveStar = !showFiveStar;
 
@@ -616,6 +691,7 @@ star5Toggle.addEventListener("click", () => {
   filterCreatures();
 });
 
+// マスタートグルをONにすると、獲得トグルも連動してONになる
 masterToggle.addEventListener("click", () => {
   showMaster = !showMaster;
 
@@ -628,6 +704,8 @@ masterToggle.addEventListener("click", () => {
   filterCreatures();
 });
 
+// カード内のチェックボックス変更イベント：獲得/★5/マスターの連動を処理する
+// 獲得を外すと ★5・マスターも外れる、★5・マスターをチェックすると獲得も自動でチェックされる
 result.addEventListener("change", (e) => {
   const target = e.target;
   const cardName = target.dataset.name;
@@ -679,6 +757,11 @@ updateToggleButtons();
 // =======================
 // 場所1・場所2の選択肢更新
 // =======================
+
+/**
+ * 選択中の趣味に応じて場所1プルダウンの選択肢を再構築する。
+ * 優先順序は固定（priorityOrder 配列）に従う。
+ */
 function updatePlace1Options() {
   const hobby = hobbyFilter.value;
   place1Filter.innerHTML = "";
@@ -719,6 +802,11 @@ function updatePlace1Options() {
   });
 }
 
+/**
+ * 選択中の趣味・場所1・シーズンに応じて場所2プルダウンの選択肢を再構築する。
+ * place1ToExcludedPlace2Map に従って矛盾する場所2を除外し、
+ * イベントクエスト場所は現在シーズンに合わせて表示を制御する。
+ */
 function updatePlace2Options() {
   const hobby = hobbyFilter.value;
   const place1 = place1Filter.value;
@@ -820,6 +908,14 @@ function updatePlace2Options() {
 // =======================
 // 描画処理（2列グリッド）
 // =======================
+
+/**
+ * フィルター済みクリーチャーリストをシーズングループ別にカード形式で描画する。
+ * グループ順序: シーズン → フェス → その他イベント → 通常
+ * 同一趣味内で☦2換算売値最高のアイテムに金縁（card-top-price）を付ける。
+ * @param {Array} list - 描画対象のクリーチャー配列
+ * @param {number} userLevel - 趣味レベル（アンロック判定に使用）
+ */
 function renderList(list, userLevel) {
   if (list.length === 0) {
     result.innerHTML = "<p>条件に合う生き物がいません。</p>";
@@ -904,9 +1000,11 @@ function renderList(list, userLevel) {
     if (topName) topPriceNames.add(topName);
   });
 
-  // カード生成用ヘルパー関数
+  // カード生成用ヘルパー関数：1件のクリーチャーカードHTMLを返す
   const generateCard = (c) => {
+    // 金縁表示対象かどうか
     const isTopPrice = topPriceNames.has(c.name);
+    // 趣味レベルでアンロック済みかどうか
     const unlocked = userLevel >= c.level;
     let hobbyClass = "";
     if (c.hobby === "釣り") {
@@ -917,6 +1015,7 @@ function renderList(list, userLevel) {
       hobbyClass = unlocked ? "card-bird-unlocked" : "card-bird-locked";
     }
     const cardClass = `card ${hobbyClass}`;
+    // 場所1の背景画像を取得（場所への視覚的ヒント）
     const placeBackgroundName = getPlace1BackgroundName(c.places1);
     const placeBackgroundMarkup = placeBackgroundName
       ? `<img class="card-place-bg" src="img/${placeBackgroundName}.png" alt="" aria-hidden="true" loading="lazy" onerror="this.remove()">`
@@ -961,6 +1060,8 @@ function renderList(list, userLevel) {
     const baseStar2Tc =
       star2Data?.tc ?? (star1Data ? (star1Data.tc ?? 0) * 4 : 0);
 
+    // レアリティブロック（☦1〜☦5）の売値・TC計算
+    // 野鳥観察は☦2基準（☦1は4分の1）、それ以外は☦1基準（各倍率を乗算）
     const rarityBlocks = [1, 2, 3, 4, 5]
       .map((star) => {
         const rarity = c.rarityData.find((r) => r.star === star);
@@ -1021,6 +1122,19 @@ function renderList(list, userLevel) {
 
     const noteLines = getNoteLines(c.note);
 
+    // --- にゃんこカード用：好物・偏食・チェックボタン追加 ---
+    let catInfoBlock = "";
+    if (c.isCatCard) {
+      catInfoBlock = `
+        <div class="cat-card-info">
+          <div class="cat-favorite">好物 <span class="cat-heart">❤️</span> ${c.favorite || ""}</div>
+          <div class="cat-picky">偏食 <span class="cat-picky-emoji">🌀</span> ${c.picky || ""}</div>
+          <div class="cat-check-row">
+            <label><input type="checkbox" class="cat-check-btn" data-name="${c.name}"> チェック</label>
+          </div>
+        </div>
+      `;
+    }
     return `
       <div class="card card-flip${isTopPrice ? " card-top-price" : ""}" role="button" tabindex="0" aria-label="${c.name}の詳細カードを裏返す">
         <div class="card-inner">
@@ -1032,6 +1146,7 @@ function renderList(list, userLevel) {
               <span class="card-category">（${c.hobby}）<span class="card-level">Lv.${c.level}</span></span>
             </div>
             ${metaLines.length ? `<div class="meta">${metaLines.join("<br>")}</div>` : ""}
+            ${catInfoBlock}
             ${
               c.hobby === "釣り"
                 ? (() => {
@@ -1141,6 +1256,11 @@ function renderList(list, userLevel) {
 // =======================
 // ページ2（園芸・料理・販売食材）
 // =======================
+
+/**
+ * ページ2アイテムのソート用売値を返す。
+ * 販売食材は price.sell、それ以外は rarityData[★1].price を使用する。
+ */
 function getSellPrice(item) {
   if (isPage2StoreIngredient(item)) {
     return item.price?.sell ?? Number.MAX_SAFE_INTEGER;
@@ -1150,6 +1270,12 @@ function getSellPrice(item) {
   return star1?.price ?? item.rarityData[0].price ?? 0;
 }
 
+/**
+ * ソートキーに応じてソート用の数値を返す。
+ * データがない場合は Number.MAX_SAFE_INTEGER（末尾に並ぼう）を返す。
+ * @param {object} item - ページ2アイテム
+ * @param {string} sortKey - 'level' | 'seedprice' | 'time' | 'sell'
+ */
 function getPage2SortValue(item, sortKey) {
   if (sortKey === "level") return item.level ?? Number.MAX_SAFE_INTEGER;
   if (sortKey === "seedprice") {
@@ -1194,6 +1320,13 @@ const INGREDIENT_IMAGE_MAP = (() => {
   return map;
 })();
 
+/**
+ * 食材名から画像パス候補配列を返す。
+ * INGREDIENT_IMAGE_MAP でフォルダが判明する場合は1候補のみ返し 404 を回避する。
+ * 不明な食材は全フォルダをフォールバック候補として返す。
+ * @param {string} ingredientName - 食材名
+ * @returns {string[]} 画像パス候補の配列
+ */
 function buildIngredientImageCandidates(ingredientName) {
   const folder = INGREDIENT_IMAGE_MAP.get(ingredientName);
   const encodedName = encodeURIComponent(ingredientName);
@@ -1213,6 +1346,10 @@ function buildIngredientImageCandidates(ingredientName) {
   return INGREDIENT_IMAGE_FOLDERS.map((f) => `${f}/${encodedName}.png`);
 }
 
+/**
+ * 食材名の配列を受け取り、画像付き食材チップのHTML文字列を返す。
+ * 各チップは画像読み込み失敗時に switchIngredientImageSource() でフォールバックする。
+ */
 function renderFoodItemsWithImages(foodItems = []) {
   if (!Array.isArray(foodItems) || foodItems.length === 0) return "";
 
@@ -1237,6 +1374,11 @@ function renderFoodItemsWithImages(foodItems = []) {
   `;
 }
 
+/**
+ * 食材画像の onerror コールバック。
+ * data-fallbacks 属性の候補リストを順番に試し、全て失敗したら画像を非表示にする。
+ * @param {HTMLImageElement} img - 読み込み失敗した img 要素
+ */
 window.switchIngredientImageSource = function switchIngredientImageSource(img) {
   const fallbackRaw = img.getAttribute("data-fallbacks");
   if (!fallbackRaw) {
@@ -1263,6 +1405,11 @@ window.switchIngredientImageSource = function switchIngredientImageSource(img) {
   img.src = fallbackList[nextIndex];
 };
 
+/**
+ * アイテムの hobby フィールドを配列として返す。
+ * 配列の場合はそのまま、「園芸-食材」のようなハイフン文字列は分割し、
+ * 単純な文字列は1要素配列として返す。
+ */
 function getPage2HobbyParts(item) {
   if (Array.isArray(item.hobby)) return item.hobby;
   if (typeof item.hobby !== "string") return [];
@@ -1270,6 +1417,12 @@ function getPage2HobbyParts(item) {
   return [item.hobby];
 }
 
+/**
+ * note フィールドを行の配列に正規化して返す。
+ * 配列・文字列・null のいずれの形式も許容する。
+ * @param {string|string[]|null} note
+ * @returns {string[]} 空文字列なしの行配列
+ */
 function getNoteLines(note) {
   if (Array.isArray(note)) {
     return note
@@ -1282,30 +1435,36 @@ function getNoteLines(note) {
   return [];
 }
 
+/** hobby配列を「園芸-食材」形式の表示文字列に変換する */
 function formatPage2HobbyLabel(item) {
   return getPage2HobbyParts(item).join("-");
 }
 
+/** アイテムが指定の hobby 値を含むかどうかを判定する */
 function hasPage2Hobby(item, hobbyValue) {
   if (!hobbyValue) return true;
   if (hobbyValue === "販売食材") return isPage2StoreIngredient(item);
   return getPage2HobbyParts(item).includes(hobbyValue);
 }
 
+/** アイテムが園芸系（ルートが「園芸」）かどうかを判定する */
 function isPage2Gardening(item) {
   return getPage2HobbyParts(item)[0] === "園芸";
 }
 
+/** アイテムが園芸食材（園芸系かつ「食材」サブタイプ）かどうかを判定する */
 function isPage2GardeningFood(item) {
   const hobbyParts = getPage2HobbyParts(item);
   return hobbyParts[0] === "園芸" && hobbyParts.includes("食材");
 }
 
+/** アイテムが園芸花（園芸系かつ「花」サブタイプ）かどうかを判定する */
 function isPage2GardeningFlower(item) {
   const hobbyParts = getPage2HobbyParts(item);
   return hobbyParts[0] === "園芸" && hobbyParts.includes("花");
 }
 
+/** アイテムが販売・採取食材（ルートが「販売」または「採取」かつ「食材」）かどうかを判定する */
 function isPage2StoreIngredient(item) {
   const hobbyParts = getPage2HobbyParts(item);
   return (
@@ -1315,6 +1474,7 @@ function isPage2StoreIngredient(item) {
   );
 }
 
+/** アイテムが料理系（ルートが「料理」）かどうかを判定する */
 function isPage2Cooking(item) {
   return getPage2HobbyParts(item)[0] === "料理";
 }
@@ -1326,6 +1486,10 @@ const COOKING_WAGON_IMAGE_BY_TYPE = {
   "block-wagon": "img/積み木移動ワゴン.png",
 };
 
+/**
+ * 料理アイテムの調理器具画像パスを返す。
+ * wagonフィールドが 'none' の場合は空文字列、未設定の場合はコンロ画像を返す。
+ */
 function getPage2CookingWagonImage(item) {
   if (!isPage2Cooking(item)) return "";
 
@@ -1337,6 +1501,10 @@ function getPage2CookingWagonImage(item) {
   );
 }
 
+/**
+ * ページ2アイテムのカードCSSクラスを返す。
+ * 園芸系・販売食材系・料理系で背景色が分かれ、アンロック/ロックでも分かれる。
+ */
 function getPage2CardClass(item, userLevel) {
   const unlocked = userLevel >= (item.level ?? 1);
   if (isPage2Gardening(item)) {
@@ -1350,6 +1518,11 @@ function getPage2CardClass(item, userLevel) {
   return unlocked ? "card-cooking-unlocked" : "card-cooking-locked";
 }
 
+/**
+ * 星1基準価格から各レアリティの売値を計算する（釣りと同じ倍率ルール）。
+ * 園芸花・園芸食材はそれぞれ専用の倍率を使用する。
+ * @param {object} item - ページ2アイテム @param {number} star - 1〜5
+ */
 function getRarityPriceLikeFishing(item, star) {
   const star1 = item.rarityData?.find((r) => r.star === 1)?.price ?? 0;
   const original = item.rarityData?.find((r) => r.star === star)?.price ?? 0;
@@ -1372,6 +1545,9 @@ function getRarityPriceLikeFishing(item, star) {
   return Math.floor(star1 * (multiplier[star] || 0));
 }
 
+/**
+ * 星1基準TCから各レアリティのTC値を計算する（getRarityPriceLikeFishing と同じルール）。
+ */
 function getRarityTcLikeFishing(item, star) {
   const star1 = item.rarityData?.find((r) => r.star === 1)?.tc ?? 0;
   const original = item.rarityData?.find((r) => r.star === star)?.tc ?? 0;
@@ -1394,6 +1570,12 @@ function getRarityTcLikeFishing(item, star) {
   return Math.floor(star1 * (multiplier[star] || 0));
 }
 
+/**
+ * ページ2のアイテムリストをシーズングループ × 趣味カテゴリ別に分割して描画する。
+ * @param {HTMLElement} targetEl - 描画先要素
+ * @param {Array} list - 描画対象アイテム配列
+ * @param {number} userLevel - 趣味レベル
+ */
 function renderPage2List(targetEl, list, userLevel) {
   if (!targetEl) return;
 
@@ -1680,6 +1862,10 @@ function renderPage2List(targetEl, list, userLevel) {
   targetEl.innerHTML = html;
 }
 
+/**
+ * ページ2アイテムのサブタイプを文字列で返す。
+ * サブフィルター選択肢の生成に使う。
+ */
 function getPage2SubType(item) {
   const hobbyParts = getPage2HobbyParts(item);
   const root = hobbyParts[0];
@@ -1702,6 +1888,10 @@ function getPage2SubType(item) {
   return "";
 }
 
+/**
+ * 主フィルター（hobbyFilterPage2）の値に応じて
+ * サブフィルター（hobbyModeFilterPage2）の選択肢を再構築する。
+ */
 function updatePage2SubFilterOptions() {
   if (!hobbyFilterPage2 || !hobbyModeFilterPage2) return;
 
@@ -1744,6 +1934,9 @@ function updatePage2SubFilterOptions() {
     .join("");
 }
 
+/**
+ * ページ2の全フィルター値を読み取り、ソート・絞り込みして renderPage2List() を呼び出す。
+ */
 function filterAndRenderPage2() {
   if (
     !resultPage2 ||
@@ -1842,6 +2035,10 @@ function filterAndRenderPage2() {
   updateCountersPage2(sorted);
 }
 
+/**
+ * ページ2のイベントリスナーを登録し、初回のレンダリングを実行する。
+ * DOM要素が存在しない場合は何もしない。
+ */
 function initPage2() {
   if (
     !resultPage2 ||
@@ -1943,12 +2140,19 @@ function initPage2() {
 // =======================
 // ページ3（にゃんこの好物）
 // =======================
-const PAGE3_STORAGE_KEY = "heartpia-page3-cat-state-v1";
+
+// ストレージキーとにゃんこスロット数の定数
 const CAT_SLOT_COUNT = 5;
+const DOG_SLOT_COUNT = 3;
+const PAGE_DOG_STORAGE_KEY = "heartpia-dog-state-v1";
+
+// キャットフードや動物汎用エサなど、釣り以外の特殊エサアイテム
 const catSpecialItems = [
   { name: "キャットフード", img: "img/キャットフード.png" },
   { name: "動物汎用エサ", img: "img/動物汎用エサ.png" },
 ];
+
+// catFishList をもとに normalFishCandidates（エサになる魚 + 特殊アイテム）を構築
 const normalFishCandidates = catFishList
   .map((name) => {
     const special = catSpecialItems.find((s) => s.name === name);
@@ -1957,12 +2161,31 @@ const normalFishCandidates = catFishList
     return fish || null;
   })
   .filter(Boolean);
+
+// 名前をキーにした高速検索用 Set
 const normalFishNameSet = new Set(
   normalFishCandidates.map((fish) => fish.name),
 );
 const cookingFishNameSet = new Set(cookingFishList);
 const cookingSeaFishNameSet = new Set(cookingSeaFishList);
 
+// わんこ用特殊アイテムと候補リストを構築
+const dogSpecialItems = [
+  { name: "ドッグフード", img: "img/ドッグフード.png" },
+  { name: "動物汎用エサ", img: "img/動物汎用エサ.png" },
+];
+const normalDogCandidates = dogFoodList
+  .map((name) => {
+    const special = dogSpecialItems.find((s) => s.name === name);
+    if (special) return special;
+    const cooking = cookingCreatures.find((c) => c.name === name);
+    if (cooking)
+      return { name: cooking.name, img: `img/cooking/${cooking.name}.png` };
+    return null;
+  })
+  .filter(Boolean);
+
+/** 指定インデックスのにゃんこのデフォルト状態オブジェクトを返す */
 function createDefaultCatState(index) {
   return {
     name: `猫${index + 1}`,
@@ -1971,20 +2194,98 @@ function createDefaultCatState(index) {
   };
 }
 
+/** CAT_SLOT_COUNT 分のデフォルト状態配列を生成して返す */
 function createDefaultCatStates() {
   return Array.from({ length: CAT_SLOT_COUNT }, (_, index) =>
     createDefaultCatState(index),
   );
 }
 
+/** 指定インデックスのわんこのデフォルト状態オブジェクトを返す */
+function createDefaultDogState(index) {
+  return {
+    name: `わんこ${index + 1}`,
+    excludedFoodNames: [],
+    favoriteFoodNames: [],
+  };
+}
+
+/** DOG_SLOT_COUNT 分のデフォルト状態配列を生成して返す */
+function createDefaultDogStates() {
+  return Array.from({ length: DOG_SLOT_COUNT }, (_, i) =>
+    createDefaultDogState(i),
+  );
+}
+
+// アクティブなにゃんこのインデックス、全スロットの状態、「好物じゃない表示」フラグ
 let activeCatIndex = 0;
 let catStates = createDefaultCatStates();
 let showCat5ExcludedOnly = false;
 
+// アクティブなわんこのインデックスと全スロットの状態
+let activeDogIndex = 0;
+let dogStates = createDefaultDogStates();
+
+/** 現在アクティブなにゃんこの状態オブジェクトを返す */
 function getActiveCatState() {
   return catStates[activeCatIndex] || createDefaultCatState(activeCatIndex);
 }
 
+/** 現在アクティブなわんこの状態オブジェクトを返す */
+function getActiveDogState() {
+  return dogStates[activeDogIndex] || createDefaultDogState(activeDogIndex);
+}
+
+/** わんこの状態を localStorage に保存する */
+function saveDogState() {
+  localStorage.setItem(
+    PAGE_DOG_STORAGE_KEY,
+    JSON.stringify({ activeDogIndex, dogStates }),
+  );
+}
+
+/** localStorage からわんこの状態を読み込む */
+function loadDogState() {
+  const raw = localStorage.getItem(PAGE_DOG_STORAGE_KEY);
+  if (!raw) return;
+  try {
+    const parsed = JSON.parse(raw);
+    const nextStates = createDefaultDogStates();
+    if (Array.isArray(parsed.dogStates)) {
+      const validFoodNames = new Set(normalDogCandidates.map((f) => f.name));
+      parsed.dogStates.slice(0, DOG_SLOT_COUNT).forEach((dog, i) => {
+        const defaultState = createDefaultDogState(i);
+        const name =
+          typeof dog.name === "string"
+            ? dog.name.slice(0, 20)
+            : defaultState.name;
+        const excluded = Array.isArray(dog.excludedFoodNames)
+          ? dog.excludedFoodNames.filter((n) => validFoodNames.has(n))
+          : [];
+        const favorites = Array.isArray(dog.favoriteFoodNames)
+          ? dog.favoriteFoodNames.filter((n) => validFoodNames.has(n))
+          : [];
+        nextStates[i] = {
+          name,
+          excludedFoodNames: excluded,
+          favoriteFoodNames: favorites,
+        };
+      });
+    }
+    dogStates = nextStates;
+    if (
+      typeof parsed.activeDogIndex === "number" &&
+      parsed.activeDogIndex >= 0 &&
+      parsed.activeDogIndex < DOG_SLOT_COUNT
+    ) {
+      activeDogIndex = parsed.activeDogIndex;
+    }
+  } catch {
+    // パース失敗時はデフォルト状態を使用
+  }
+}
+
+/** ページ3（にゃんこ）の状態を localStorage に保存する */
 function savePage3State() {
   localStorage.setItem(
     PAGE3_STORAGE_KEY,
@@ -1996,6 +2297,10 @@ function savePage3State() {
   );
 }
 
+/**
+ * localStorage からページ3（にゃんこ）の状態を読み込む。
+ * 不正なデータや存在しない魚名は除外し、好物と除外の重複も解消する。
+ */
 function loadPage3State() {
   const raw = localStorage.getItem(PAGE3_STORAGE_KEY);
   if (!raw) return;
@@ -2055,6 +2360,10 @@ function loadPage3State() {
   }
 }
 
+/**
+ * 「好物じゃない表示」トグルのUI（テキスト・aria-pressed・クラス）を
+ * showCat5ExcludedOnly 変数に合わせて更新する。
+ */
 function updateCat5ExcludedToggleUi() {
   if (!cat5ExcludedToggleWrap || !cat5ExcludedToggle) return;
 
@@ -2064,9 +2373,127 @@ function updateCat5ExcludedToggleUi() {
   cat5ExcludedToggle.classList.remove("is-disabled");
   cat5ExcludedToggle.classList.toggle("active", showCat5ExcludedOnly);
   cat5ExcludedToggle.setAttribute("aria-pressed", String(showCat5ExcludedOnly));
-  cat5ExcludedToggle.textContent = `好物じゃない表示 ${showCat5ExcludedOnly ? "ON" : "OFF"}`;
+  cat5ExcludedToggle.textContent = `普通表示 ${showCat5ExcludedOnly ? "ON" : "OFF"}`;
 }
 
+/** わんこタブのUI（アクティブ状態・ボタンテキスト）と名前入力欄を更新する */
+function updateDogTabsUi() {
+  if (!dogTabsEl) return;
+  dogTabsEl.querySelectorAll(".dog-tab").forEach((btn) => {
+    const index = Number(btn.dataset.dogIndex || "0");
+    const state = dogStates[index] || createDefaultDogState(index);
+    btn.textContent = state.name || `わんこ${index + 1}`;
+    const isActive = index === activeDogIndex;
+    btn.classList.toggle("active", isActive);
+    btn.setAttribute("aria-pressed", String(isActive));
+  });
+  if (dogNameInput) {
+    dogNameInput.value = getActiveDogState().name || "";
+  }
+}
+
+/**
+ * アクティブなわんこの食べ物候補リストを描画する。
+ * キーワードフィルターを適用し、好物/偏食/普通チェックボックスつきカードを生成する。
+ */
+function renderPageDogList() {
+  if (!resultPageDog) return;
+
+  const activeState = getActiveDogState();
+  const excludedSet = new Set(activeState.excludedFoodNames || []);
+  const favoriteSet = new Set(activeState.favoriteFoodNames || []);
+  const keyword = dogSearchInput?.value.trim().toLowerCase() || "";
+
+  let visibleFood = normalDogCandidates.filter(
+    (food) => !excludedSet.has(food.name),
+  );
+  if (keyword) {
+    visibleFood = visibleFood.filter((food) =>
+      food.name.toLowerCase().includes(keyword),
+    );
+  }
+
+  if (dogVisibleCount) {
+    dogVisibleCount.textContent = `候補：${visibleFood.length}個`;
+  }
+
+  if (visibleFood.length === 0) {
+    resultPageDog.innerHTML =
+      '<p class="cat-empty">表示できる食べ物がありません。</p>';
+    return;
+  }
+
+  const pickyMap = (window.__dogPickyMap = window.__dogPickyMap || {});
+  resultPageDog.innerHTML = visibleFood
+    .map((food) => {
+      const isFavorite = favoriteSet.has(food.name);
+      const isExcluded = excludedSet.has(food.name);
+      const isPicky = !!pickyMap[food.name];
+      let cardClass = "cat-fish-card";
+      if (isFavorite) cardClass += " cat-fish-card-favorite";
+      else if (isPicky) cardClass += " cat-fish-card-picky";
+      return `
+      <article class="${cardClass}">
+        ${food.img ? `<img class="cat-fish-img" src="${food.img}" alt="${food.name}" loading="lazy" onerror="this.remove()">` : ""}
+        <div class="cat-fish-name">${food.name}</div>
+        <div class="cat-fish-toggle-row">
+          <label class="cat-fish-toggle">
+            <input type="checkbox" class="dog-food-favorite-checkbox" data-food-name="${food.name}" ${isFavorite ? "checked" : ""}>
+            好物❤️
+          </label>
+          <label class="cat-fish-toggle">
+            <input type="checkbox" class="dog-food-picky-checkbox" data-food-name="${food.name}" ${isPicky ? "checked" : ""}>
+            偏食🌀
+          </label>
+          <label class="cat-fish-toggle">
+            <input type="checkbox" class="dog-food-exclude-checkbox" data-food-name="${food.name}" ${isExcluded ? "checked" : ""}>
+            普通
+          </label>
+        </div>
+      </article>
+    `;
+    })
+    .join("");
+}
+
+/**
+ * 野生動物カードを描画する。
+ * 各動物の画像と固定の好物3つをカード形式で表示する。
+ */
+function renderWildAnimalList() {
+  if (!resultPageWild) return;
+  if (!wildAnimalData || wildAnimalData.length === 0) {
+    resultPageWild.innerHTML = '<p class="cat-empty">データがありません。</p>';
+    return;
+  }
+  resultPageWild.innerHTML = wildAnimalData
+    .map((animal) => {
+      const favHtml =
+        animal.favorites && animal.favorites.length > 0
+          ? animal.favorites
+              .map(
+                (fav) => `
+            <div class="wild-animal-fav-item">
+              ${fav.img ? `<img src="${fav.img}" alt="${fav.name}" loading="lazy" onerror="this.remove()">` : ""}
+              <span>${fav.name}</span>
+            </div>`,
+              )
+              .join("")
+          : '<p class="wild-animal-no-data">好物は後で追加予定</p>';
+      return `
+      <article class="wild-animal-card">
+        ${animal.img ? `<img class="wild-animal-img" src="${animal.img}" alt="${animal.name}" loading="lazy" onerror="this.style.display='none'">` : ""}
+        <div class="wild-animal-name">${animal.name}</div>
+        <div class="wild-animal-favorites">${favHtml}</div>
+      </article>`;
+    })
+    .join("");
+}
+
+/**
+ * にゃんこタブのUI（アクティブ状態・ボタンテキスト）と
+ * 名前入力欄の値を catStates に合わせて更新する。
+ */
 function updateCatTabsUi() {
   if (!catTabsEl) return;
 
@@ -2086,7 +2513,13 @@ function updateCatTabsUi() {
   updateCat5ExcludedToggleUi();
 }
 
+/**
+ * アクティブなにゃんこのエサ候補魚リストを描画する。
+ * 「好物じゃない表示ON」時は除外リストの魚のみ、OFFの時は除外されていない魚を表示する。
+ * キーワード・場所・時間・天候フィルターも適用する。
+ */
 function renderPage3FishList() {
+  // （排他ロジックは下部で1回だけ追加されるのでここは不要）
   if (!resultPage3) return;
 
   const activeState = getActiveCatState();
@@ -2144,7 +2577,7 @@ function renderPage3FishList() {
   }
 
   if (catVisibleCount) {
-    const label = shouldShowExcludedOnly ? "好物じゃない" : "候補";
+    const label = shouldShowExcludedOnly ? "普通" : "候補";
     catVisibleCount.textContent = `${label}：${filteredFish.length}匹`;
   }
 
@@ -2154,10 +2587,13 @@ function renderPage3FishList() {
     return;
   }
 
+  // 仮の状態管理: 偏食はlocalStorageやcatStateに未保存。UIのみ。
+  const pickyMap = (window.__catPickyMap = window.__catPickyMap || {});
   resultPage3.innerHTML = filteredFish
     .map((fish) => {
       const isFavorite = favoriteSet.has(fish.name);
       const isExcluded = excludedSet.has(fish.name);
+      const isPicky = !!pickyMap[fish.name];
       const hasFishData = fishingCreatures.some((f) => f.name === fish.name);
       const fishData = fishingCreatures.find((f) => f.name === fish.name);
       const waterTags = [];
@@ -2176,38 +2612,41 @@ function renderPage3FishList() {
       const waterBadge = waterTags.length
         ? `<div class="fish-water-badge">${waterTags.join("")}</div>`
         : "";
+      let cardClass = "cat-fish-card";
+      if (isFavorite) cardClass += " cat-fish-card-favorite";
+      else if (isPicky) cardClass += " cat-fish-card-picky";
       return `
-      <article class="cat-fish-card ${isFavorite ? "cat-fish-card-favorite" : ""}">
+      <article class="${cardClass}">
         ${hasFishData ? '<span class="cat-fish-tap-badge">Tap</span>' : ""}
         ${waterBadge}
         ${fish.img ? `<img class="cat-fish-img" src="${fish.img}" alt="${fish.name}" loading="lazy" onerror="this.remove()">` : ""}
         <div class="cat-fish-name">${fish.name}</div>
-        ${
-          isFavorite
-            ? `<div class="cat-fish-favorite-wrap">
-          <div class="cat-fish-favorite-badge">好物</div>
-          <label class="cat-fish-toggle cat-fish-unfavorite-toggle">
-            <input type="checkbox" class="cat-fish-unfavorite-checkbox" data-fish-name="${fish.name}">
-            やっぱり違った…
+        <div class="cat-fish-toggle-row">
+          <label class="cat-fish-toggle">
+            <input type="checkbox" class="cat-fish-favorite-checkbox" data-fish-name="${fish.name}" ${isFavorite ? "checked" : ""}>
+            好物❤️
           </label>
-        </div>`
-            : `<div class="cat-fish-toggle-row">
+          <label class="cat-fish-toggle">
+            <input type="checkbox" class="cat-fish-picky-checkbox" data-fish-name="${fish.name}" ${isPicky ? "checked" : ""}>
+            偏食🌀
+          </label>
           <label class="cat-fish-toggle">
             <input type="checkbox" class="cat-fish-exclude-checkbox" data-fish-name="${fish.name}" ${isExcluded ? "checked" : ""}>
-            好物じゃない
+            普通
           </label>
-          <label class="cat-fish-toggle">
-            <input type="checkbox" class="cat-fish-favorite-checkbox" data-fish-name="${fish.name}" ${favoriteSet.size >= 3 ? "disabled" : ""}>
-            好物♡${favoriteSet.size >= 3 ? "（上限）" : ""}
-          </label>
-        </div>`
-        }
+        </div>
       </article>
     `;
     })
     .join("");
+
+  // チェックボックスの排他制御・状態保存は initPage3 の change イベント委任ハンドラで行う
 }
 
+/**
+ * 魚の出現場所・時間・天候をポップアップダイアログで表示する。
+ * オーバーレイ外クリックまたは「閉じる」ボタンで閉じる。
+ */
 function showFishLocationPopup(fishName, places1, places2, times, weathers) {
   const existing = document.getElementById("fishLocationOverlay");
   if (existing) existing.remove();
@@ -2279,6 +2718,10 @@ function showFishLocationPopup(fishName, places1, places2, times, weathers) {
   document.body.appendChild(overlay);
 }
 
+/**
+ * ページ3（にゃんこ）のイベントリスナーを登録し、初回の描画を実行する。
+ * タブ切り替え・名前入力・好物/除外チェックボックス・カードタップ（ポップアップ）を管理する。
+ */
 function initPage3() {
   if (!catTabsEl || !catNameInput || !catResetBtn || !resultPage3) return;
 
@@ -2351,6 +2794,7 @@ function initPage3() {
     if (
       !target.classList.contains("cat-fish-exclude-checkbox") &&
       !target.classList.contains("cat-fish-favorite-checkbox") &&
+      !target.classList.contains("cat-fish-picky-checkbox") &&
       !target.classList.contains("cat-fish-unfavorite-checkbox")
     ) {
       return;
@@ -2358,6 +2802,9 @@ function initPage3() {
 
     const fishName = target.dataset.fishName;
     if (!fishName) return;
+
+    // pickyMap は renderPage3FishList 内で初期化される一時状態
+    const pickyMap = (window.__catPickyMap = window.__catPickyMap || {});
 
     const current = getActiveCatState();
     const excluded = new Set(current.excludedFishNames || []);
@@ -2367,6 +2814,7 @@ function initPage3() {
       if (target.checked) {
         excluded.add(fishName);
         favorite.delete(fishName);
+        pickyMap[fishName] = false; // 偏食をクリア
       } else {
         excluded.delete(fishName);
       }
@@ -2380,8 +2828,20 @@ function initPage3() {
         }
         favorite.add(fishName);
         excluded.delete(fishName);
+        pickyMap[fishName] = false; // 偏食をクリア
       } else {
         favorite.delete(fishName);
+      }
+    }
+
+    // 偏食チェック: 好物・好物じゃないを両方クリアする
+    if (target.classList.contains("cat-fish-picky-checkbox")) {
+      if (target.checked) {
+        favorite.delete(fishName);
+        excluded.delete(fishName);
+        pickyMap[fishName] = true;
+      } else {
+        pickyMap[fishName] = false;
       }
     }
 
@@ -2402,9 +2862,126 @@ function initPage3() {
   });
 }
 
+/**
+ * わんこページを初期化する。
+ * ローカルストレージから状態を復元し、タブ・名前入力・リセット・検索・
+ * チェックボックスの排他制御イベントをまとめて登録する。
+ */
+function initPageDog() {
+  if (!dogTabsEl || !dogNameInput || !dogResetBtn || !resultPageDog) return;
+
+  loadDogState();
+  updateDogTabsUi();
+  renderPageDogList();
+
+  dogTabsEl.addEventListener("click", (event) => {
+    const target = event.target.closest(".dog-tab");
+    if (!target) return;
+    const index = Number(target.dataset.dogIndex || "0");
+    if (!Number.isInteger(index) || index < 0 || index >= DOG_SLOT_COUNT)
+      return;
+    activeDogIndex = index;
+    updateDogTabsUi();
+    renderPageDogList();
+    saveDogState();
+  });
+
+  dogNameInput.addEventListener("input", () => {
+    const current = getActiveDogState();
+    current.name = dogNameInput.value.slice(0, 20);
+    updateDogTabsUi();
+    saveDogState();
+  });
+
+  if (dogSearchInput) {
+    dogSearchInput.addEventListener("input", renderPageDogList);
+  }
+
+  const resetFilterBtnDog = document.getElementById("resetFilterBtnDog");
+  if (resetFilterBtnDog) {
+    resetFilterBtnDog.addEventListener("click", () => {
+      if (dogSearchInput) dogSearchInput.value = "";
+      renderPageDogList();
+    });
+  }
+
+  dogResetBtn.addEventListener("click", () => {
+    const current = getActiveDogState();
+    current.excludedFoodNames = [];
+    current.favoriteFoodNames = [];
+    window.__dogPickyMap = {};
+    renderPageDogList();
+    saveDogState();
+  });
+
+  resultPageDog.addEventListener("change", (event) => {
+    const target = event.target;
+    if (
+      !target.classList.contains("dog-food-exclude-checkbox") &&
+      !target.classList.contains("dog-food-favorite-checkbox") &&
+      !target.classList.contains("dog-food-picky-checkbox")
+    ) {
+      return;
+    }
+
+    const foodName = target.dataset.foodName;
+    if (!foodName) return;
+
+    const pickyMap = (window.__dogPickyMap = window.__dogPickyMap || {});
+    const current = getActiveDogState();
+    const excluded = new Set(current.excludedFoodNames || []);
+    const favorite = new Set(current.favoriteFoodNames || []);
+
+    if (target.classList.contains("dog-food-exclude-checkbox")) {
+      if (target.checked) {
+        excluded.add(foodName);
+        favorite.delete(foodName);
+        pickyMap[foodName] = false;
+      } else {
+        excluded.delete(foodName);
+      }
+    }
+    if (target.classList.contains("dog-food-favorite-checkbox")) {
+      if (target.checked) {
+        if (favorite.size >= 3) {
+          target.checked = false;
+          return;
+        }
+        favorite.add(foodName);
+        excluded.delete(foodName);
+        pickyMap[foodName] = false;
+      } else {
+        favorite.delete(foodName);
+      }
+    }
+    if (target.classList.contains("dog-food-picky-checkbox")) {
+      if (target.checked) {
+        favorite.delete(foodName);
+        excluded.delete(foodName);
+        pickyMap[foodName] = true;
+      } else {
+        pickyMap[foodName] = false;
+      }
+    }
+
+    current.excludedFoodNames = [...excluded];
+    current.favoriteFoodNames = [...favorite];
+    renderPageDogList();
+    saveDogState();
+  });
+}
+
+/** 野生動物ページを初期化し、動物カードを描画する */
+function initPageWild() {
+  renderWildAnimalList();
+}
+
 // =======================
 // イベント登録
 // =======================
+
+// ページ1フィルター要素の変更イベントをまとめて登録する。
+// 趣味・場所1・シーズンが変わる場合はプルダウン再構築も実施する。
 [
   userLevelInput,
   seasonFilter,
@@ -2435,6 +3012,11 @@ searchInput.addEventListener("input", filterCreatures);
 // =======================
 // 初期セットアップ
 // =======================
+
+/**
+ * 野鳥観察クリーチャーの rarityData を正規化する。
+ * 星2データがなく星1データのみの場合、星2 = 星1 × 4 として設定する。
+ */
 function normalizeBirdRarityData() {
   creatures.forEach((c) => {
     if (c.hobby === "野鳥観察") {
@@ -2450,6 +3032,11 @@ function normalizeBirdRarityData() {
 // =======================
 // ページ4（テスト：行動アドバイザー）
 // =======================
+
+/**
+ * 行動アドバイザー（ページ4）を初期化する。
+ * 趣味レベル・時間・天候・目的を入力すると、今取れる生き物と稼ぎの提案を表示する。
+ */
 function initPageTest() {
   const STORAGE_KEY_TEST = "heartpia-test-settings-v1";
   const testResultEl = document.getElementById("testResult");
@@ -2997,6 +3584,13 @@ function initPageTest() {
 // =======================
 // メイン初期化
 // =======================
+
+/**
+ * アプリ全体の初期化処理。
+ * 1. localStorage から状態を復元
+ * 2. フィルターのプルダウン選択肢を構築
+ * 3. 各ページを初期化してレンダリングを実行
+ */
 function init() {
   loadState();
   saveState(); // 移行後は新キーを確実に更新
@@ -3337,6 +3931,23 @@ function init() {
   }
 
   initPage3();
+  initPageDog();
+  initPageWild();
+
+  // 動物タイプ切り替えセレクター
+  const animalTypeSelect = document.getElementById("animalTypeSelect");
+  if (animalTypeSelect) {
+    animalTypeSelect.addEventListener("change", () => {
+      const type = animalTypeSelect.value;
+      const catSection = document.getElementById("animalSection-cat");
+      const dogSection = document.getElementById("animalSection-dog");
+      const wildSection = document.getElementById("animalSection-wild");
+      if (catSection) catSection.hidden = type !== "cat";
+      if (dogSection) dogSection.hidden = type !== "dog";
+      if (wildSection) wildSection.hidden = type !== "wild";
+    });
+  }
+
   initPageTest();
 
   // 全フィルター変更時に自動保存
@@ -3368,6 +3979,12 @@ function init() {
 // =======================
 // 食材チップ 長押し拡大
 // =======================
+
+/**
+ * 料理カードの食材チップを長押し（400ms）すると拡大ポップアップを表示する。
+ * タッチ（スマホ）とマウス（PC）の両方に対応する。
+ * 長押し後のクリックでカードがフリップしないようにキャプチャ段階でブロックする。
+ */
 (function setupFoodChipZoom() {
   const LONG_PRESS_MS = 400;
   let zoomEl = null;
@@ -3505,6 +4122,12 @@ function init() {
 // =======================
 // URLハッシュ経由の自動インポート（ブックマークレット連携）
 // =======================
+
+/**
+ * ページ読み込み時に URL ハッシュ（#import=...）が付いていれば
+ * Base64 デコードして localStorage に自動インポートする。
+ * インポート後はハッシュを消してページをリロードする。
+ */
 (function checkHashImport() {
   var hash = window.location.hash;
   if (!hash.startsWith("#import=")) return;
@@ -3647,6 +4270,12 @@ function init() {
 // =======================
 // 旧サイトからのデータ引き継ぎ（手動貼り付け）
 // =======================
+
+/**
+ * 旧サイトのコンソールスニペットで出力したJSONテキストを
+ * テキストエリアに貼り付けてインポートする機能を初期化する。
+ * 引き継ぎ内容の件数を確認ダイアログで提示してから上書きする。
+ */
 (function setupImportFromOldSite() {
   const btn = document.getElementById("importFromOldSiteBtn");
   const statusEl = document.getElementById("importStatus");

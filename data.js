@@ -1,4 +1,21 @@
 ﻿// data.js
+// このファイルはゲーム内の生き物・植物・料理・食材などのデータを定義する。
+// script.js から参照され、フィルタリング・表示に使用される。
+
+// ============================================================
+// 生き物データの共通フィールド構造:
+//   name      : 表示名
+//   hobby     : 趣味（"釣り" | "虫捕り" | "野鳥観察"）
+//   level     : 解放に必要な趣味レベル（1〜）
+//   places1   : 大分類の出現場所（配列）
+//   places2   : 詳細な出現場所（配列）
+//   times     : 出現時間帯（"00-06" | "06-12" | "12-18" | "18-00" の配列）
+//   weathers  : 出現天候（"晴れ" | "雨(雪)" | "虹" の配列）
+//   rarityData: レアリティ別の売値・TC値（[{ star, price, tc? }, ...]）
+//   note      : 備考（文字列または文字列配列）
+//   season    : 出現シーズン（省略時は "normal"）
+//   img       : 画像パス（省略時は画像なし）
+// ============================================================
 
 // 釣り----------------------------------------------
 const fishingCreatures = [
@@ -929,6 +946,7 @@ const fishingCreatures = [
 ];
 
 // 虫捕り----------------------------------------------
+// 虫捕りで獲得できる生き物のデータ配列（昆虫・クモ類など）
 const insectCreatures = [
   {
     name: "キアゲハ",
@@ -1646,6 +1664,7 @@ const insectCreatures = [
 ];
 
 // 野鳥観察----------------------------------------------
+// 野鳥観察で発見できる鳥類のデータ配列
 const birdCreatures = [
   {
     name: "コマドリ",
@@ -2352,6 +2371,8 @@ const birdCreatures = [
 ];
 
 // 園芸----------------------------------------------
+// 園芸で育てられる植物・花のデータ配列
+// フィールド: name, hobby("園芸"), level, time(育成時間h), price, note, season, img など
 const gardeningCreatures = [
   {
     name: "トマト",
@@ -2536,6 +2557,8 @@ const gardeningCreatures = [
 ];
 
 // 料理----------------------------------------------
+// 料理で作れるレシピのデータ配列
+// フィールド: name, hobby("料理"), level, time(調理時間h), price, note, season, img など
 //元気いっぱい
 //エネルギッシュ
 //神速の足
@@ -3130,6 +3153,8 @@ const cookingCreatures = [
   },
 ];
 
+// 店舗・採取で入手できる食材のデータ配列
+// フィールド: name, hobby(["採取"|"販売", "食材"]), price({ buy, sell }), level, note
 const storeIngredientCreatures = [
   {
     name: "リンゴ",
@@ -3336,7 +3361,10 @@ const storeIngredientCreatures = [
   },
 ];
 
-// ページ2（園芸・料理）用：生物図鑑とは独立
+// ============================================================
+// ページ2（園芸・料理）用: 園芸・料理・食材を統合した配列
+// script.js のページ2フィルタ・表示で参照される
+// ============================================================
 const page2Creatures = [
   ...gardeningCreatures,
   ...cookingCreatures,
@@ -3405,7 +3433,9 @@ function formatHourToJpTime(hourValue) {
   return `${hours}時間${minutes}分`;
 }
 
-// まとめて扱う配列（ページ1: 生物図鑑）
+// ============================================================
+// ページ1（生物図鑑）用: 釣り・虫捕り・野鳥観察を統合した配列
+// ============================================================
 const creatures = [...fishingCreatures, ...insectCreatures, ...birdCreatures];
 creatures.forEach((c) => {
   let folder = "";
@@ -5329,3 +5359,30 @@ const otterFishList = [
 //"レッドベリーピラニア",
 //"バタフライコイ",
 //"カクレクマノミ",
+
+// =======================
+// わんこにあげられるものリスト
+// 特殊アイテムを先頭に、その後は料理を全て初期リストとして設定。
+// img/cooking/ の画像が自動的に参照される。
+// =======================
+const dogFoodList = [
+  "ドッグフード",
+  "動物汎用エサ",
+  ...cookingCreatures.map((c) => c.name),
+];
+
+// =======================
+// 野生動物データ（動物名・画像・固定の好物）
+// 好物は { name, img } の形式。画像は img/animal/ フォルダに追加する。
+// favorites が空の場合はプレースホルダーが表示される。
+// =======================
+const wildAnimalData = [
+  { name: "パンダ", img: "img/animal/パンダ.png", favorites: [] },
+  { name: "カピバラ", img: "img/animal/カピバラ.png", favorites: [] },
+  { name: "ウサギ", img: "img/animal/ウサギ.png", favorites: [] },
+  { name: "キツネ", img: "img/animal/キツネ.png", favorites: [] },
+  { name: "ラッコ", img: "img/animal/ラッコ.png", favorites: [] },
+  { name: "テン", img: "img/animal/テン.png", favorites: [] },
+  { name: "ニホンジカ", img: "img/animal/ニホンジカ.png", favorites: [] },
+  { name: "アルパカ", img: "img/animal/アルパカ.png", favorites: [] },
+];

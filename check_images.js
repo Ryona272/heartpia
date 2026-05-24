@@ -1,4 +1,7 @@
 // 画像ファイルと名前の一致チェックスクリプト
+// img_list.txt のファイル一覧と data.js 内の全生物名を照導合わせ、
+// 画像が存在しない項目をレポートする。
+// 使い方: node check_images.js
 const fs = require("fs");
 const path = require("path");
 const vm = require("vm");

@@ -28,7 +28,7 @@
     <nav class="nav-tabs top-nav" role="navigation" aria-label="上部ナビ">
       <button class="tab active" data-target="page-zukan">生物図鑑</button>
       <button class="tab" data-target="page-info">園芸・料理</button>
-      <button class="tab" data-target="page-cat">にゃんこ</button>
+      <button class="tab" data-target="page-cat">動物</button>
       <button class="tab" data-target="page-test">テスト</button>
       <button class="tab" data-target="page-settings">そのた</button>
     </nav>
@@ -251,107 +251,105 @@
         <section id="resultPage2" class="result" aria-live="polite"></section>
       </section>
 
-      <!-- ▼ にゃんこページ -->
+      <!-- ▼ 動物ライフページ -->
       <section id="page-cat" class="page" aria-labelledby="cat-title">
-        <h2 id="cat-title">にゃんこ</h2>
-        <p class="cat-help">
-          にゃんこの好物を絞ります。
-        </p>
+        <h2 id="cat-title">動物ライフ</h2>
+        <p class="cat-help">動物のお世話をします。</p>
 
-        <section class="cat-controls" aria-label="猫の管理">
-          <div id="catTabs" class="cat-tabs" role="tablist" aria-label="猫選択">
-            <button
-              class="cat-tab active"
-              data-cat-index="0"
-              aria-pressed="true"
-            >
-              猫1
-            </button>
-            <button class="cat-tab" data-cat-index="1" aria-pressed="false">
-              猫2
-            </button>
-            <button class="cat-tab" data-cat-index="2" aria-pressed="false">
-              猫3
-            </button>
-            <button class="cat-tab" data-cat-index="3" aria-pressed="false">
-              猫4
-            </button>
-            <button class="cat-tab" data-cat-index="4" aria-pressed="false">
-              猫5
-            </button>
-          </div>
+        <div class="animal-type-selector">
+          <label for="animalTypeSelect">動物：</label>
+          <select id="animalTypeSelect">
+            <option value="cat">にゃんこ</option>
+            <option value="dog">わんこ</option>
+            <option value="wild">野生動物</option>
+          </select>
+        </div>
 
-          <div
-            id="cat5ExcludedToggleWrap"
-            class="cat5-toggle-wrap"
-            aria-live="polite"
-          >
-            <button
-              id="cat5ExcludedToggle"
-              type="button"
-              class="filter-toggle"
-              aria-pressed="false"
-            >
-              好物じゃない表示 OFF
-            </button>
-          </div>
-
-          <div class="cat-name-row">
-            <label for="catNameInput">猫の名前：</label>
-            <input
-              id="catNameInput"
-              type="text"
-              maxlength="20"
-              placeholder="例：しろ"
-              aria-label="猫の名前"
-            />
-            <button id="catResetBtn" type="button">この猫をリセット</button>
-            <span id="catVisibleCount">候補：0匹</span>
-          </div>
-
-          <div class="cat-search-row">
-            <input
-              id="catSearchInput"
-              type="search"
-              placeholder="魚名で検索…"
-              aria-label="魚名で検索"
-            />
-            <button id="resetFilterBtnCat" type="button" class="reset-filter-btn">検索リセット</button>
-          </div>
-
-          <div class="controls cat-filter-controls">
-            <div class="controls-place-row">
-              <label for="catPlace1Filter">場所1：</label>
-              <select id="catPlace1Filter"><option value="">すべて</option></select>
+        <!-- にゃんこセクション -->
+        <div id="animalSection-cat">
+          <section class="cat-controls" aria-label="猫の管理">
+            <div id="catTabs" class="cat-tabs" role="tablist" aria-label="猫選択">
+              <button class="cat-tab active" data-cat-index="0" aria-pressed="true">猫1</button>
+              <button class="cat-tab" data-cat-index="1" aria-pressed="false">猫2</button>
+              <button class="cat-tab" data-cat-index="2" aria-pressed="false">猫3</button>
+              <button class="cat-tab" data-cat-index="3" aria-pressed="false">猫4</button>
+              <button class="cat-tab" data-cat-index="4" aria-pressed="false">猫5</button>
             </div>
-            <div>
-              <label for="catPlace2Filter">場所2：</label>
-              <select id="catPlace2Filter"><option value="">すべて</option></select>
-            </div>
-            <div>
-              <label for="catTimeFilter">時間：</label>
-              <select id="catTimeFilter"><option value="">すべて</option></select>
-            </div>
-            <div>
-              <label for="catWeatherFilter">天候：</label>
-              <select id="catWeatherFilter">
-                <option value="">すべて</option>
-                <option value="all_three">晴れ , 雨(雪) , 虹</option>
-                <option value="exclude_sunny">雨(雪) , 虹</option>
-                <option value="exclude_rain">晴れ , 虹</option>
-                <option value="rainbow_only">虹のみ</option>
-                <option value="include_sunny">晴れを含む</option>
-                <option value="include_rain">雨(雪)を含む</option>
-              </select>
-            </div>
-          </div>
-        </section>
 
-        <section
-          id="resultPage3"
-          class="cat-fish-grid"
-          aria-live="polite"
-        ></section>
+            <div id="cat5ExcludedToggleWrap" class="cat5-toggle-wrap" aria-live="polite">
+              <button id="cat5ExcludedToggle" type="button" class="filter-toggle" aria-pressed="false">
+                普通表示 OFF
+              </button>
+            </div>
+
+            <div class="cat-name-row">
+              <label for="catNameInput">猫の名前：</label>
+              <input id="catNameInput" type="text" maxlength="20" placeholder="例：しろ" aria-label="猫の名前" />
+              <button id="catResetBtn" type="button">この猫をリセット</button>
+              <span id="catVisibleCount">候補：0匹</span>
+            </div>
+
+            <div class="cat-search-row">
+              <input id="catSearchInput" type="search" placeholder="魚名で検索…" aria-label="魚名で検索" />
+              <button id="resetFilterBtnCat" type="button" class="reset-filter-btn">検索リセット</button>
+            </div>
+
+            <div class="controls cat-filter-controls">
+              <div class="controls-place-row">
+                <label for="catPlace1Filter">場所1：</label>
+                <select id="catPlace1Filter"><option value="">すべて</option></select>
+              </div>
+              <div>
+                <label for="catPlace2Filter">場所2：</label>
+                <select id="catPlace2Filter"><option value="">すべて</option></select>
+              </div>
+              <div>
+                <label for="catTimeFilter">時間：</label>
+                <select id="catTimeFilter"><option value="">すべて</option></select>
+              </div>
+              <div>
+                <label for="catWeatherFilter">天候：</label>
+                <select id="catWeatherFilter">
+                  <option value="">すべて</option>
+                  <option value="all_three">晴れ , 雨(雪) , 虹</option>
+                  <option value="exclude_sunny">雨(雪) , 虹</option>
+                  <option value="exclude_rain">晴れ , 虹</option>
+                  <option value="rainbow_only">虹のみ</option>
+                  <option value="include_sunny">晴れを含む</option>
+                  <option value="include_rain">雨(雪)を含む</option>
+                </select>
+              </div>
+            </div>
+          </section>
+          <section id="resultPage3" class="cat-fish-grid" aria-live="polite"></section>
+        </div>
+
+        <!-- わんこセクション -->
+        <div id="animalSection-dog" hidden>
+          <section class="cat-controls" aria-label="わんこの管理">
+            <div id="dogTabs" class="cat-tabs dog-tabs" role="tablist" aria-label="わんこ選択">
+              <button class="dog-tab active" data-dog-index="0" aria-pressed="true">わんこ1</button>
+              <button class="dog-tab" data-dog-index="1" aria-pressed="false">わんこ2</button>
+              <button class="dog-tab" data-dog-index="2" aria-pressed="false">わんこ3</button>
+            </div>
+            <div class="cat-name-row">
+              <label for="dogNameInput">わんこの名前：</label>
+              <input id="dogNameInput" type="text" maxlength="20" placeholder="例：ぽち" aria-label="わんこの名前" />
+              <button id="dogResetBtn" type="button">このわんこをリセット</button>
+              <span id="dogVisibleCount">候補：0個</span>
+            </div>
+            <div class="cat-search-row">
+              <input id="dogSearchInput" type="search" placeholder="食べ物名で検索…" aria-label="食べ物名で検索" />
+              <button id="resetFilterBtnDog" type="button" class="reset-filter-btn">検索リセット</button>
+            </div>
+          </section>
+          <section id="resultPageDog" class="cat-fish-grid" aria-live="polite"></section>
+        </div>
+
+        <!-- 野生動物セクション -->
+        <div id="animalSection-wild" hidden>
+          <section id="resultPageWild" class="wild-animal-grid" aria-live="polite"></section>
+        </div>
       </section>
 
       <!-- ▼ テストページ -->
@@ -472,8 +470,8 @@
       <button class="tab" data-target="page-info" aria-label="園芸・料理">
         園芸・料理
       </button>
-      <button class="tab" data-target="page-cat" aria-label="にゃんこ">
-        にゃんこ
+      <button class="tab" data-target="page-cat" aria-label="動物">
+        動物
       </button>
       <button class="tab" data-target="page-test" aria-label="テスト">
         テスト

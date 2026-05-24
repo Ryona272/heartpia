@@ -1,3 +1,46 @@
+/* --- にゃんこ魚カード色分け --- */
+.cat-fish-card-favorite {
+  border: 2px solid #e25555 !important;
+  background: #fff4f4 !important;
+  box-shadow: 0 0 0 2px #e2555533;
+}
+.cat-fish-card-picky {
+  border: 2px solid #3a7be0 !important;
+  background: #f4f8ff !important;
+  box-shadow: 0 0 0 2px #3a7be033;
+}
+/* --- にゃんこカード用カスタム --- */
+.cat-card-info {
+  margin: 8px 0 0 0;
+  padding: 6px 0 0 0;
+  border-top: 1px dashed #e0bfcf;
+  font-size: 0.95em;
+}
+.cat-favorite {
+  margin-bottom: 2px;
+  color: #d33;
+  font-weight: bold;
+}
+.cat-heart {
+  color: #e25555;
+  font-size: 1.2em;
+  vertical-align: middle;
+}
+.cat-picky {
+  margin-bottom: 2px;
+  color: #3a3a3a;
+}
+.cat-picky-emoji {
+  font-size: 1.1em;
+  vertical-align: middle;
+}
+.cat-check-row {
+  margin-top: 4px;
+}
+.cat-check-btn {
+  accent-color: #e25555;
+  margin-right: 4px;
+}
 @import url("https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&family=Zen+Maru+Gothic:wght@500;700&display=swap");
 
 /* ベース */
@@ -397,6 +440,28 @@ body::before {
   margin-bottom: 10px;
 }
 
+/* わんこタブは3列 */
+.dog-tabs {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.dog-tab {
+  min-height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(166, 128, 67, 0.35);
+  background: #fffdf4;
+  color: #5f4a22;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 0 rgba(138, 110, 62, 0.2);
+}
+
+.dog-tab.active {
+  background: #de8b43;
+  color: #fffaf0;
+  border-color: rgba(129, 70, 30, 0.42);
+}
+
 .cat5-toggle-wrap {
   display: none;
   justify-content: flex-end;
@@ -444,7 +509,8 @@ body::before {
   gap: 8px;
 }
 
-#catSearchInput {
+#catSearchInput,
+#dogSearchInput {
   width: 100%;
   max-width: 320px;
   min-height: 38px;
@@ -457,7 +523,8 @@ body::before {
   box-sizing: border-box;
 }
 
-#catNameInput {
+#catNameInput,
+#dogNameInput {
   min-height: 38px;
   border-radius: 9px;
   border: 1px solid rgba(175, 148, 93, 0.45);
@@ -467,7 +534,8 @@ body::before {
   min-width: 180px;
 }
 
-#catResetBtn {
+#catResetBtn,
+#dogResetBtn {
   min-height: 38px;
   border-radius: 9px;
   border: 1px solid rgba(175, 148, 93, 0.45);
@@ -478,7 +546,8 @@ body::before {
   cursor: pointer;
 }
 
-#catVisibleCount {
+#catVisibleCount,
+#dogVisibleCount {
   font-weight: 700;
   color: #6b4a1f;
 }
@@ -1956,6 +2025,96 @@ button.is-pressed,
 .test-empty {
   font-size: 13px;
   color: #aaa;
+  font-style: italic;
+  margin: 0;
+}
+
+/* =======================
+   動物ライフ — 動物タイプセレクター
+   ======================= */
+.animal-type-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.animal-type-selector select {
+  min-height: 38px;
+  border-radius: 9px;
+  border: 1px solid rgba(175, 148, 93, 0.45);
+  background: #fffef8;
+  color: #4b4027;
+  padding: 6px 10px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+/* =======================
+   野生動物カード
+   ======================= */
+.wild-animal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+}
+
+.wild-animal-card {
+  border-radius: 14px;
+  border: 1px solid rgba(173, 151, 104, 0.28);
+  background: linear-gradient(180deg, #fffaf0, #fff7e7);
+  box-shadow: 0 6px 16px var(--shadow);
+  padding: 12px 10px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.wild-animal-img {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.wild-animal-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #3e3120;
+  text-align: center;
+}
+
+.wild-animal-favorites {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.wild-animal-fav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.wild-animal-fav-item img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.wild-animal-fav-item span {
+  font-size: 0.7rem;
+  color: #5a4320;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.wild-animal-no-data {
+  font-size: 0.78rem;
+  color: #9e8060;
   font-style: italic;
   margin: 0;
 }
