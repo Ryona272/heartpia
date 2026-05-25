@@ -71,6 +71,7 @@ const dog5ExcludedToggle = document.getElementById("dog5ExcludedToggle");
 const resultPageWild = document.getElementById("resultPageWild");
 const eventnameFilterWrap = document.getElementById("eventnameFilterWrap");
 const eventnameFilter = document.getElementById("eventnameFilter");
+const fishSubFilter = document.getElementById("fishSubFilter");
 const eventnameFilterPage2Wrap = document.getElementById(
   "eventnameFilterPage2Wrap",
 );
@@ -338,6 +339,7 @@ function resetFiltersCat() {
  * 「獲得非ON」「★5非ON」などのグローバルトグル状態も適用する。
  */
 function filterCreatures() {
+  updateFishSubFilterOptions();
   const fishLevel = Number(bioLevelFishInput?.value) || 10;
   const insectLevel = Number(bioLevelInsectInput?.value) || 10;
   const birdLevel = Number(bioLevelBirdInput?.value) || 10;
@@ -399,6 +401,27 @@ function filterCreatures() {
       return false;
 
     if (hobby && c.hobby !== hobby) return false;
+
+    // 釣り種別サブフィルター
+    const fishSub = fishSubFilter?.value || "";
+    if (fishSub && c.hobby === "釣り") {
+      if (fishSub === "cooking" && !cookingFishNameSet.has(c.name))
+        return false;
+      if (fishSub === "seafish" && !cookingSeaFishNameSet.has(c.name))
+        return false;
+      if (fishSub === "cat" && !normalFishNameSet.has(c.name)) return false;
+      if (fishSub.startsWith("fav-")) {
+        const catLabel = fishSub.slice(4);
+        const hasFav = catStates.some(
+          (cat) =>
+            ((cat.name || "猫").trim() || "猫") === catLabel &&
+            Array.isArray(cat.favoriteFishNames) &&
+            cat.favoriteFishNames.includes(c.name),
+        );
+        if (!hasFav) return false;
+      }
+    }
+
     if (place1 && !c.places1?.includes(place1)) return false;
     if (place2 && !c.places2?.includes(place2)) return false;
     if (time && !c.times?.includes(time)) return false;
@@ -497,6 +520,7 @@ function saveFilterState() {
     sortBio: sortBioSelect?.value ?? "default",
     seasonFilter: seasonFilter?.value ?? "",
     eventnameFilter: eventnameFilter?.value ?? "",
+    fishSubFilter: fishSubFilter?.value ?? "",
     timeFilter: timeFilter?.value ?? "",
     place1Filter: place1Filter?.value ?? "",
     place2Filter: place2Filter?.value ?? "",
@@ -552,6 +576,9 @@ function loadFilterState() {
       eventnameFilter.value = s.eventnameFilter;
     if (seasonFilter?.value === "otherevent")
       eventnameFilter.style.visibility = "visible";
+    if (fishSubFilter && s.fishSubFilter != null)
+      fishSubFilter.value = s.fishSubFilter;
+    updateFishSubFilterVisibility();
     if (timeFilter && s.timeFilter != null) timeFilter.value = s.timeFilter;
     if (weatherFilter && s.weatherFilter != null)
       weatherFilter.value = s.weatherFilter;
@@ -851,6 +878,52 @@ function matchesSeasonForOptions(c, season) {
   if (isOtherEvent(season))
     return isOtherEvent(c.season) || c.season === "normal";
   return true;
+}
+
+/**
+ * 釣り種別サブフィルターの選択肢を再構築する。
+ * 固定3種（魚-食材・海の魚-食材・猫-エサ）＋好物を設定している猫ごとに追加。
+ */
+function updateFishSubFilterOptions() {
+  if (!fishSubFilter) return;
+  const prevValue = fishSubFilter.value;
+  fishSubFilter.innerHTML = '<option value="">すべて</option>';
+  const opts = [
+    { value: "cooking", label: "🐟 魚-食材" },
+    { value: "seafish", label: "🌊 海の魚-食材" },
+    { value: "cat", label: "🐱 猫-エサ" },
+  ];
+  catStates.forEach((cat) => {
+    if (
+      Array.isArray(cat.favoriteFishNames) &&
+      cat.favoriteFishNames.length > 0
+    ) {
+      const label = (cat.name || "猫").trim() || "猫";
+      opts.push({ value: `fav-${label}`, label: `🐱 ${label}-好物` });
+    }
+  });
+  opts.forEach(({ value, label }) => {
+    const opt = document.createElement("option");
+    opt.value = value;
+    opt.textContent = label;
+    fishSubFilter.appendChild(opt);
+  });
+  if (Array.from(fishSubFilter.options).some((o) => o.value === prevValue)) {
+    fishSubFilter.value = prevValue;
+  } else {
+    fishSubFilter.value = "";
+  }
+}
+
+/**
+ * 趣味フィルターが「釣り」のときだけ釣り種別サブフィルターを表示する。
+ * 「釣り」以外になった場合は値もリセットする。
+ */
+function updateFishSubFilterVisibility() {
+  if (!fishSubFilter) return;
+  const isFishing = hobbyFilter.value === "釣り";
+  fishSubFilter.style.visibility = isFishing ? "visible" : "hidden";
+  if (!isFishing) fishSubFilter.value = "";
 }
 
 function updatePlace1Options() {
@@ -2315,6 +2388,10 @@ const cookingSeaFishNameSet = new Set(cookingSeaFishList);
 const dogSpecialItems = [
   { name: "ドッグフード", img: "img/store-ingredient/ドッグフード.png" },
   { name: "動物汎用エサ", img: "img/store-ingredient/動物汎用エサ.png" },
+  { name: "リンゴ", img: "img/store-ingredient/リンゴ.png" },
+  { name: "ヒラタケ", img: "img/store-ingredient/ヒラタケ.png" },
+  { name: "シイタケ", img: "img/store-ingredient/シイタケ.png" },
+  { name: "マッシュルーム", img: "img/store-ingredient/マッシュルーム.png" },
 ];
 const normalDogCandidates = dogFoodList
   .map((name) => {
@@ -2816,15 +2893,15 @@ function renderPage3FishList() {
       const waterTags = [];
       if (fishData?.places1?.includes("海"))
         waterTags.push(
-          `<span class="fish-water-tag fish-water-tag--sea">🌊 海</span>`,
+          `<span class="fish-water-tag fish-water-tag--sea">⚓ 海</span>`,
         );
       if (fishData?.places1?.includes("川"))
         waterTags.push(
-          `<span class="fish-water-tag fish-water-tag--river">💧 川</span>`,
+          `<span class="fish-water-tag fish-water-tag--river">🛶 川</span>`,
         );
       if (fishData?.places1?.includes("湖"))
         waterTags.push(
-          `<span class="fish-water-tag fish-water-tag--lake">🔵 湖</span>`,
+          `<span class="fish-water-tag fish-water-tag--lake">🦆 湖</span>`,
         );
       const waterBadge = waterTags.length
         ? `<div class="fish-water-badge">${waterTags.join("")}</div>`
@@ -3219,11 +3296,15 @@ function initPageWild() {
   place2Filter,
   timeFilter,
   weatherFilter,
+  fishSubFilter,
 ].forEach((el) =>
   el.addEventListener("change", () => {
     if (el === hobbyFilter) {
       updatePlace1Options();
       updatePlace2Options();
+      updateFishSubFilterVisibility();
+    } else if (el === fishSubFilter) {
+      // サブフィルター変更時は追加処理なし
     } else if (el === place1Filter) {
       updatePlace2Options();
     } else if (el === seasonFilter) {
@@ -4246,6 +4327,7 @@ function init() {
     seasonFilterPage2,
     eventnameFilterPage2,
     sortPage2,
+    fishSubFilter,
   ].forEach((el) => el?.addEventListener("change", saveFilterState));
   sortBioSelect?.addEventListener("change", filterCreatures);
   searchInput?.addEventListener("input", saveFilterState);

@@ -2168,6 +2168,16 @@ button.is-pressed,
   flex: 1;
   width: auto;
 }
+/* 生物図鑑 趣味・釣り種別の2つのセレクトを横並び */
+.hobby-filter-selects {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+.hobby-filter-selects > select {
+  flex: 1;
+  width: auto;
+}
 /* シーズン・イベントの2つのセレクトを横並び */
 .page2-season-selects {
   display: inline-flex;
