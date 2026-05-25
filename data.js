@@ -5372,17 +5372,120 @@ const dogFoodList = [
 ];
 
 // =======================
-// 野生動物データ（動物名・画像・固定の好物）
+// 野生動物データ（動物名・画像・固定の好物・好きな天気）
 // 好物は { name, img } の形式。画像は img/animal/ フォルダに追加する。
-// favorites が空の場合はプレースホルダーが表示される。
 // =======================
 const wildAnimalData = [
-  { name: "パンダ", img: "img/animal/パンダ.png", favorites: [] },
-  { name: "カピバラ", img: "img/animal/カピバラ.png", favorites: [] },
-  { name: "ウサギ", img: "img/animal/ウサギ.png", favorites: [] },
-  { name: "キツネ", img: "img/animal/キツネ.png", favorites: [] },
-  { name: "ラッコ", img: "img/animal/ラッコ.png", favorites: [] },
-  { name: "テン", img: "img/animal/テン.png", favorites: [] },
-  { name: "ニホンジカ", img: "img/animal/ニホンジカ.png", favorites: [] },
-  { name: "アルパカ", img: "img/animal/アルパカ.png", favorites: [] },
+  {
+    name: "パンダ",
+    img: "img/animal/パンダ.png",
+    favorites: [
+      { name: "竹", img: "img/store-ingredient/竹.png" },
+      { name: "リンゴ", img: "img/store-ingredient/リンゴ.png" },
+      { name: "トウモロコシ", img: "img/gardening/トウモロコシ.png" },
+    ],
+    favoriteWeather: ["雨(雪)", "虹"],
+    category: "常駐",
+  },
+  {
+    name: "カピバラ",
+    img: "img/animal/カピバラ.png",
+    favorites: [
+      { name: "トマト", img: "img/gardening/トマト.png" },
+      { name: "ブドウ", img: "img/gardening/ブドウ.png" },
+      { name: "ラズベリー", img: "img/store-ingredient/ラズベリー.png" },
+    ],
+    favoriteWeather: ["雨(雪)", "虹"],
+    category: "常駐",
+  },
+  {
+    name: "ウサギ",
+    img: "img/animal/ウサギ.png",
+    favorites: [
+      { name: "雑草", img: "img/store-ingredient/雑草.png" },
+      { name: "ニンジン", img: "img/gardening/ニンジン.png" },
+      { name: "いちご", img: "img/gardening/いちご.png" },
+    ],
+    favoriteWeather: ["晴れ", "虹"],
+    category: "常駐",
+  },
+  {
+    name: "キツネ",
+    img: "img/animal/キツネ.png",
+    favorites: [
+      { name: "肉", img: "img/store-ingredient/肉.png" },
+      { name: "ヨーロピアンパーチ", img: "img/fish/ヨーロピアンパーチ.png" },
+      { name: "オオクチバス", img: "img/fish/オオクチバス.png" },
+    ],
+    favoriteWeather: ["虹"],
+    category: "常駐",
+  },
+  {
+    name: "ラッコ",
+    img: "img/animal/ラッコ.png",
+    favorites: [
+      { name: "ウミエビ", img: "img/fish/ウミエビ.png" },
+      { name: "コウライエビ", img: "img/fish/コウライエビ.png" },
+      { name: "イガイ", img: "img/fish/イガイ.png" },
+    ],
+    favoriteWeather: ["雨(雪)", "虹"],
+    category: "常駐",
+  },
+  {
+    name: "テン",
+    img: "img/animal/テン.png",
+    favorites: [
+      { name: "卵", img: "img/store-ingredient/卵.png" },
+      { name: "スズキ", img: "img/fish/スズキ.png" },
+      { name: "ハゼ", img: "img/fish/ハゼ.png" },
+    ],
+    favoriteWeather: ["虹"],
+    category: "常駐",
+  },
+  {
+    name: "ニホンジカ",
+    img: "img/animal/ニホンジカ.png",
+    favorites: [
+      { name: "低木の枝", img: "img/store-ingredient/低木の枝.png" },
+      { name: "レタス", img: "img/gardening/レタス.png" },
+      { name: "田園サラダ", img: "img/cooking/田園サラダ.png" },
+    ],
+    favoriteWeather: ["晴れ", "虹"],
+    category: "常駐",
+  },
+  {
+    name: "アルパカ",
+    img: "img/animal/アルパカ.png",
+    favorites: [
+      { name: "ブルーベリー", img: "img/store-ingredient/ブルーベリー.png" },
+      { name: "パイナップル", img: "img/gardening/パイナップル.png" },
+      { name: "小麦", img: "img/gardening/小麦.png" },
+    ],
+    favoriteWeather: ["晴れ", "虹"],
+    category: "常駐",
+  },
+  {
+    name: "ペンギン",
+    img: "img/animal/ペンギン.png",
+    favorites: [
+      { name: "ニシイワシ", img: "img/fish/ニシイワシ.png" },
+      { name: "ウミエビ", img: "img/fish/ウミエビ.png" },
+      { name: "フランスアジ", img: "img/fish/フランスアジ.png" },
+    ],
+    favoriteWeather: ["雨(雪)", "虹"],
+    category: "イベント",
+    eventActive: false, // イベント開催中: true / 終了: false
+  },
+  {
+    name: "MALTESE",
+    img: "img/animal/MALTESE.png",
+    favorites: [
+      { name: "ドッグフード", img: "img/store-ingredient/ドッグフード.png" },
+      { name: "肉", img: "img/store-ingredient/肉.png" },
+      { name: "焼きキノコ", img: "img/cooking/焼きキノコ.png" },
+    ],
+    favoriteWeather: ["晴れ", "虹"],
+    category: "イベント",
+    eventActive: true, // イベント開催中: true / 終了: false
+  },
 ];

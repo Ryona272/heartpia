@@ -1,4 +1,4 @@
-/* --- にゃんこ魚カード色分け --- */
+/* --- にめE��こ魚カード色刁E�� --- */
 .cat-fish-card-favorite {
   border: 2px solid #e25555 !important;
   background: #fff4f4 !important;
@@ -9,7 +9,7 @@
   background: #f4f8ff !important;
   box-shadow: 0 0 0 2px #3a7be033;
 }
-/* --- にゃんこカード用カスタム --- */
+/* --- にめE��こカード用カスタム --- */
 .cat-card-info {
   margin: 8px 0 0 0;
   padding: 6px 0 0 0;
@@ -43,7 +43,7 @@
 }
 @import url("https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&family=Zen+Maru+Gothic:wght@500;700&display=swap");
 
-/* ベース */
+/* ベ�Eス */
 :root {
   --bg: #f2f3e8;
   --bg-paper: #fffef6;
@@ -74,6 +74,9 @@ html {
 body {
   font-family: "M PLUS Rounded 1c", "Zen Maru Gothic", sans-serif;
   margin: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
   background:
     radial-gradient(
       circle at 8% -4%,
@@ -159,7 +162,7 @@ body::before {
     inset 0 -2px 0 rgba(119, 54, 20, 0.25);
 }
 
-/* ページ切替 */
+/* ペ�Eジ刁E�� */
 .page {
   display: none;
   padding: 16px 0;
@@ -170,7 +173,7 @@ body::before {
   animation: page-enter 0.28s ease;
 }
 
-/* 表示切替 */
+/* 表示刁E�� */
 .view-switch {
   display: flex;
   gap: 8px;
@@ -211,7 +214,7 @@ body::before {
       rgba(255, 255, 255, 0.72),
       transparent 50%
     ),
-    url("img/back1.png");
+    url("img/other/back1.png");
   background-repeat: no-repeat;
   background-position:
     0 0,
@@ -235,7 +238,7 @@ body::before {
       rgba(255, 255, 255, 0.72),
       transparent 50%
     ),
-    url("img/back2.png");
+    url("img/other/back2.png");
   background-repeat: no-repeat;
   background-position:
     0 0,
@@ -408,7 +411,7 @@ body::before {
       rgba(255, 255, 255, 0.72),
       transparent 50%
     ),
-    url("img/back3.png");
+    url("img/other/back3.png");
   background-repeat: no-repeat;
   background-position:
     0 0,
@@ -440,7 +443,7 @@ body::before {
   margin-bottom: 10px;
 }
 
-/* わんこタブは3列 */
+/* わんこタブ�E3刁E*/
 .dog-tabs {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -653,7 +656,7 @@ body::before {
   color: #8b1a30;
 }
 
-/* 釣れる場所ポップアップ */
+/* 釣れる場所ポップアチE�E */
 .fish-location-overlay {
   position: fixed;
   inset: 0;
@@ -778,6 +781,22 @@ body::before {
   background: #f5eed8;
 }
 
+.sort-inline-label {
+  font-size: 13px;
+  color: #6b5c3e;
+  white-space: nowrap;
+}
+
+.sort-inline-select {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(172, 146, 99, 0.5);
+  background: #fffef8;
+  color: #6b5c3e;
+  font-size: 13px;
+  cursor: pointer;
+}
+
 #searchInput:focus,
 #searchInputPage2:focus,
 select:focus,
@@ -800,6 +819,58 @@ button:focus-visible,
 
 .controls .controls-place-row {
   grid-column-start: 1;
+}
+
+.controls > .test-level-row {
+  grid-column: 1 / -1;
+}
+
+.controls .controls-season-row {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.controls .controls-season-row > div {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.controls .controls-season-row select {
+  width: 100%;
+}
+
+/* スマホ：時間・天候を2行目に折り返し */
+@media (max-width: 640px) {
+  .controls .controls-season-row > div:nth-child(-n+3) {
+    flex: 1 1 28%;
+  }
+  .controls .controls-season-row > div:nth-child(n+4) {
+    flex: 1 1 45%;
+  }
+}
+
+/* eventnameFilterをフロー外に出してシーズン行�E幁E��算に影響させなぁE*/
+.season-filter-wrap {
+  position: relative;
+}
+
+#eventnameFilter {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  margin-top: 2px;
+}
+
+/* bio page / page-info controls をフレックスカラムで上書き（auto-fitグリッドの問題を回避） */
+#page-zukan .controls,
+#page-info .controls {
+  display: flex;
+  flex-direction: column;
 }
 
 .controls label {
@@ -828,7 +899,7 @@ button:focus-visible,
   color: #333;
 }
 
-/* 結果（グリッド：デフォルト2列） */
+/* 結果�E�グリチE���E�デフォルチE列！E*/
 .result {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -836,7 +907,7 @@ button:focus-visible,
   align-items: start;
 }
 
-/* Gridの子要素はデフォルトmin-width:autoではみ出すため0に */
+/* Gridの子要素はチE��ォルチEin-width:autoではみ出すためEに */
 .result > *,
 .creature-group-content > * {
   min-width: 0;
@@ -922,7 +993,7 @@ button:focus-visible,
   }
 }
 
-/* カード */
+/* カーチE*/
 .card {
   position: relative;
   padding: 0;
@@ -930,32 +1001,15 @@ button:focus-visible,
   border-radius: var(--radius);
 }
 
-/* 各趣味で★2換算売値トップのカード：金ぴか枠 */
-.card-top-price {
-  border-radius: var(--radius);
-  outline: 2.5px solid #f5c518;
-  box-shadow:
-    0 0 8px 2px #ffd700,
-    0 0 20px 4px rgba(255, 200, 0, 0.35);
-  animation: gold-shimmer 1.6s ease-in-out infinite alternate;
-}
-
-@keyframes gold-shimmer {
-  from {
-    box-shadow:
-      0 0 8px 2px #ffd700,
-      0 0 20px 4px rgba(255, 200, 0, 0.35);
-  }
-  to {
-    box-shadow:
-      0 0 16px 5px #ffe84d,
-      0 0 34px 10px rgba(255, 215, 0, 0.55);
-  }
-}
-
 .card-flip {
   cursor: pointer;
   position: relative;
+}
+
+.card-not-acquired .card-front > :not(.card-control-row),
+.card-not-acquired .card-back > * {
+  opacity: 0.45;
+  filter: grayscale(0.4);
 }
 
 .card-flip::after {
@@ -984,16 +1038,16 @@ button:focus-visible,
   border-radius: var(--radius);
 }
 
-/* 回転なし：3D変換を廃止してクロスフェードに変更（全端末のぼやけ対策） */
+/* 回転なし！ED変換を廁E��してクロスフェードに変更�E��E端末のぼめE��対策！E*/
 .card-flip.flipped .card-inner {
   /* 3D不使用 */
 }
 
-/* 表面・裏面：同一グリッドセルに重ねる（absolute廃止→サブピクセルずれなし） */
+/* 表面・裏面�E�同一グリチE��セルに重�Eる！Ebsolute廁E��→サブピクセルずれなし！E*/
 .card-front,
 .card-back {
   grid-area: card;
-  position: relative; /* card-place-bgのabsolute基準 */
+  position: relative; /* card-place-bgのabsolute基溁E*/
   box-sizing: border-box;
   border-radius: var(--radius);
   background: var(--card-surface);
@@ -1013,26 +1067,129 @@ button:focus-visible,
 }
 
 .card-place-bg {
-  position: absolute;
-  right: -6px;
-  bottom: -6px;
-  width: min(42%, 160px);
-  max-height: 72%;
-  object-fit: contain;
-  opacity: 0.3;
-  object-position: right bottom;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
+  display: none;
 }
 
-/* 裏面：通常は非表示 */
+.card-front > .place-badges-container {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 3px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.place-main-badges {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 165px;
+  gap: 0;
+}
+
+.place-main-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.58rem;
+  padding: 1px 4px;
+  border-radius: 999px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.place-main-badge--on {
+  background: rgba(255, 255, 255, 0.85);
+  color: #333;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+.place-main-badge--on[data-place="中心街"],
+.place-main-badge--on[data-place="郊外"],
+.place-main-badge--on[data-place="ホーム"] {
+  background: rgba(200, 206, 214, 0.9);
+  border-color: rgba(140, 150, 165, 0.5);
+}
+.place-main-badge--on[data-place="森林"] {
+  background: rgba(160, 215, 148, 0.9);
+  border-color: rgba(70, 150, 55, 0.45);
+}
+.place-main-badge--on[data-place="温泉山"] {
+  background: rgba(204, 168, 128, 0.9);
+  border-color: rgba(140, 95, 50, 0.45);
+}
+.place-main-badge--on[data-place="花畑"] {
+  background: rgba(243, 176, 203, 0.9);
+  border-color: rgba(200, 90, 140, 0.45);
+}
+.place-main-badge--on[data-place="漁村"] {
+  background: rgba(138, 208, 232, 0.9);
+  border-color: rgba(50, 155, 195, 0.45);
+}
+
+.place-main-badge--off {
+  background: rgba(0, 0, 0, 0.04);
+  color: #aaa;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  opacity: 0.45;
+}
+
+.place-water-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.place-water-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.58rem;
+  padding: 1px 4px;
+  border-radius: 999px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.place-water-badge--river {
+  background: #dff0ff;
+  color: #00619e;
+  border: 1px solid #90caf9;
+}
+
+.place-water-badge--lake {
+  background: #90caf9;
+  color: #003060;
+  border: 1px solid #42a5f5;
+}
+
+.place-water-badge--sea {
+  background: #1565c0;
+  color: #ffffff;
+  border: 1px solid #0d47a1;
+}
+
+.place-water-badge--waterside {
+  background: #dff0ff;
+  color: #00619e;
+  border: 1px solid #90caf9;
+}
+
+.place-water-badge--special {
+  background: #fff8e1;
+  color: #b8860b;
+  border: 1px solid #ffe082;
+}
+
+/* 裏面�E�通常は非表示 */
 .card-back {
   opacity: 0;
   pointer-events: none;
 }
 
-/* 表面だけフェードアウト。裏面は即表示でぼやけを防ぐ */
+/* 表面だけフェードアウト。裏面は即表示でぼめE��を防ぁE*/
 .card-front {
   transition: opacity 0.2s ease;
 }
@@ -1047,16 +1204,16 @@ button:focus-visible,
   pointer-events: auto;
 }
 
-/* 画像 */
+/* 画僁E*/
 .card-img {
   width: 100%;
-  height: 140px;
+  height: 165px;
   object-fit: contain;
   background: linear-gradient(180deg, #fffffe, #fff8e8);
   background: linear-gradient(#ffffff, #ffffff);
 }
 
-/* テキスト */
+/* チE��スチE*/
 .card-name {
   font-weight: 800;
   font-size: 1.05rem;
@@ -1101,6 +1258,9 @@ button:focus-visible,
   overflow: hidden;
   border: 1px solid rgba(0, 0, 0, 0.12);
   background: rgba(255, 255, 255, 0.7);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .food-chip-img {
@@ -1132,7 +1292,7 @@ button:focus-visible,
   background: rgba(0, 0, 0, 0.45);
 }
 
-/* 食材チップ 長押し拡大ポップアップ */
+/* 食材チッチE長押し拡大ポップアチE�E */
 #food-chip-zoom {
   position: fixed;
   width: 120px;
@@ -1150,6 +1310,11 @@ button:focus-visible,
 
 #food-chip-zoom.visible {
   display: flex;
+}
+
+#food-chip-zoom.text-only {
+  width: auto;
+  white-space: nowrap;
 }
 
 #food-chip-zoom img {
@@ -1273,7 +1438,119 @@ button.is-pressed,
   margin-top: auto;
 }
 
-/* 釣り生物カードの用途アイコン */
+.card-time-row {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 4px;
+  flex-wrap: nowrap;
+}
+
+.card-weather-row {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 0;
+  padding-top: 5px;
+  border-top: 1px solid transparent;
+  border-image: linear-gradient(to right, rgba(0, 0, 0, 0.12) 70%, transparent 70%) 1;
+  flex-wrap: nowrap;
+}
+
+.card-row-label {
+  font-size: 0.6rem;
+  color: #666;
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.card-time-badge {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(18px, calc((100% - 9px) / 4), 44px);
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 5px;
+  font-size: 1.4rem;
+  line-height: 1;
+  overflow: hidden;
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.card-time-start,
+.card-time-end {
+  position: absolute;
+  font-size: 0.42rem;
+  font-weight: 700;
+  line-height: 1;
+  color: inherit;
+  pointer-events: none;
+}
+
+.card-time-start {
+  top: 2px;
+  left: 2px;
+}
+
+.card-time-end {
+  bottom: 2px;
+  right: 2px;
+}
+
+.card-time-label {
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.card-time-badge--on {
+  background: rgba(255, 255, 255, 0.9);
+  color: #444;
+  border: 1.5px solid rgba(0, 0, 0, 0.25);
+}
+
+.card-time-badge--off {
+  background: rgba(0, 0, 0, 0.05);
+  color: #bbb;
+  opacity: 0.45;
+  filter: grayscale(1);
+  border: 1.5px solid rgba(0, 0, 0, 0.4);
+}
+
+.card-weather-chip {
+  flex: 0 0 auto;
+  width: clamp(18px, calc((100% - 9px) / 4), 44px);
+  aspect-ratio: 1;
+  border-radius: 8px;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.7);
+  display: block;
+}
+
+.card-weather-chip-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.card-weather-chip--off {
+  opacity: 0.25;
+  filter: grayscale(1);
+}
+
+/* 釣り生物カード�E用途アイコン */
 .fish-use-icons {
   display: flex;
   flex-wrap: wrap;
@@ -1317,7 +1594,7 @@ button.is-pressed,
   font-weight: 700;
 }
 
-/* 水場バッジ（釣りカード左上） */
+/* 水場バッジ�E��Eりカード左上！E*/
 .fish-water-badge {
   position: absolute !important;
   top: 6px;
@@ -1328,27 +1605,37 @@ button.is-pressed,
 }
 
 .fish-water-tag {
-  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
   font-weight: bold;
-  padding: 2px 6px;
-  border-radius: 4px;
-  color: #fff;
-  line-height: 1.3;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
-  letter-spacing: 0.03em;
+  padding: 1px 6px;
+  border-radius: 999px;
   white-space: nowrap;
 }
 
 .fish-water-tag--sea {
   background: #1565c0;
+  color: #ffffff;
+  border: 1px solid #0d47a1;
 }
 
 .fish-water-tag--river {
-  background: #2e7d32;
+  background: #dff0ff;
+  color: #00619e;
+  border: 1px solid #90caf9;
 }
 
 .fish-water-tag--lake {
-  background: #5c35ab;
+  background: #90caf9;
+  color: #003060;
+  border: 1px solid #42a5f5;
+}
+
+.wpi-lake {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.7em;
+  line-height: 1;
 }
 
 .card-control-row label {
@@ -1363,8 +1650,8 @@ button.is-pressed,
   height: 16px;
 }
 
-/* ===== 趣味別カラー（アンロック時は濃い色） ===== */
-/* 釣り（青系） */
+/* ===== 趣味別カラー�E�アンロチE��時�E濁E��色�E�E===== */
+/* 釣り（青系�E�E*/
 .card-front.card-fishing-unlocked,
 .card-back.card-fishing-unlocked {
   background: linear-gradient(180deg, #77adda, #c2e0f7);
@@ -1375,7 +1662,7 @@ button.is-pressed,
   color: #0d47a1;
 }
 
-/* 虫捕り（緑系） */
+/* 虫捕り�E�緑系�E�E*/
 .card-front.card-insect-unlocked,
 .card-back.card-insect-unlocked {
   background: linear-gradient(180deg, #7eca81, #c5efcf);
@@ -1386,7 +1673,7 @@ button.is-pressed,
   color: #1b5e20;
 }
 
-/* 野鳥観察（黄色系） */
+/* 野鳥観察（黁E��系�E�E*/
 .card-front.card-bird-unlocked,
 .card-back.card-bird-unlocked {
   background: linear-gradient(180deg, #edbd74, #ebd6a9);
@@ -1397,8 +1684,8 @@ button.is-pressed,
   color: #f55617;
 }
 
-/* ===== ロック時（各色の薄い色） ===== */
-/* 釣り（薄い青） */
+/* ===== ロチE��時（各色の薁E��色�E�E===== */
+/* 釣り（薄ぁE���E�E*/
 .card-front.card-fishing-locked,
 .card-back.card-fishing-locked {
   background: linear-gradient(180deg, #e3f2fd, #f1f8ff);
@@ -1409,7 +1696,7 @@ button.is-pressed,
   color: #666;
 }
 
-/* 虫捕り（薄い緑） */
+/* 虫捕り�E�薄ぁE��！E*/
 .card-front.card-insect-locked,
 .card-back.card-insect-locked {
   background: linear-gradient(180deg, #e8f5e9, #f1f8f6);
@@ -1420,7 +1707,7 @@ button.is-pressed,
   color: #666;
 }
 
-/* 野鳥観察（薄い黄） */
+/* 野鳥観察（薄ぁE��E��E*/
 .card-front.card-bird-locked,
 .card-back.card-bird-locked {
   background: linear-gradient(180deg, #fff9e6, #fffef0);
@@ -1433,18 +1720,18 @@ button.is-pressed,
 
 .card-front.card-garden-flower-unlocked,
 .card-back.card-garden-flower-unlocked {
-  background: linear-gradient(180deg, #9fdc68, #e6f7c9);
-  color: #35621c;
+  background: linear-gradient(180deg, #f48cb1, #fde0ec);
+  color: #7b1a4b;
 }
 
 .card-front.card-garden-flower-unlocked .card-name,
 .card-back.card-garden-flower-unlocked .card-name {
-  color: #35621c;
+  color: #7b1a4b;
 }
 
 .card-front.card-garden-flower-locked,
 .card-back.card-garden-flower-locked {
-  background: linear-gradient(180deg, #eef8df, #f9fdf2);
+  background: linear-gradient(180deg, #fce8f3, #fff5fb);
   color: #666;
 }
 .card-front.card-garden-flower-locked .card-name,
@@ -1496,11 +1783,11 @@ button.is-pressed,
   color: #666;
 }
 
-/* レスポンシブ：スマホ中心（モバイルファースト調整） */
+/* レスポンシブ：スマ�E中忁E��モバイルファースト調整�E�E*/
 @media (max-width: 600px) {
   body {
     padding: 8px 8px 84px;
-  } /* 下部ナビのスペース確保 */
+  } /* 下部ナビのスペ�Eス確俁E*/
 
   #page-zukan,
   #page-info,
@@ -1544,7 +1831,7 @@ button.is-pressed,
     min-height: 48px;
   }
 
-  /* 検索・コントロールをフル幅に */
+  /* 検索・コントロールをフル幁E�� */
   #searchInput {
     width: 100%;
     font-size: 16px;
@@ -1578,7 +1865,7 @@ button.is-pressed,
     gap: 8px;
     margin-bottom: 12px;
   }
-  /* シーズン行のselect2つを縦並びに */
+  /* シーズン行�Eselect2つを縦並びに */
   .controls div > select + select {
     display: block;
     width: 100%;
@@ -1596,7 +1883,7 @@ button.is-pressed,
     border-radius: 8px;
   }
 
-  /* カードは1列・フル幅 */
+  /* カード�E1列�Eフル幁E*/
   .result {
     grid-template-columns: 1fr !important;
     gap: 12px;
@@ -1614,14 +1901,18 @@ button.is-pressed,
     font-size: 16px;
     min-height: 160px;
   }
-  .card-place-bg {
-    width: min(40%, 132px);
-    max-height: 64%;
-    bottom: -4px;
-    right: -4px;
-  }
   .card-img {
     height: 120px;
+  }
+
+  .place-main-badges {
+    height: 120px;
+  }
+
+  .place-main-badge,
+  .place-water-badge {
+    font-size: 0.5rem;
+    padding: 0px 3px;
   }
 
   .meta {
@@ -1645,7 +1936,7 @@ button.is-pressed,
     line-height: 1.6;
   }
 
-  /* テストページ スマホ対応 */
+  /* チE��ト�Eージ スマ�E対忁E*/
   #page-test .controls {
     flex-direction: column;
     align-items: stretch;
@@ -1666,6 +1957,11 @@ button.is-pressed,
   .test-level-items {
     flex-wrap: wrap;
     gap: 6px;
+  }
+
+  #page-test .test-level-items {
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
   }
 
   .test-level-item {
@@ -1704,7 +2000,7 @@ button.is-pressed,
   }
 }
 
-/* 先頭に戻るボタン */
+/* 先頭に戻る�Eタン */
 #backToTop {
   position: fixed;
   bottom: 80px;
@@ -1735,7 +2031,7 @@ button.is-pressed,
   }
 }
 
-/* タブレット～デスクトップで少し広げる */
+/* タブレチE���E�デスクトップで少し庁E��めE*/
 @media (min-width: 769px) {
   html {
     font-size: 18px;
@@ -1762,7 +2058,7 @@ button.is-pressed,
 }
 
 /* =======================
-   テストページ（行動アドバイザー）
+   チE��ト�Eージ�E�行動アドバイザー�E�E
    ======================= */
 
 #page-test {
@@ -1788,7 +2084,7 @@ button.is-pressed,
   gap: 10px;
 }
 
-/* 趣味レベル行 */
+/* 趣味レベル衁E*/
 .test-level-row {
   display: flex;
   align-items: flex-end;
@@ -1798,25 +2094,102 @@ button.is-pressed,
 }
 
 .test-level-label {
-  font-size: 12px;
+  font-size: 0.88rem;
   font-weight: 700;
   color: #5f4a22;
   white-space: nowrap;
 }
 
 .test-level-items {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 6px;
-  flex-wrap: nowrap;
-  flex: 1;
+  flex-shrink: 0;
+  width: max-content;
 }
+
+/* bio page: 趣味めE番目のグリチE��アイチE��として追加、残り幁E��占朁E*/
+#page-zukan .test-level-items {
+  grid-template-columns: repeat(3, 1fr) 2fr;
+  flex: 1;
+  min-width: 0;
+  width: auto;
+}
+
+/* bio page: 趣味アイチE���E�最後）�Eラベル左寁E��・左に隙間 */
+#page-zukan .test-level-items > .test-level-item:last-child {
+  align-items: flex-start;
+  margin-left: 8px;
+}
+
+/* スマ�Eなど: 園芸・料理・趣味めE行目に折り返し */
+@media (max-width: 640px) {
+  #page-zukan .test-level-items {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  #page-zukan .test-level-items > .test-level-item:last-child {
+    margin-left: 0;
+    grid-column: 1 / span 2;
+  }
+}
+
+/* page-info: 園芸レベル・料理レベル・趣味の3列グリッド */
+#page-info .test-level-row {
+  align-items: center;
+}
+#page-info .test-level-items {
+  grid-template-columns: repeat(2, 1fr) 3fr;
+  flex: 1;
+  min-width: 0;
+  width: auto;
+}
+#page-info .test-level-items > .test-level-item:last-child {
+  align-items: flex-start;
+  margin-left: 12px;
+}
+
+/* スマホなど：趣味を2行目に折り返し、2×2配置 */
+@media (max-width: 640px) {
+  #page-info .test-level-items {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  #page-info .test-level-items > .test-level-item:last-child {
+    margin-left: 0;
+    grid-column: 1 / -1;
+  }
+}
+/* 趣味・モードの2つのセレクトを横並び */
+.page2-hobby-selects {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+.page2-hobby-selects > select {
+  flex: 1;
+  width: auto;
+}
+/* シーズン・イベントの2つのセレクトを横並び */
+.page2-season-selects {
+  display: inline-flex;
+  gap: 4px;
+}
+.page2-season-selects > select {
+  width: auto;
+}
+/* シーズン行とソート行を同じ行に */
+.page2-season-sort-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
 
 .test-level-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  flex: 1;
 }
 
 .test-level-item label {
@@ -1831,8 +2204,6 @@ button.is-pressed,
 .test-level-item select {
   width: 100%;
   min-width: 34px;
-  font-size: 12px;
-  padding: 2px 2px;
   text-align: center;
 }
 
@@ -2030,7 +2401,7 @@ button.is-pressed,
 }
 
 /* =======================
-   動物ライフ — 動物タイプセレクター
+   動物ライチE E動物タイプセレクター
    ======================= */
 .animal-type-selector {
   display: flex;
@@ -2051,12 +2422,62 @@ button.is-pressed,
 }
 
 /* =======================
-   野生動物カード
+   野生動物カーチE
    ======================= */
 .wild-animal-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 14px;
+}
+
+.wild-animal-grid--resident {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 480px) {
+  .wild-animal-grid--resident {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.wild-animal-section {
+  margin-bottom: 24px;
+}
+
+.wild-animal-section-heading {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #7a5c2e;
+  border-left: 4px solid #c8a96e;
+  padding: 3px 10px;
+  margin: 0 0 12px;
+  background: rgba(200, 169, 110, 0.1);
+  border-radius: 0 6px 6px 0;
+}
+
+.wild-animal-section-heading.ended {
+  color: #aaa;
+  border-left-color: #ccc;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.wild-animal-card.grayed {
+  opacity: 0.45;
+  filter: grayscale(0.7);
+}
+
+.wild-animal-event-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #fff;
+  background: #e07b3a;
+  border-radius: 20px;
+  padding: 2px 8px;
+  align-self: flex-start;
+}
+
+.wild-animal-event-badge.ended {
+  background: #aaa;
 }
 
 .wild-animal-card {
@@ -2072,8 +2493,9 @@ button.is-pressed,
 }
 
 .wild-animal-img {
-  width: 110px;
-  height: 110px;
+  width: 50%;
+  aspect-ratio: 1 / 1;
+  height: auto;
   object-fit: contain;
   border-radius: 10px;
 }
@@ -2087,9 +2509,9 @@ button.is-pressed,
 
 .wild-animal-favorites {
   display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
+  gap: 6px;
+  flex-wrap: nowrap;
+  width: 100%;
 }
 
 .wild-animal-fav-item {
@@ -2099,25 +2521,42 @@ button.is-pressed,
   gap: 3px;
 }
 
-.wild-animal-fav-item img {
-  width: 44px;
-  height: 44px;
-  object-fit: contain;
-}
-
-.wild-animal-fav-item span {
-  font-size: 0.7rem;
-  color: #5a4320;
-  text-align: center;
-  line-height: 1.2;
-}
-
 .wild-animal-no-data {
   font-size: 0.78rem;
   color: #9e8060;
   font-style: italic;
   margin: 0;
 }
+
+.wild-animal-weather-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+  border-top: 1px solid rgba(173, 151, 104, 0.2);
+  padding-top: 6px;
+  margin-top: 2px;
+  width: 100%;
+}
+
+.wild-animal-favorites .food-chip,
+.wild-animal-weather-row .food-chip {
+  flex: none;
+  width: calc((100% - 12px) / 3);
+  max-width: none;
+  min-width: 0;
+}
+
+.wild-animal-weather-row .food-chip--weather-off {
+  opacity: 0.28;
+  filter: grayscale(1);
+}
+
+.wild-animal-weather-row .food-chip--weather-fav {
+  opacity: 1;
+  filter: none;
+}
+
+
 
 .test-cat-label {
   font-size: 13px;
@@ -2126,7 +2565,7 @@ button.is-pressed,
   margin: 8px 0 4px;
 }
 
-/* ===== テストページ チップ ホビー別カラー ===== */
+/* ===== チE��ト�Eージ チッチEホビー別カラー ===== */
 .test-chip.chip-fishing {
   background: linear-gradient(180deg, #77adda, #c2e0f7);
   border-color: rgba(13, 71, 161, 0.2);
@@ -2149,11 +2588,11 @@ button.is-pressed,
 .test-chip.chip-bird .test-chip-hobby { color: #bf360c; }
 
 .test-chip.chip-gardening {
-  background: linear-gradient(180deg, #9fdc68, #e6f7c9);
-  border-color: rgba(53, 98, 28, 0.2);
+  background: linear-gradient(180deg, #f48cb1, #fde0ec);
+  border-color: rgba(123, 26, 75, 0.2);
 }
-.test-chip.chip-gardening .test-chip-name { color: #35621c; }
-.test-chip.chip-gardening .test-chip-hobby { color: #558b2f; }
+.test-chip.chip-gardening .test-chip-name { color: #7b1a4b; }
+.test-chip.chip-gardening .test-chip-hobby { color: #a0336a; }
 
 .test-chip.chip-ingredient {
   background: linear-gradient(180deg, #7ec8ff, #dff3ff);

@@ -91,70 +91,75 @@
             aria-label="検索"
           />
           <button id="resetFilterBtn" type="button" class="reset-filter-btn">検索リセット</button>
+          <label for="sortBio" class="sort-inline-label">ソート：</label>
+          <select id="sortBio" class="sort-inline-select">
+            <option value="default">デフォルト</option>
+            <option value="level">趣味レベル順</option>
+            <option value="sell">売値順</option>
+            <option value="name">名前順</option>
+          </select>
         </div>
 
         <section class="controls" aria-label="フィルター">
-          <div>
-            <label for="hobbyFilter">趣味：</label>
-            <select id="hobbyFilter">
-              <option value="">すべて</option>
-            </select>
+          <div class="test-level-row">
+            <span class="test-level-label">趣味Lv：</span>
+            <div class="test-level-items">
+              <div class="test-level-item">
+                <label for="bioLevelFish">釣り🐟</label>
+                <select id="bioLevelFish"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
+              </div>
+              <div class="test-level-item">
+                <label for="bioLevelInsect">虫捕り🐛</label>
+                <select id="bioLevelInsect"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
+              </div>
+              <div class="test-level-item">
+                <label for="bioLevelBird">野鳥観察🐦</label>
+                <select id="bioLevelBird"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
+              </div>
+              <div class="test-level-item">
+                <label for="hobbyFilter">趣味：</label>
+                <select id="hobbyFilter">
+                  <option value="">すべて</option>
+                </select>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <label for="userLevel">趣味レベル：</label>
-            <select id="userLevel">
-              <option value="1" selected>1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-            </select>
-          </div>
-
-          <div id="eventnameFilterWrap" hidden style="display:none"></div>
-
-          <div>
-            <label for="seasonFilter">シーズン：</label>
-            <select id="seasonFilter">
-              <option value="">すべて</option>
-            </select>
-            <select id="eventnameFilter" aria-label="イベント絞り込み" style="visibility:hidden">
-              <option value="">すべて</option>
-            </select>
-          </div>
-
-          <div class="controls-place-row">
-            <label for="place1Filter">場所1：</label>
-            <select id="place1Filter"></select>
-          </div>
-
-          <div>
-            <label for="place2Filter">場所2：</label>
-            <select id="place2Filter"></select>
-          </div>
-
-          <div>
-            <label for="timeFilter">時間：</label>
-            <select id="timeFilter"></select>
-          </div>
-
-          <div>
-            <label for="weatherFilter">天候：</label>
-            <select id="weatherFilter">
-              <option value="">すべて</option>
-              <option value="all_three">晴れ , 雨(雪) , 虹</option>
-              <option value="exclude_sunny">雨(雪) , 虹</option>
-              <option value="exclude_rain">晴れ , 虹</option>
-              <option value="rainbow_only">虹のみ</option>
-              <option value="include_sunny">晴れを含む</option>
-              <option value="include_rain">雨(雪)を含む</option>
-            </select>
+          <div class="controls-season-row">
+            <div class="season-filter-wrap">
+              <label for="seasonFilter">シーズン：</label>
+              <select id="seasonFilter">
+                <option value="">すべて</option>
+              </select>
+              <select id="eventnameFilter" aria-label="イベント絞り込み" style="visibility:hidden">
+                <option value="">すべて</option>
+              </select>
+              <div id="eventnameFilterWrap" hidden style="display:none"></div>
+            </div>
+            <div>
+              <label for="place1Filter">場所1：</label>
+              <select id="place1Filter"></select>
+            </div>
+            <div>
+              <label for="place2Filter">場所2：</label>
+              <select id="place2Filter"></select>
+            </div>
+            <div>
+              <label for="timeFilter">時間：</label>
+              <select id="timeFilter"></select>
+            </div>
+            <div>
+              <label for="weatherFilter">天候：</label>
+              <select id="weatherFilter">
+                <option value="">すべて</option>
+                <option value="all_three">晴れ , 雨(雪) , 虹</option>
+                <option value="exclude_sunny">雨(雪) , 虹</option>
+                <option value="exclude_rain">晴れ , 虹</option>
+                <option value="rainbow_only">虹のみ</option>
+                <option value="include_sunny">晴れを含む</option>
+                <option value="include_rain">雨(雪)を含む</option>
+              </select>
+            </div>
           </div>
         </section>
 
@@ -193,58 +198,59 @@
             aria-label="ページ2検索"
           />
           <button id="resetFilterBtnPage2" type="button" class="reset-filter-btn">検索リセット</button>
+          <label for="sortPage2" class="sort-inline-label">ソート：</label>
+          <select id="sortPage2" class="sort-inline-select">
+            <option value="default">デフォルト</option>
+            <option value="level">趣味レベル順</option>
+            <option value="sell">売値順</option>
+            <option value="name">名前順</option>
+            <option value="time">育成時間順</option>
+          </select>
         </div>
 
         <section class="controls controls-page2" aria-label="ページ2フィルター">
-          <div>
-            <label for="hobbyFilterPage2">趣味：</label>
-            <select id="hobbyFilterPage2">
-              <option value="">すべて</option>
-              <option value="園芸">園芸</option>
-              <option value="料理">料理</option>
-              <option value="採取・販売">採取・販売</option>
-            </select>
-            <select id="hobbyModeFilterPage2" aria-label="表示種別">
-              <option value="">すべて</option>
-            </select>
+          <div class="test-level-row">
+            <span class="test-level-label">趣味Lv：</span>
+            <div class="test-level-items">
+              <div class="test-level-item">
+                <label for="userLevelGardenPage2">園芸🌿</label>
+                <select id="userLevelGardenPage2"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
+              </div>
+              <div class="test-level-item">
+                <label for="userLevelCookingPage2">料理🍳</label>
+                <select id="userLevelCookingPage2"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
+              </div>
+              <div class="test-level-item">
+                <label for="hobbyFilterPage2">趣味：</label>
+                <div class="page2-hobby-selects">
+                  <select id="hobbyFilterPage2">
+                    <option value="">すべて</option>
+                    <option value="園芸">園芸</option>
+                    <option value="料理">料理</option>
+                    <option value="採取・販売">採取・販売</option>
+                  </select>
+                  <select id="hobbyModeFilterPage2" aria-label="表示種別">
+                    <option value="">すべて</option>
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div id="eventnameFilterPage2Wrap" hidden style="display:none"></div>
 
-          <div>
-            <label for="userLevelPage2">趣味レベル：</label>
-            <select id="userLevelPage2">
-              <option value="1" selected>1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
-              <option value="7">7</option>
-              <option value="8">8</option>
-              <option value="9">9</option>
-              <option value="10">10</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="seasonFilterPage2">シーズン：</label>
-            <select id="seasonFilterPage2">
-              <option value="">すべて</option>
-            </select>
-            <select id="eventnameFilterPage2" aria-label="イベント絞り込み" style="visibility:hidden">
-              <option value="">すべて</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="sortPage2">ソート：</label>
-            <select id="sortPage2">
-              <option value="level">趣味レベル順</option>
-              <option value="seedprice">種の値段順</option>
-              <option value="time">時間順</option>
-              <option value="sell">売値順</option>
-            </select>
+          <div class="page2-season-sort-row">
+            <div>
+              <label for="seasonFilterPage2">シーズン：</label>
+              <div class="page2-season-selects">
+                <select id="seasonFilterPage2">
+                  <option value="">すべて</option>
+                </select>
+                <select id="eventnameFilterPage2" aria-label="イベント絞り込み">
+                  <option value="">すべて</option>
+                </select>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -332,6 +338,13 @@
               <button class="dog-tab" data-dog-index="1" aria-pressed="false">わんこ2</button>
               <button class="dog-tab" data-dog-index="2" aria-pressed="false">わんこ3</button>
             </div>
+
+            <div id="dog5ExcludedToggleWrap" class="cat5-toggle-wrap" aria-live="polite">
+              <button id="dog5ExcludedToggle" type="button" class="filter-toggle" aria-pressed="false">
+                普通表示 OFF
+              </button>
+            </div>
+
             <div class="cat-name-row">
               <label for="dogNameInput">わんこの名前：</label>
               <input id="dogNameInput" type="text" maxlength="20" placeholder="例：ぽち" aria-label="わんこの名前" />
@@ -348,7 +361,7 @@
 
         <!-- 野生動物セクション -->
         <div id="animalSection-wild" hidden>
-          <section id="resultPageWild" class="wild-animal-grid" aria-live="polite"></section>
+          <section id="resultPageWild" aria-live="polite"></section>
         </div>
       </section>
 
