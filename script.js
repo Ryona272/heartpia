@@ -320,13 +320,9 @@ function resetFiltersPage2() {
   filterAndRenderPage2();
 }
 
-/** ページ3（にゃんこ）の全フィルターを初期値に戻す */
+/** ページ3（にゃんこ）の名前検索をリセット */
 function resetFiltersCat() {
   if (catSearchInput) catSearchInput.value = "";
-  if (catPlace1Filter) catPlace1Filter.value = "";
-  if (catPlace2Filter) catPlace2Filter.value = "";
-  if (catTimeFilter) catTimeFilter.value = "";
-  if (catWeatherFilter) catWeatherFilter.value = "";
   renderPage3FishList();
 }
 
@@ -2938,6 +2934,45 @@ function renderPage3FishList() {
 }
 
 /**
+ * リセット確認ダイアログを表示する。
+ * はいを押したら onConfirm を呼び出し、いいえ or オーバーレイ外クリックで閉じる。
+ * @param {string} message - 確認メッセージ
+ * @param {Function} onConfirm - はいが押されたときに実行する関数
+ */
+function showResetConfirm(message, onConfirm) {
+  const existing = document.getElementById("resetConfirmOverlay");
+  if (existing) existing.remove();
+
+  const overlay = document.createElement("div");
+  overlay.id = "resetConfirmOverlay";
+  overlay.className = "reset-confirm-overlay";
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-modal", "true");
+  overlay.innerHTML = `
+    <div class="reset-confirm-modal">
+      <div class="reset-confirm-message">${message}</div>
+      <div class="reset-confirm-buttons">
+        <button class="reset-confirm-yes" type="button">はい</button>
+        <button class="reset-confirm-no" type="button">いいえ</button>
+      </div>
+    </div>
+  `;
+
+  const close = () => overlay.remove();
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) close();
+  });
+  overlay.querySelector(".reset-confirm-yes").addEventListener("click", () => {
+    close();
+    onConfirm();
+  });
+  overlay.querySelector(".reset-confirm-no").addEventListener("click", close);
+
+  document.body.appendChild(overlay);
+  overlay.querySelector(".reset-confirm-yes").focus();
+}
+
+/**
  * 魚の出現場所・時間・天候をポップアップダイアログで表示する。
  * オーバーレイ外クリックまたは「閉じる」ボタンで閉じる。
  */
@@ -3059,11 +3094,19 @@ function initPage3() {
   }
 
   catResetBtn.addEventListener("click", () => {
-    const current = getActiveCatState();
-    current.excludedFishNames = [];
-    current.favoriteFishNames = [];
-    renderPage3FishList();
-    savePage3State();
+    showResetConfirm(
+      "リセットしますか？\nすべての除外・お気に入り設定が消えます。",
+      () => {
+        const current = getActiveCatState();
+        current.name = `猫${activeCatIndex + 1}`;
+        current.excludedFishNames = [];
+        current.favoriteFishNames = [];
+        if (catNameInput) catNameInput.value = current.name;
+        updateCatTabsUi();
+        renderPage3FishList();
+        savePage3State();
+      },
+    );
   });
 
   resultPage3.addEventListener("click", (event) => {
@@ -3209,12 +3252,20 @@ function initPageDog() {
   }
 
   dogResetBtn.addEventListener("click", () => {
-    const current = getActiveDogState();
-    current.excludedFoodNames = [];
-    current.favoriteFoodNames = [];
-    window.__dogPickyMap = {};
-    renderPageDogList();
-    saveDogState();
+    showResetConfirm(
+      "リセットしますか？\nすべての除外・お気に入り設定が消えます。",
+      () => {
+        const current = getActiveDogState();
+        current.name = `わんこ${activeDogIndex + 1}`;
+        current.excludedFoodNames = [];
+        current.favoriteFoodNames = [];
+        window.__dogPickyMap = {};
+        if (dogNameInput) dogNameInput.value = current.name;
+        updateDogTabsUi();
+        renderPageDogList();
+        saveDogState();
+      },
+    );
   });
 
   resultPageDog.addEventListener("change", (event) => {
