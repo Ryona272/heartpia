@@ -5007,6 +5007,36 @@ const otherEventPage2Creatures = [
     season: ["otherevent", "normal"],
     eventname: "MALTESEコラボ",
   },
+  {
+    name: "虹のときめきグミ",
+    hobby: ["料理"],
+    level: 1,
+    food: ["果物", "果物", "果物", "果物"],
+    rarityData: [{ star: 1, price: 170 }],
+    staminaRecovery: "20",
+    buff: "なし",
+    note: [
+      "中心街の「虹色キャンディ」ポップアップストアでレシピを購入",
+      "果物ならなんでも",
+    ],
+    season: ["otherevent", "normal"],
+    eventname: "虹色のことば",
+  },
+  {
+    name: "虹のドキドキグミ",
+    hobby: ["料理"],
+    level: 1,
+    food: ["果物", "果物", "果物", "果物"],
+    rarityData: [{ star: 1, price: 170 }],
+    staminaRecovery: "20",
+    buff: "なし",
+    note: [
+      "中心街の「虹色キャンディ」ポップアップストアでレシピを購入",
+      "果物ならなんでも",
+    ],
+    season: ["otherevent", "normal"],
+    eventname: "虹色のことば",
+  },
 ];
 
 //シーズン/フェス生物をメイン配列に通合
