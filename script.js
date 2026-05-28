@@ -4086,8 +4086,9 @@ function initPageTest() {
           }
         });
 
-        // ② おすすめ Top10（スコア順）
+        // ② おすすめ Top10（スコア順・-25点以下除外）
         const topFood = [...catFood]
+          .filter((c) => getCatScore(c) > -25)
           .sort((a, b) => getCatScore(b) - getCatScore(a))
           .slice(0, 10);
         if (topFood.length > 0) {
