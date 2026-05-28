@@ -3703,7 +3703,7 @@ function initPageTest() {
   }
 
   // チップ1件を描画
-  function renderChip(c, priceLabel) {
+  function renderChip(c, priceLabel, extraClass = "") {
     const colorClass = getChipColorClass(c);
     const badges = [];
     if (c.acquired)
@@ -3739,7 +3739,7 @@ function initPageTest() {
     }
     const hobbyKey = Array.isArray(c.hobby) ? c.hobby[0] : c.hobby;
     return (
-      `<div class="test-chip ${colorClass}${tappable ? " test-chip--tappable" : ""}" data-item-name="${c.name}" data-item-hobby="${hobbyKey}"${tappable ? ' role="button" tabindex="0"' : ""}>` +
+      `<div class="test-chip ${colorClass}${extraClass ? " " + extraClass : ""}${tappable ? " test-chip--tappable" : ""}" data-item-name="${c.name}" data-item-hobby="${hobbyKey}"${tappable ? ' role="button" tabindex="0"' : ""}>` +
       `<span class="test-chip-longpress-hint" title="長押しで図鑑へ">長押</span>` +
       imgTag +
       `<div class="test-chip-body">` +
@@ -4081,20 +4081,19 @@ function initPageTest() {
           if (favFood.length > 0) {
             html += renderSection(
               `⭐ ${cat.name || "猫"}の好物`,
-              `<div class="test-chips">${favFood.map((c) => renderChip(c, "")).join("")}</div>`,
+              `<div class="test-chips">${favFood.map((c) => renderChip(c, "", "test-chip--favorite")).join("")}</div>`,
             );
           }
         });
 
-        // ② おすすめ Top10（好物以外・スコア順）
-        const nonFavFood = catFood.filter((c) => !allFavNameSet.has(c.name));
-        const topFood = [...nonFavFood]
+        // ② おすすめ Top10（スコア順）
+        const topFood = [...catFood]
           .sort((a, b) => getCatScore(b) - getCatScore(a))
           .slice(0, 10);
         if (topFood.length > 0) {
           html += renderSection(
             `🐟 おすすめ Top10（希少・猫チェック少ない順）`,
-            `<div class="test-chips">${topFood.map((c) => renderChip(c, "")).join("")}</div>`,
+            `<div class="test-chips">${topFood.map((c) => renderChip(c, "", allFavNameSet.has(c.name) ? "test-chip--favorite" : "")).join("")}</div>`,
           );
         }
 
