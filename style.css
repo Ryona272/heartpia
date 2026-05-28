@@ -2406,6 +2406,7 @@ button.is-pressed,
   flex-shrink: 0;
   box-shadow: 0 1px 4px rgba(46, 56, 64, 0.06);
   transition: box-shadow 0.15s ease;
+  position: relative;
 }
 
 .test-chip--tappable {
@@ -2507,6 +2508,26 @@ button.is-pressed,
 .test-badge--master {
   background: #d6c8f5;
   color: #4a2a8a;
+}
+
+/* 長押しヒントバッジ（右上固定） */
+.test-chip-longpress-hint {
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  font-size: 8px;
+  font-weight: 700;
+  color: rgba(120, 100, 60, 0.45);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: 0;
+}
+
+/* 長押し中のビジュアルフィードバック */
+.test-chip--lp-active {
+  box-shadow: 0 0 0 2px rgba(193, 164, 101, 0.7), 0 2px 8px rgba(0, 0, 0, 0.12);
+  background: rgba(255, 248, 220, 0.95);
 }
 
 .test-empty {

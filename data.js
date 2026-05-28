@@ -3955,8 +3955,8 @@ const snowseasonPage2Creatures = [
     food: [
       "大根おろし肉",
       "大根クリームポタージュ",
-      "アイスカップドリンク",
-      "シュガーパンケーキ",
+      "アイスカップコーヒー",
+      "シュガーパンケーキ（プレーン）",
     ],
     rarityData: [{ star: 1, price: 1630, tc: 770 }],
     staminaRecovery: 10,

@@ -158,6 +158,125 @@ if (view1Page2 && view2Page2) {
 // 初期状態
 updateViewButtons();
 
+// ▼ おすすめカードの長押しで図鑑ページへジャンプ
+(function () {
+  let _lpTimer = null;
+  let _lpX = 0;
+  let _lpY = 0;
+  let _lpChip = null;
+  let _suppressNextClick = false;
+
+  function cancelLP() {
+    if (_lpTimer) {
+      clearTimeout(_lpTimer);
+      _lpTimer = null;
+    }
+    if (_lpChip) {
+      _lpChip.classList.remove("test-chip--lp-active");
+      _lpChip = null;
+    }
+  }
+
+  document.addEventListener("pointerdown", (e) => {
+    const chip = e.target.closest(".test-chip[data-item-name]");
+    if (!chip) return;
+    _lpX = e.clientX;
+    _lpY = e.clientY;
+    _lpChip = chip;
+    chip.classList.add("test-chip--lp-active");
+    _lpTimer = setTimeout(() => {
+      _lpTimer = null;
+      const c = _lpChip;
+      _lpChip = null;
+      if (c) {
+        c.classList.remove("test-chip--lp-active");
+        _suppressNextClick = true;
+        jumpToZukan(c);
+      }
+    }, 500);
+  });
+
+  document.addEventListener("pointermove", (e) => {
+    if (!_lpTimer) return;
+    const dx = e.clientX - _lpX;
+    const dy = e.clientY - _lpY;
+    if (Math.sqrt(dx * dx + dy * dy) > 10) cancelLP();
+  });
+
+  document.addEventListener("pointerup", cancelLP);
+  document.addEventListener("pointercancel", cancelLP);
+
+  // 長押し後の click（チップ展開）を抑制する
+  document.addEventListener(
+    "click",
+    (e) => {
+      if (!_suppressNextClick) return;
+      _suppressNextClick = false;
+      if (e.target.closest(".test-chip[data-item-name]")) {
+        e.stopImmediatePropagation();
+      }
+    },
+    true,
+  );
+
+  function scrollToCard(selector, delay) {
+    setTimeout(
+      () => {
+        const card = document.querySelector(selector);
+        if (card) card.scrollIntoView({ behavior: "smooth", block: "center" });
+      },
+      delay != null ? delay : 80,
+    );
+  }
+
+  function jumpToZukan(chip) {
+    const name = chip.dataset.itemName;
+    const hobby = chip.dataset.itemHobby;
+    const isCreature = ["釣り", "虫捕り", "野鳥観察"].includes(hobby);
+    const targetPage = isCreature ? "page-zukan" : "page-info";
+
+    switchTab(targetPage);
+
+    if (isCreature) {
+      // おすすめページの場所・時間・天候を生物図鑑フィルターに反映
+      const p1 = document.getElementById("testPlace1").value;
+      const p2 = document.getElementById("testPlace2").value;
+      const time = document.getElementById("testTime").value;
+      const weather = document.getElementById("testWeather").value;
+
+      // カードを確実に表示するためにキーワード・趣味・シーズンをリセット
+      searchInput.value = "";
+      hobbyFilter.value = "";
+      if (typeof fishSubFilter !== "undefined" && fishSubFilter)
+        fishSubFilter.value = "";
+      seasonFilter.value = "normal";
+
+      place1Filter.value = p1;
+      updatePlace2Options();
+      place2Filter.value = p2;
+      timeFilter.value = time;
+      weatherFilter.value = weather;
+      filterCreatures();
+
+      // カードへスクロール（setTimeout でレイアウト確定を待つ）
+      const sel = `.card-flip[data-name="${CSS.escape(name)}"]`;
+      scrollToCard(sel);
+    } else {
+      // 園芸・料理ページへ：趣味フィルターをセットして対象カードへスクロール
+      searchInputPage2.value = "";
+      seasonFilterPage2.value = "normal";
+      const hobbyVal = ["園芸", "料理", "採取・販売"].includes(hobby)
+        ? hobby
+        : "";
+      document.getElementById("hobbyFilterPage2").value = hobbyVal;
+      filterAndRenderPage2();
+
+      const sel = `#resultPage2 .card-flip[data-name="${CSS.escape(name)}"]`;
+      scrollToCard(sel);
+    }
+  }
+})();
+
 // ▼ 先頭に戻るボタン
 // スクロール量が 300px を超えたらボタンを表示し、クリックで最上部にスムーススクロールする
 (function setupBackToTop() {

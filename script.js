@@ -1305,7 +1305,7 @@ function renderList(list, hobbyLevelMap) {
       `;
     }
     return `
-      <div class="card card-flip${c.acquired ? "" : " card-not-acquired"}" role="button" tabindex="0" aria-label="${c.name}の詳細カードを裏返す">
+      <div class="card card-flip${c.acquired ? "" : " card-not-acquired"}" data-name="${c.name}" role="button" tabindex="0" aria-label="${c.name}の詳細カードを裏返す">
         <div class="card-inner">
           <div class="card-front ${cardClass}">
             ${placeBackgroundMarkup}
@@ -1870,7 +1870,7 @@ function renderPage2List(targetEl, list, gardenLevel, cookingLevel) {
         : '<div class="note">売値データなし</div>';
 
     return `
-        <article class="card card-flip${item.acquired ? "" : " card-not-acquired"}" role="button" tabindex="0" aria-label="${item.name}の詳細カードを裏返す">
+        <article class="card card-flip${item.acquired ? "" : " card-not-acquired"}" data-name="${item.name}" role="button" tabindex="0" aria-label="${item.name}の詳細カードを裏返す">
           <div class="card-inner">
             <div class="card-front ${cardClass}">
               ${cookingWagonMarkup}
@@ -3737,8 +3737,10 @@ function initPageTest() {
         (p2 ? `<span class="test-chip-place2">🗺 ${p2}</span>` : "") +
         `</div>`;
     }
+    const hobbyKey = Array.isArray(c.hobby) ? c.hobby[0] : c.hobby;
     return (
-      `<div class="test-chip ${colorClass}${tappable ? " test-chip--tappable" : ""}"${tappable ? ' role="button" tabindex="0"' : ""}>` +
+      `<div class="test-chip ${colorClass}${tappable ? " test-chip--tappable" : ""}" data-item-name="${c.name}" data-item-hobby="${hobbyKey}"${tappable ? ' role="button" tabindex="0"' : ""}>` +
+      `<span class="test-chip-longpress-hint" title="長押しで図鑑へ">長押</span>` +
       imgTag +
       `<div class="test-chip-body">` +
       `<span class="test-chip-name">${c.name}</span>` +
@@ -4049,9 +4051,24 @@ function initPageTest() {
       }
       case "cat": {
         const catFood = filtered.filter((c) => normalFishNameSet.has(c.name));
-        let catContent = "";
 
-        // 各猫の好物を優先表示
+        const catPickyMap = window.__catPickyMap || {};
+
+        // スコア計算（ソート用のみ）
+        const getCatScore = (c) => {
+          let score = 0;
+          const w = c.weathers || [];
+          if (w.includes("晴れ")) score -= 2;
+          if (w.includes("雨(雪)")) score -= 1;
+          score -= (c.times || []).length;
+          catStates.forEach((cat) => {
+            if ((cat.excludedFishNames || []).includes(c.name)) score -= 5;
+          });
+          if (catPickyMap[c.name]) score -= 5;
+          return score;
+        };
+
+        // ① 各猫の好物セクション（猫ごとに個別ボックス）
         const catsWithFav = catStates.filter(
           (cat) => (cat.favoriteFishNames || []).length > 0,
         );
@@ -4062,23 +4079,41 @@ function initPageTest() {
           const favSet = new Set(cat.favoriteFishNames || []);
           const favFood = catFood.filter((c) => favSet.has(c.name));
           if (favFood.length > 0) {
-            catContent += `<p class="test-cat-label">⭐ ${cat.name || "猫"}の好物</p>`;
-            catContent += `<div class="test-chips">${favFood.map((c) => renderChip(c, "")).join("")}</div>`;
+            html += renderSection(
+              `⭐ ${cat.name || "猫"}の好物`,
+              `<div class="test-chips">${favFood.map((c) => renderChip(c, "")).join("")}</div>`,
+            );
           }
         });
-        const otherFood = catFood.filter((c) => !allFavNameSet.has(c.name));
-        if (otherFood.length > 0) {
-          catContent += `<p class="test-cat-label">エサになる魚（好物以外）</p>`;
-          catContent += `<div class="test-chips">${otherFood.map((c) => renderChip(c, "")).join("")}</div>`;
+
+        // ② おすすめ Top10（好物以外・スコア順）
+        const nonFavFood = catFood.filter((c) => !allFavNameSet.has(c.name));
+        const topFood = [...nonFavFood]
+          .sort((a, b) => getCatScore(b) - getCatScore(a))
+          .slice(0, 10);
+        if (topFood.length > 0) {
+          html += renderSection(
+            `🐟 おすすめ Top10（希少・猫チェック少ない順）`,
+            `<div class="test-chips">${topFood.map((c) => renderChip(c, "")).join("")}</div>`,
+          );
         }
-        if (!catContent) {
-          catContent =
-            '<p class="test-empty">今の状況でエサになる魚はいません。</p>';
-        }
-        html += renderSection(
-          `🐱 にゃんこのエサ ─ 今取れるエサになる魚（${catFood.length}種）`,
-          catContent,
+
+        // ③ 一覧（全件・スコア順）
+        const allSorted = [...catFood].sort(
+          (a, b) => getCatScore(b) - getCatScore(a),
         );
+        if (allSorted.length > 0) {
+          html += renderSection(
+            `📋 一覧（${catFood.length}種）`,
+            `<div class="test-chips">${allSorted.map((c) => renderChip(c, "")).join("")}</div>`,
+          );
+        } else {
+          html += renderSection(
+            `🐱 にゃんこのエサ`,
+            '<p class="test-empty">今の状況でエサになる魚はいません。</p>',
+          );
+        }
+
         break;
       }
     }
