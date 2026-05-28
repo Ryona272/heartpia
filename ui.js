@@ -6,6 +6,12 @@
  * @param {string} target - タブの data-target 属性値（ページ要素の id と一致）
  */
 function switchTab(target) {
+  // 現在表示中のページのスクロール位置を保存
+  const currentPage = document.querySelector(".page.active");
+  if (currentPage) {
+    localStorage.setItem("scrollPos_" + currentPage.id, window.scrollY);
+  }
+
   document.querySelectorAll(".nav-tabs .tab").forEach((t) => {
     const isTarget = t.dataset.target === target;
     t.classList.toggle("active", isTarget);
@@ -17,6 +23,10 @@ function switchTab(target) {
   const pageEl = document.getElementById(target);
   if (pageEl) pageEl.classList.add("active");
   localStorage.setItem("activeTab", target);
+
+  // 切り替え先のページのスクロール位置を復元
+  const savedScroll = localStorage.getItem("scrollPos_" + target);
+  window.scrollTo(0, savedScroll ? parseInt(savedScroll, 10) : 0);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
