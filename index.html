@@ -29,7 +29,7 @@
       <button class="tab active" data-target="page-zukan">生物図鑑</button>
       <button class="tab" data-target="page-info">園芸・料理</button>
       <button class="tab" data-target="page-cat">動物</button>
-      <button class="tab" data-target="page-test">テスト</button>
+      <button class="tab" data-target="page-test">おすすめ</button>
       <button class="tab" data-target="page-settings">そのた</button>
     </nav>
 
@@ -370,58 +370,43 @@
         </div>
       </section>
 
-      <!-- ▼ テストページ -->
+      <!-- ▼ おすすめページ -->
       <section id="page-test" class="page" aria-labelledby="test-title">
-        <h2 id="test-title">テスト</h2>
+        <h2 id="test-title">おすすめ</h2>
         <p class="test-desc">今の状況と目的を選ぶと、おすすめの行動を提案します。</p>
 
         <section class="controls" aria-label="現在の状況">
-          <div class="test-level-row">
-            <span class="test-level-label">趣味Lv：</span>
-            <div class="test-level-items">
-              <div class="test-level-item">
-                <label for="testLevelFish">釣り🐟</label>
-                <select id="testLevelFish"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
-              </div>
-              <div class="test-level-item">
-                <label for="testLevelInsect">虫捕り🐛</label>
-                <select id="testLevelInsect"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
-              </div>
-              <div class="test-level-item">
-                <label for="testLevelBird">野鳥観察🐦</label>
-                <select id="testLevelBird"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
-              </div>
-              <div class="test-level-item">
-                <label for="testLevelGarden">園芸🌿</label>
-                <select id="testLevelGarden"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
-              </div>
-              <div class="test-level-item">
-                <label for="testLevelCooking">料理🍳</label>
-                <select id="testLevelCooking"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option></select>
-              </div>
+          <div class="test-time-weather">
+            <div>
+              <label for="testPlace1">場所1：</label>
+              <select id="testPlace1"><option value="">指定なし</option></select>
             </div>
-          </div>
-          <div>
-            <label for="testTime">時間帯：</label>
-            <select id="testTime">
-              <option value="">指定なし</option>
-              <option value="00-06">00:00〜06:00</option>
-              <option value="06-12">06:00〜12:00</option>
-              <option value="12-18">12:00〜18:00</option>
-              <option value="18-00">18:00〜00:00</option>
-            </select>
-          </div>
-          <div>
-            <label for="testWeather">天気：</label>
-            <select id="testWeather">
-              <option value="">指定なし</option>
-              <option value="all_three">晴れ , 雨(雪) , 虹</option>
-              <option value="exclude_sunny">雨(雪) , 虹</option>
-              <option value="exclude_rain">晴れ , 虹</option>
-              <option value="rainbow_only">虹のみ</option>
-              <option value="include_sunny">晴れを含む</option>
-              <option value="include_rain">雨(雪)を含む</option>
-            </select>
+            <div>
+              <label for="testPlace2">場所2：</label>
+              <select id="testPlace2"><option value="">指定なし</option></select>
+            </div>
+            <div>
+              <label for="testTime">時間帯：</label>
+              <select id="testTime">
+                <option value="">指定なし</option>
+                <option value="00-06">00:00〜06:00</option>
+                <option value="06-12">06:00〜12:00</option>
+                <option value="12-18">12:00〜18:00</option>
+                <option value="18-00">18:00〜00:00</option>
+              </select>
+            </div>
+            <div>
+              <label for="testWeather">天気：</label>
+              <select id="testWeather">
+                <option value="">指定なし</option>
+                <option value="all_three">晴れ , 雨(雪) , 虹</option>
+                <option value="exclude_sunny">雨(雪) , 虹</option>
+                <option value="exclude_rain">晴れ , 虹</option>
+                <option value="rainbow_only">虹のみ</option>
+                <option value="include_sunny">晴れを含む</option>
+                <option value="include_rain">雨(雪)を含む</option>
+              </select>
+            </div>
           </div>
         </section>
 
@@ -491,8 +476,8 @@
       <button class="tab" data-target="page-cat" aria-label="動物">
         動物
       </button>
-      <button class="tab" data-target="page-test" aria-label="テスト">
-        テスト
+      <button class="tab" data-target="page-test" aria-label="おすすめ">
+        おすすめ
       </button>
       <button class="tab" data-target="page-settings" aria-label="そのた">
         そのた

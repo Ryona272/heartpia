@@ -131,8 +131,9 @@ body::before {
 }
 
 .nav-tabs .tab {
-  flex: 1;
-  padding: 10px 0;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 10px 4px;
   border: 1px solid rgba(159, 123, 67, 0.28);
   background: var(--tab-bg);
   border-radius: 10px;
@@ -145,8 +146,10 @@ body::before {
   text-align: center;
   color: #5f4a22;
   box-shadow: 0 2px 0 rgba(138, 110, 62, 0.25);
-  font-size: clamp(11px, 2.5vw, 16px);
+  font-size: 13px;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nav-tabs .tab:active {
@@ -1885,11 +1888,15 @@ button.is-pressed,
   }
 
   .nav-tabs .tab {
-    flex: 1;
-    padding: 12px 6px;
-    font-size: clamp(10px, 3.5vw, 14px);
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 12px 4px;
+    font-size: 11px;
     border-radius: 10px;
     min-height: 48px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* 検索・コントロールをフル幁E�� */
@@ -2034,15 +2041,26 @@ button.is-pressed,
     font-size: 0.75rem;
   }
 
-  #page-test .controls > div:not(.test-level-row) {
+  #page-test .test-time-weather {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #page-test .test-time-weather > div {
+    flex: unset;
+  }
+
+  #page-test .controls > div:not(.test-level-row):not(.test-time-weather) {
     width: 100%;
     flex-wrap: wrap;
   }
 
+  #testPlace1,
+  #testPlace2,
   #testTime,
   #testWeather {
-    flex: 1;
-    width: auto;
+    width: 100%;
     font-size: 16px;
     padding: 8px;
   }
@@ -2140,9 +2158,35 @@ button.is-pressed,
 
 #page-test .controls {
   display: flex;
-  flex-wrap: nowrap;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: stretch;
   gap: 10px;
+}
+
+.test-time-weather {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.test-time-weather > div {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.test-time-weather > div label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #5f4a22;
+  white-space: nowrap;
+}
+
+.test-time-weather > div select {
+  width: 100%;
 }
 
 /* 趣味レベル衁E*/
@@ -2278,7 +2322,7 @@ button.is-pressed,
   text-align: center;
 }
 
-#page-test .controls > div:not(.test-level-row) {
+#page-test .controls > div:not(.test-level-row):not(.test-time-weather) {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -2286,15 +2330,16 @@ button.is-pressed,
   white-space: nowrap;
 }
 
-#page-test .controls > div:not(.test-level-row) label {
+#page-test .controls > div:not(.test-level-row):not(.test-time-weather) label {
   display: inline;
   margin-bottom: 0;
   white-space: nowrap;
 }
 
+#testPlace1,
+#testPlace2,
 #testTime,
 #testWeather {
-  width: auto;
   min-height: 32px;
 }
 
