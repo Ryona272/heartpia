@@ -2423,6 +2423,7 @@ function createDefaultDogState(index) {
     name: `わんこ${index + 1}`,
     excludedFoodNames: [],
     favoriteFoodNames: [],
+    pickyFoodNames: [],
   };
 }
 
@@ -2482,10 +2483,19 @@ function loadDogState() {
         const favorites = Array.isArray(dog.favoriteFoodNames)
           ? dog.favoriteFoodNames.filter((n) => validFoodNames.has(n))
           : [];
+        const picky = Array.isArray(dog.pickyFoodNames)
+          ? dog.pickyFoodNames
+              .filter((n) => validFoodNames.has(n))
+              .filter(
+                (n) =>
+                  !new Set(favorites).has(n) && !new Set(excluded).has(n),
+              )
+          : [];
         nextStates[i] = {
           name,
           excludedFoodNames: excluded,
           favoriteFoodNames: favorites,
+          pickyFoodNames: picky,
         };
       });
     }
@@ -2674,12 +2684,12 @@ function renderPageDogList() {
     return;
   }
 
-  const pickyMap = (window.__dogPickyMap = window.__dogPickyMap || {});
+  const pickySet = new Set(activeState.pickyFoodNames || []);
   resultPageDog.innerHTML = visibleFood
     .map((food) => {
       const isFavorite = favoriteSet.has(food.name);
       const isExcluded = excludedSet.has(food.name);
-      const isPicky = !!pickyMap[food.name];
+      const isPicky = pickySet.has(food.name);
       let cardClass = "cat-fish-card";
       if (isFavorite) cardClass += " cat-fish-card-favorite";
       else if (isPicky) cardClass += " cat-fish-card-picky";
@@ -3274,7 +3284,7 @@ function initPageDog() {
         current.name = `わんこ${activeDogIndex + 1}`;
         current.excludedFoodNames = [];
         current.favoriteFoodNames = [];
-        window.__dogPickyMap = {};
+        current.pickyFoodNames = [];
         if (dogNameInput) dogNameInput.value = current.name;
         updateDogTabsUi();
         renderPageDogList();
@@ -3296,16 +3306,16 @@ function initPageDog() {
     const foodName = target.dataset.foodName;
     if (!foodName) return;
 
-    const pickyMap = (window.__dogPickyMap = window.__dogPickyMap || {});
     const current = getActiveDogState();
     const excluded = new Set(current.excludedFoodNames || []);
     const favorite = new Set(current.favoriteFoodNames || []);
+    const picky = new Set(current.pickyFoodNames || []);
 
     if (target.classList.contains("dog-food-exclude-checkbox")) {
       if (target.checked) {
         excluded.add(foodName);
         favorite.delete(foodName);
-        pickyMap[foodName] = false;
+        picky.delete(foodName);
       } else {
         excluded.delete(foodName);
       }
@@ -3318,7 +3328,7 @@ function initPageDog() {
         }
         favorite.add(foodName);
         excluded.delete(foodName);
-        pickyMap[foodName] = false;
+        picky.delete(foodName);
       } else {
         favorite.delete(foodName);
       }
@@ -3327,14 +3337,15 @@ function initPageDog() {
       if (target.checked) {
         favorite.delete(foodName);
         excluded.delete(foodName);
-        pickyMap[foodName] = true;
+        picky.add(foodName);
       } else {
-        pickyMap[foodName] = false;
+        picky.delete(foodName);
       }
     }
 
     current.excludedFoodNames = [...excluded];
     current.favoriteFoodNames = [...favorite];
+    current.pickyFoodNames = [...picky];
     updateDog5ExcludedToggleUi();
     renderPageDogList();
     saveDogState();
