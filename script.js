@@ -3116,6 +3116,7 @@ function initPage3() {
         current.name = `猫${activeCatIndex + 1}`;
         current.excludedFishNames = [];
         current.favoriteFishNames = [];
+        current.pickyFishNames = [];
         if (catNameInput) catNameInput.value = current.name;
         updateCatTabsUi();
         renderPage3FishList();
@@ -4066,7 +4067,9 @@ function initPageTest() {
       case "cat": {
         const catFood = filtered.filter((c) => normalFishNameSet.has(c.name));
 
-        const catPickyMap = window.__catPickyMap || {};
+        const allPickyFishNames = new Set(
+          catStates.flatMap((cat) => cat.pickyFishNames || []),
+        );
 
         // スコア計算（ソート用のみ）
         const getCatScore = (c) => {
@@ -4078,7 +4081,7 @@ function initPageTest() {
           catStates.forEach((cat) => {
             if ((cat.excludedFishNames || []).includes(c.name)) score -= 5;
           });
-          if (catPickyMap[c.name]) score -= 5;
+          if (allPickyFishNames.has(c.name)) score -= 5;
           return score;
         };
 
