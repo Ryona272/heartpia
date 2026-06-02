@@ -2406,6 +2406,7 @@ function createDefaultCatState(index) {
     name: `猫${index + 1}`,
     excludedFishNames: [],
     favoriteFishNames: [],
+    pickyFishNames: [],
   };
 }
 
@@ -2548,15 +2549,30 @@ function loadPage3State() {
               .filter((fishName) => normalFishNameSet.has(fishName))
           : [];
 
+        const pickyFishNames = Array.isArray(cat?.pickyFishNames)
+          ? cat.pickyFishNames
+              .filter((fishName) => typeof fishName === "string")
+              .filter((fishName) => normalFishNameSet.has(fishName))
+          : [];
+
         const favoriteSet = new Set(favoriteFishNames);
         const cleanedExcluded = excludedFishNames.filter(
           (fishName) => !favoriteSet.has(fishName),
+        );
+        // 偏食は好物・除外と重複しないよう除去
+        const pickySet = new Set(
+          pickyFishNames.filter(
+            (fishName) =>
+              !favoriteSet.has(fishName) &&
+              !new Set(cleanedExcluded).has(fishName),
+          ),
         );
 
         nextStates[index] = {
           name,
           excludedFishNames: [...new Set(cleanedExcluded)],
           favoriteFishNames: [...favoriteSet],
+          pickyFishNames: [...pickySet],
         };
       });
     }
@@ -2877,13 +2893,12 @@ function renderPage3FishList() {
     return;
   }
 
-  // 仮の状態管理: 偏食はlocalStorageやcatStateに未保存。UIのみ。
-  const pickyMap = (window.__catPickyMap = window.__catPickyMap || {});
+  const pickySet = new Set(activeState.pickyFishNames || []);
   resultPage3.innerHTML = filteredFish
     .map((fish) => {
       const isFavorite = favoriteSet.has(fish.name);
       const isExcluded = excludedSet.has(fish.name);
-      const isPicky = !!pickyMap[fish.name];
+      const isPicky = pickySet.has(fish.name);
       const hasFishData = fishingCreatures.some((f) => f.name === fish.name);
       const fishData = fishingCreatures.find((f) => f.name === fish.name);
       const waterTags = [];
@@ -3140,18 +3155,16 @@ function initPage3() {
     const fishName = target.dataset.fishName;
     if (!fishName) return;
 
-    // pickyMap は renderPage3FishList 内で初期化される一時状態
-    const pickyMap = (window.__catPickyMap = window.__catPickyMap || {});
-
     const current = getActiveCatState();
     const excluded = new Set(current.excludedFishNames || []);
     const favorite = new Set(current.favoriteFishNames || []);
+    const picky = new Set(current.pickyFishNames || []);
 
     if (target.classList.contains("cat-fish-exclude-checkbox")) {
       if (target.checked) {
         excluded.add(fishName);
         favorite.delete(fishName);
-        pickyMap[fishName] = false; // 偏食をクリア
+        picky.delete(fishName); // 偏食をクリア
       } else {
         excluded.delete(fishName);
       }
@@ -3165,7 +3178,7 @@ function initPage3() {
         }
         favorite.add(fishName);
         excluded.delete(fishName);
-        pickyMap[fishName] = false; // 偏食をクリア
+        picky.delete(fishName); // 偏食をクリア
       } else {
         favorite.delete(fishName);
       }
@@ -3176,9 +3189,9 @@ function initPage3() {
       if (target.checked) {
         favorite.delete(fishName);
         excluded.delete(fishName);
-        pickyMap[fishName] = true;
+        picky.add(fishName);
       } else {
-        pickyMap[fishName] = false;
+        picky.delete(fishName);
       }
     }
 
@@ -3190,6 +3203,7 @@ function initPage3() {
 
     current.excludedFishNames = [...excluded];
     current.favoriteFishNames = [...favorite];
+    current.pickyFishNames = [...picky];
 
     updateCat5ExcludedToggleUi();
     renderPage3FishList();
