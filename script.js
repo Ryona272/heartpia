@@ -2487,8 +2487,7 @@ function loadDogState() {
           ? dog.pickyFoodNames
               .filter((n) => validFoodNames.has(n))
               .filter(
-                (n) =>
-                  !new Set(favorites).has(n) && !new Set(excluded).has(n),
+                (n) => !new Set(favorites).has(n) && !new Set(excluded).has(n),
               )
           : [];
         nextStates[i] = {
