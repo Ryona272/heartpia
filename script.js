@@ -3956,25 +3956,24 @@ function initPageTest() {
     );
 
     // ── 動的レアリティスコア ──
-    // 通常種の天候パターン別・時間スロット数別の体数を集計し重みとする。
-    // 生き物が増えるほど自動的に重みが変わる。
-    // 天候は「出にくい条件ほど希少」を強調するため ×1.5 倍。
+    // 天候パターン別の体数を集計し重みとする（生き物が増えるほど自動的に重みが変わる）。
+    // 天候は希少性をより強調するため ×1.5 倍。
+    // 時間は各スロットに固定重みを与える: 00-06（深夜帯）= 5、それ以外 = 10。
+    // スコアが大きい（負が小さい）ほど希少として上位に表示される。
     const _normalCreatures = creatures.filter((c) => c.season === "normal");
     const _weatherWeight = {};
     _normalCreatures.forEach((c) => {
       const k = (c.weathers || []).slice().sort().join("+");
       _weatherWeight[k] = (_weatherWeight[k] || 0) + 1;
     });
-    const _timeWeight = {};
-    _normalCreatures.forEach((c) => {
-      const n = (c.times || []).length;
-      _timeWeight[n] = (_timeWeight[n] || 0) + 1;
-    });
     const calcRarityScore = (c) => {
       const wk = (c.weathers || []).slice().sort().join("+");
       const ws = _weatherWeight[wk] || 0;
-      const ts = _timeWeight[(c.times || []).length] || 0;
-      return -(ws * 2 + ts);
+      const ts = (c.times || []).reduce(
+        (sum, t) => sum + (t.startsWith("00") ? 5 : 10),
+        0,
+      );
+      return -(ws * 1.5 + ts);
     };
     const fishLevel = Number(bioLevelFishInput?.value) || 1;
     const insectLevel = Number(bioLevelInsectInput?.value) || 1;
