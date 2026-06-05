@@ -375,6 +375,23 @@
         <h2 id="test-title">おすすめ</h2>
         <p class="test-desc">今の状況と目的を選ぶと、おすすめの行動を提案します。</p>
 
+        <div class="test-goal-row" role="group" aria-label="目的を選択">
+          <span class="test-goal-label">目的：</span>
+          <button type="button" class="test-goal-btn filter-toggle" data-goal="money" aria-pressed="false">💰 お金を稼ぐ</button>
+          <button type="button" class="test-goal-btn filter-toggle" data-goal="collect" aria-pressed="false">📖 コレクション完成</button>
+          <button type="button" class="test-goal-btn filter-toggle" data-goal="star5" aria-pressed="false">⭐ ★５のコンプ</button>
+          <button type="button" class="test-goal-btn filter-toggle" data-goal="master" aria-pressed="false">🏆 マスターコンプ</button>
+          <button type="button" class="test-goal-btn filter-toggle" data-goal="cat" aria-pressed="false">🐱 にゃんこのエサ</button>
+        </div>
+
+        <div class="test-hobby-filter-row" role="group" aria-label="表示する趣味を選択">
+          <button type="button" class="test-hobby-btn hobby-fishing active" data-hobby="釣り" aria-pressed="true">🐟 魚</button>
+          <button type="button" class="test-hobby-btn hobby-insect active" data-hobby="虫捕り" aria-pressed="true">🦋 虫</button>
+          <button type="button" class="test-hobby-btn hobby-bird active" data-hobby="野鳥観察" aria-pressed="true">🐦 鳥</button>
+          <button type="button" class="test-hobby-btn hobby-gardening active" data-hobby="園芸" aria-pressed="true">🌿 園芸</button>
+          <button type="button" class="test-hobby-btn hobby-cooking active" data-hobby="料理" aria-pressed="true">🍳 料理</button>
+        </div>
+
         <section class="controls" aria-label="現在の状況">
           <div class="test-time-weather">
             <div>
@@ -409,15 +426,6 @@
             </div>
           </div>
         </section>
-
-        <div class="test-goal-row" role="group" aria-label="目的を選択">
-          <span class="test-goal-label">目的：</span>
-          <button type="button" class="test-goal-btn filter-toggle" data-goal="money" aria-pressed="false">💰 お金を稼ぐ</button>
-          <button type="button" class="test-goal-btn filter-toggle" data-goal="collect" aria-pressed="false">📖 コレクション完成</button>
-          <button type="button" class="test-goal-btn filter-toggle" data-goal="star5" aria-pressed="false">⭐ ★５のコンプ</button>
-          <button type="button" class="test-goal-btn filter-toggle" data-goal="master" aria-pressed="false">🏆 マスターコンプ</button>
-          <button type="button" class="test-goal-btn filter-toggle" data-goal="cat" aria-pressed="false">🐱 にゃんこのエサ</button>
-        </div>
 
         <div id="testResult" class="test-result" aria-live="polite">
           <p class="test-placeholder">目的ボタンを選ぶと提案が表示されます。</p>

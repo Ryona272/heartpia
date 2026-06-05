@@ -3446,6 +3446,8 @@ function initPageTest() {
     return;
 
   let selectedGoal = null;
+  const ALL_HOBBIES = ["釣り", "虫捕り", "野鳥観察", "園芸", "料理"];
+  const enabledHobbies = new Set(ALL_HOBBIES);
 
   // 場所1プルダウンを初期化（通常シーズン・生物のみ）
   function buildTestPlace1Options() {
@@ -3548,6 +3550,15 @@ function initPageTest() {
           selectedGoal = s.goal;
         }
       }
+      if (Array.isArray(s.hobbies)) {
+        enabledHobbies.clear();
+        s.hobbies.forEach((h) => enabledHobbies.add(h));
+        document.querySelectorAll(".test-hobby-btn").forEach((btn) => {
+          const on = enabledHobbies.has(btn.dataset.hobby);
+          btn.classList.toggle("active", on);
+          btn.setAttribute("aria-pressed", String(on));
+        });
+      }
     } catch (e) {}
   }
 
@@ -3561,9 +3572,28 @@ function initPageTest() {
         time: testTimeEl.value,
         weather: testWeatherEl.value,
         goal: selectedGoal || "",
+        hobbies: [...enabledHobbies],
       }),
     );
   }
+
+  // 趣味フィルターボタン（複数選択トグル）
+  document.querySelectorAll(".test-hobby-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const hobby = btn.dataset.hobby;
+      if (enabledHobbies.has(hobby)) {
+        enabledHobbies.delete(hobby);
+        btn.classList.remove("active");
+        btn.setAttribute("aria-pressed", "false");
+      } else {
+        enabledHobbies.add(hobby);
+        btn.classList.add("active");
+        btn.setAttribute("aria-pressed", "true");
+      }
+      saveTestSettings();
+      if (selectedGoal) renderTestResults();
+    });
+  });
 
   // 目的ボタン（単一選択）
   document.querySelectorAll(".test-goal-btn").forEach((btn) => {
@@ -3794,7 +3824,31 @@ function initPageTest() {
   // 結果全体を描画
   function renderTestResults() {
     if (!selectedGoal) return;
-    const filtered = getFilteredCreatures();
+    const filtered = getFilteredCreatures().filter((c) =>
+      enabledHobbies.has(c.hobby),
+    );
+
+    // ── 動的レアリティスコア ──
+    // 通常種の天候パターン別・時間スロット数別の体数を集計し重みとする。
+    // 生き物が増えるほど自動的に重みが変わる。
+    // 天候は「出にくい条件ほど希少」を強調するため ×1.5 倍。
+    const _normalCreatures = creatures.filter((c) => c.season === "normal");
+    const _weatherWeight = {};
+    _normalCreatures.forEach((c) => {
+      const k = (c.weathers || []).slice().sort().join("+");
+      _weatherWeight[k] = (_weatherWeight[k] || 0) + 1;
+    });
+    const _timeWeight = {};
+    _normalCreatures.forEach((c) => {
+      const n = (c.times || []).length;
+      _timeWeight[n] = (_timeWeight[n] || 0) + 1;
+    });
+    const calcRarityScore = (c) => {
+      const wk = (c.weathers || []).slice().sort().join("+");
+      const ws = _weatherWeight[wk] || 0;
+      const ts = _timeWeight[(c.times || []).length] || 0;
+      return -(ws * 1.5 + ts);
+    };
     const fishLevel = Number(bioLevelFishInput?.value) || 1;
     const insectLevel = Number(bioLevelInsectInput?.value) || 1;
     const birdLevel = Number(bioLevelBirdInput?.value) || 1;
@@ -3814,8 +3868,8 @@ function initPageTest() {
         item.season === "normal" &&
         !isPage2StoreIngredient(item) &&
         (isPage2Gardening(item)
-          ? (item.level ?? 1) <= gardenLevel
-          : (item.level ?? 1) <= cookingLevel),
+          ? enabledHobbies.has("園芸") && (item.level ?? 1) <= gardenLevel
+          : enabledHobbies.has("料理") && (item.level ?? 1) <= cookingLevel),
     );
 
     // ── 目的別アドバイス ──
@@ -3973,17 +4027,9 @@ function initPageTest() {
         const unacquired = [...filtered, ...filteredPage2].filter(
           (c) => !c.acquired,
         );
-        const getRarityScore = (c) => {
-          const w = c.weathers || [];
-          let score = 0;
-          if (w.includes("晴れ")) score -= 2;
-          if (w.includes("雨(雪)")) score -= 1;
-          score -= (c.times || []).length;
-          return score;
-        };
         const topUnacquired = [...unacquired]
           .filter((c) => Array.isArray(c.times))
-          .sort((a, b) => getRarityScore(b) - getRarityScore(a))
+          .sort((a, b) => calcRarityScore(b) - calcRarityScore(a))
           .slice(0, 10);
         if (topUnacquired.length > 0) {
           html += renderSection(
@@ -4022,17 +4068,9 @@ function initPageTest() {
         const notStar5 = [...filtered, ...filteredPage2].filter(
           (c) => !c.fiveStar,
         );
-        const getRarityScoreStar5 = (c) => {
-          const w = c.weathers || [];
-          let score = 0;
-          if (w.includes("晴れ")) score -= 2;
-          if (w.includes("雨(雪)")) score -= 1;
-          score -= (c.times || []).length;
-          return score;
-        };
         const topNotStar5 = [...notStar5]
           .filter((c) => Array.isArray(c.times))
-          .sort((a, b) => getRarityScoreStar5(b) - getRarityScoreStar5(a))
+          .sort((a, b) => calcRarityScore(b) - calcRarityScore(a))
           .slice(0, 10);
         if (topNotStar5.length > 0) {
           html += renderSection(
@@ -4050,17 +4088,9 @@ function initPageTest() {
         const notMaster = [...filtered, ...filteredPage2].filter(
           (c) => c.season === "normal" && !c.master,
         );
-        const getRarityScoreMaster = (c) => {
-          const w = c.weathers || [];
-          let score = 0;
-          if (w.includes("晴れ")) score -= 2;
-          if (w.includes("雨(雪)")) score -= 1;
-          score -= (c.times || []).length;
-          return score;
-        };
         const topNotMaster = [...notMaster]
           .filter((c) => Array.isArray(c.times))
-          .sort((a, b) => getRarityScoreMaster(b) - getRarityScoreMaster(a))
+          .sort((a, b) => calcRarityScore(b) - calcRarityScore(a))
           .slice(0, 10);
         if (topNotMaster.length > 0) {
           html += renderSection(

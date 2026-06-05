@@ -2348,13 +2348,61 @@ button.is-pressed,
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .test-goal-label {
   font-size: 13px;
   font-weight: 700;
   color: #5f4a22;
+}
+
+/* 趣味フィルターボタン行 */
+.test-hobby-filter-row {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.test-hobby-btn {
+  flex: 1;
+  padding: 8px 4px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background: #e0e0e0;
+  color: #999;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.test-hobby-btn.active.hobby-fishing {
+  background: linear-gradient(180deg, #77adda, #c2e0f7);
+  color: #0d47a1;
+  border-color: rgba(13, 71, 161, 0.4);
+}
+.test-hobby-btn.active.hobby-insect {
+  background: linear-gradient(180deg, #7eca81, #c5efcf);
+  color: #1b5e20;
+  border-color: rgba(27, 94, 32, 0.4);
+}
+.test-hobby-btn.active.hobby-bird {
+  background: linear-gradient(180deg, #edbd74, #ebd6a9);
+  color: #c84a00;
+  border-color: rgba(245, 86, 23, 0.4);
+}
+.test-hobby-btn.active.hobby-gardening {
+  background: linear-gradient(180deg, #f48cb1, #fde0ec);
+  color: #7b1a4b;
+  border-color: rgba(123, 26, 75, 0.4);
+}
+.test-hobby-btn.active.hobby-cooking {
+  background: linear-gradient(180deg, #ffd45a, #ffefb4);
+  color: #835700;
+  border-color: rgba(131, 87, 0, 0.4);
 }
 
 .test-result {
