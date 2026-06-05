@@ -12,6 +12,10 @@ function switchTab(target) {
     localStorage.setItem("scrollPos_" + currentPage.id, window.scrollY);
   }
 
+  // 動物ページを離れる場合は名前バーを非表示にする
+  const bar = document.getElementById("animalStickyNameBar");
+  if (bar && target !== "page-cat") bar.hidden = true;
+
   document.querySelectorAll(".nav-tabs .tab").forEach((t) => {
     const isTarget = t.dataset.target === target;
     t.classList.toggle("active", isTarget);

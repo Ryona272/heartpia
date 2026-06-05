@@ -3356,6 +3356,133 @@ function initPageWild() {
   renderWildAnimalList();
 }
 
+/**
+ * 動物ページ（にゃんこ・わんこ）スクロール時の名前バーを初期化する。
+ * 名前入力欄が画面上部に見えなくなったとき、画面上部に名前を固定表示する。
+ */
+function initAnimalStickyNameBar() {
+  const bar = document.getElementById("animalStickyNameBar");
+  if (!bar) return;
+
+  const catNameRow = document.querySelector("#animalSection-cat .cat-name-row");
+  const dogNameRow = document.querySelector("#animalSection-dog .cat-name-row");
+  const pageCat = document.getElementById("page-cat");
+  const animalTypeSelect = document.getElementById("animalTypeSelect");
+  const topNav = document.querySelector(".top-nav");
+
+  // 上部ナビが表示されている場合はその高さ分だけ下に配置する
+  function updateBarTop() {
+    if (topNav && getComputedStyle(topNav).display !== "none") {
+      bar.style.top = topNav.offsetHeight + "px";
+    } else {
+      bar.style.top = "0";
+    }
+  }
+
+  updateBarTop();
+  window.addEventListener("resize", updateBarTop);
+
+  function getActiveAnimalType() {
+    return animalTypeSelect ? animalTypeSelect.value : "cat";
+  }
+
+  function getCurrentName() {
+    const type = getActiveAnimalType();
+    if (type === "cat") return getActiveCatState().name || "";
+    if (type === "dog") return getActiveDogState().name || "";
+    return "";
+  }
+
+  function getAnimalLabel() {
+    const type = getActiveAnimalType();
+    if (type === "cat") return "🐱";
+    if (type === "dog") return "🐶";
+    return "";
+  }
+
+  // バーの表示を更新する（visible=true のとき名前があれば表示）
+  function refreshBar(visible) {
+    if (!pageCat || !pageCat.classList.contains("active")) {
+      bar.hidden = true;
+      return;
+    }
+    const type = getActiveAnimalType();
+    if (type === "wild") {
+      bar.hidden = true;
+      return;
+    }
+    const name = getCurrentName();
+    if (visible && name) {
+      bar.textContent = getAnimalLabel() + " " + name;
+      bar.hidden = false;
+    } else {
+      bar.hidden = true;
+    }
+  }
+
+  // どちらの名前行が画面外（上方向）にあるかを追跡する
+  let catRowHidden = false;
+  let dogRowHidden = false;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const isAbove =
+          !entry.isIntersecting && entry.boundingClientRect.top < 0;
+        if (entry.target === catNameRow) catRowHidden = isAbove;
+        if (entry.target === dogNameRow) dogRowHidden = isAbove;
+      });
+      const type = getActiveAnimalType();
+      const shouldShow =
+        (type === "cat" && catRowHidden) || (type === "dog" && dogRowHidden);
+      refreshBar(shouldShow);
+    },
+    { threshold: 0 },
+  );
+
+  if (catNameRow) observer.observe(catNameRow);
+  if (dogNameRow) observer.observe(dogNameRow);
+
+  // 名前入力に合わせてバーのテキストをリアルタイム更新
+  catNameInput?.addEventListener("input", () => {
+    if (!bar.hidden) {
+      const name = getActiveCatState().name || "";
+      if (name) {
+        bar.textContent = "🐱 " + name;
+      } else {
+        bar.hidden = true;
+      }
+    }
+  });
+
+  dogNameInput?.addEventListener("input", () => {
+    if (!bar.hidden) {
+      const name = getActiveDogState().name || "";
+      if (name) {
+        bar.textContent = "🐶 " + name;
+      } else {
+        bar.hidden = true;
+      }
+    }
+  });
+
+  // タブ切り替え時にバーのテキストを更新
+  document.getElementById("catTabs")?.addEventListener("click", () => {
+    if (!bar.hidden) refreshBar(catRowHidden);
+  });
+  document.getElementById("dogTabs")?.addEventListener("click", () => {
+    if (!bar.hidden) refreshBar(dogRowHidden);
+  });
+
+  // 動物タイプ切り替え時にバーを再評価
+  animalTypeSelect?.addEventListener("change", () => {
+    const type = getActiveAnimalType();
+    const shouldShow =
+      (type === "cat" && catRowHidden) || (type === "dog" && dogRowHidden);
+    refreshBar(shouldShow);
+  });
+}
+
 // =======================
 // イベント登録
 // =======================
@@ -4537,6 +4664,7 @@ function init() {
   initPage3();
   initPageDog();
   initPageWild();
+  initAnimalStickyNameBar();
 
   // 動物タイプ切り替えセレクター
   const animalTypeSelect = document.getElementById("animalTypeSelect");
