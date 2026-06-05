@@ -3974,7 +3974,7 @@ function initPageTest() {
       const wk = (c.weathers || []).slice().sort().join("+");
       const ws = _weatherWeight[wk] || 0;
       const ts = _timeWeight[(c.times || []).length] || 0;
-      return -(ws * 1.5 + ts);
+      return -(ws * 2 + ts);
     };
     const fishLevel = Number(bioLevelFishInput?.value) || 1;
     const insectLevel = Number(bioLevelInsectInput?.value) || 1;
