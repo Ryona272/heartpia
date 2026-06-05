@@ -3959,6 +3959,7 @@ function initPageTest() {
     // 天候パターン別の体数を集計し重みとする（生き物が増えるほど自動的に重みが変わる）。
     // 天候は希少性をより強調するため ×1.5 倍。
     // 時間は各スロットに固定重みを与える: 00-06（深夜帯）= 1、それ以外 = 2。
+    // 野鳥観察は双眼鏡が必要で観察難易度が高いため +3 のボーナス。
     // スコアが大きい（負が小さい）ほど希少として上位に表示される。
     const _normalCreatures = creatures.filter((c) => c.season === "normal");
     const _weatherWeight = {};
@@ -3973,7 +3974,8 @@ function initPageTest() {
         (sum, t) => sum + (t.startsWith("00") ? 1 : 2),
         0,
       );
-      return -(ws * 1.5 + ts);
+      const hobbyBonus = c.hobby === "野鳥観察" ? 3 : 0;
+      return -(ws * 1.5 + ts - hobbyBonus);
     };
     const fishLevel = Number(bioLevelFishInput?.value) || 1;
     const insectLevel = Number(bioLevelInsectInput?.value) || 1;
