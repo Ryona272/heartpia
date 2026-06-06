@@ -4318,12 +4318,41 @@ function initPageTest() {
 // =======================
 
 /**
+ * レベル選択プルダウンの選択肢をデータの最大レベルに基づいて動的に生成する。
+ * @param {HTMLSelectElement} selectEl - 対象の select 要素
+ * @param {Array} dataArray - level フィールドを持つデータ配列
+ */
+function populateLevelSelect(selectEl, dataArray) {
+  if (!selectEl || !dataArray?.length) return;
+  const currentValue = selectEl.value;
+  const maxLevel = Math.max(...dataArray.map((d) => d.level ?? 1));
+  selectEl.innerHTML = "";
+  for (let i = 1; i <= maxLevel; i++) {
+    const opt = document.createElement("option");
+    opt.value = String(i);
+    opt.textContent = String(i);
+    selectEl.appendChild(opt);
+  }
+  // 以前の値が範囲内であれば復元、そうでなければ最大値を選択
+  const parsed = parseInt(currentValue, 10);
+  selectEl.value =
+    parsed >= 1 && parsed <= maxLevel ? String(parsed) : String(maxLevel);
+}
+
+/**
  * アプリ全体の初期化処理。
  * 1. localStorage から状態を復元
  * 2. フィルターのプルダウン選択肢を構築
  * 3. 各ページを初期化してレンダリングを実行
  */
 function init() {
+  // 各趣味の最大レベルをデータから読み取り、プルダウン選択肢を動的に生成する
+  populateLevelSelect(bioLevelFishInput, fishingCreatures);
+  populateLevelSelect(bioLevelInsectInput, insectCreatures);
+  populateLevelSelect(bioLevelBirdInput, birdCreatures);
+  populateLevelSelect(userLevelGardenPage2Input, gardeningCreatures);
+  populateLevelSelect(userLevelCookingPage2Input, cookingCreatures);
+
   loadState();
   saveState(); // 移行後は新キーを確実に更新
   updateToggleButtons();
