@@ -3871,9 +3871,9 @@ function initPageTest() {
       exclude_sunny: "雨(雪) , 虹",
       exclude_rain: "晴れ , 虹",
       rainbow_only: "虹のみ",
-      include_sunny: "晴れを含む（今晴れ）",
-      include_rain: "雨(雪)を含む（今雨or雪）",
-      include_rainbow: "虹を含む（今虹）",
+      include_sunny: "今 晴れ",
+      include_rain: "今 雨or雪",
+      include_rainbow: "今 虹",
     };
     const parts = [];
     if (testTimeEl.value)
@@ -4269,18 +4269,20 @@ function initPageTest() {
         const topNotStar5 = [...notStar5]
           .filter((c) => Array.isArray(c.times))
           .sort((a, b) => {
-            // 「今〇〇」フィルター時: 今の天候でしか★5が出ない鳥のみ優先（それ以外は通常評価）
+            // 「今〇〇」フィルター時の優先ルール:
+            // 雨選択 → star5Weathersに"雨(雪)"を含む鳥を優先
+            // 虹選択 → star5Weathersに"虹"を含み、かつ"雨(雪)"を含まない鳥を優先
+            //          （"雨(雪)"でも★5が出る鳥は通常評価）
             if (_nowWeather) {
-              const aExclusive =
-                (a.star5Weathers || []).length === 1 &&
-                a.star5Weathers[0] === _nowWeather
-                  ? 1
-                  : 0;
-              const bExclusive =
-                (b.star5Weathers || []).length === 1 &&
-                b.star5Weathers[0] === _nowWeather
-                  ? 1
-                  : 0;
+              const isPriority = (c) => {
+                const s5w = c.star5Weathers || [];
+                if (!s5w.includes(_nowWeather)) return false;
+                if (_nowWeather === "虹" && s5w.includes("雨(雪)"))
+                  return false;
+                return true;
+              };
+              const aExclusive = isPriority(a) ? 1 : 0;
+              const bExclusive = isPriority(b) ? 1 : 0;
               if (bExclusive !== aExclusive) return bExclusive - aExclusive;
             }
             return calcRarityScoreBase(b) - calcRarityScoreBase(a);
