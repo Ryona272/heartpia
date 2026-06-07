@@ -1614,6 +1614,16 @@ button.is-pressed,
   filter: grayscale(1);
 }
 
+.card-weather-chip--star5 {
+  outline: 2px solid rgb(151, 112, 26);
+  outline-offset: 1px;
+}
+
+.card-time-badge--star5 {
+  outline: 2px solid rgb(151, 112, 26);
+  outline-offset: 1px;
+}
+
 /* 釣り生物カード�E用途アイコン */
 .fish-use-icons {
   display: flex;

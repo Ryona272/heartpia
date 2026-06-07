@@ -441,6 +441,8 @@ function filterCreatures() {
         if (!w.includes("晴れ")) return false;
       } else if (weather === "include_rain") {
         if (!w.includes("雨(雪)")) return false;
+      } else if (weather === "include_rainbow") {
+        if (!w.includes("虹")) return false;
       }
     }
     // グローバル toggles: OFF にすると該当済みを非表示
@@ -1205,7 +1207,8 @@ function renderList(list, hobbyLevelMap) {
 
     const ALL_WEATHERS_CARD = ["晴れ", "雨(雪)", "虹"];
     const weatherSet = new Set(c.weathers || []);
-    const weatherRowMarkup = `<div class="card-weather-row"><span class="card-row-label">天気：</span>${ALL_WEATHERS_CARD.map((w) => `<span class="card-weather-chip${weatherSet.has(w) ? "" : " card-weather-chip--off"}" data-label="${w}"><img class="card-weather-chip-img" src="img/other/${w}.png" alt="${w}" onerror="this.closest('.card-weather-chip').style.display='none'"></span>`).join("")}</div>`;
+    const star5WeatherSet = new Set(c.star5Weathers || []);
+    const weatherRowMarkup = `<div class="card-weather-row"><span class="card-row-label">天気：</span>${ALL_WEATHERS_CARD.map((w) => `<span class="card-weather-chip${weatherSet.has(w) ? "" : " card-weather-chip--off"}${star5WeatherSet.has(w) ? " card-weather-chip--star5" : ""}" data-label="${w}"><img class="card-weather-chip-img" src="img/other/${w}.png" alt="${w}" onerror="this.closest('.card-weather-chip').style.display='none'"></span>`).join("")}</div>`;
 
     const TIME_SLOTS = [
       { key: "00-06", emoji: "🌙", dataLabel: "深夜 00:00～06:00" },
@@ -1214,10 +1217,11 @@ function renderList(list, hobbyLevelMap) {
       { key: "18-00", emoji: "🌇", dataLabel: "夜 18:00～00:00" },
     ];
     const timeSet = new Set(c.times || []);
+    const star5TimeSet = new Set(c.star5Times || []);
     const timeRowMarkup = `<div class="card-time-row"><span class="card-row-label">時間：</span>${TIME_SLOTS.map(
       ({ key, emoji, dataLabel }) => {
         const [tStart, tEnd] = key.split("-");
-        return `<span class="card-time-badge${timeSet.has(key) ? " card-time-badge--on" : " card-time-badge--off"}" data-label="${dataLabel}"><span class="card-time-start">${tStart}</span>${emoji}<span class="card-time-end">${tEnd}</span></span>`;
+        return `<span class="card-time-badge${timeSet.has(key) ? " card-time-badge--on" : " card-time-badge--off"}${star5TimeSet.size > 0 && star5TimeSet.has(key) ? " card-time-badge--star5" : ""}" data-label="${dataLabel}"><span class="card-time-start">${tStart}</span>${emoji}<span class="card-time-end">${tEnd}</span></span>`;
       },
     ).join("")}</div>`;
 
@@ -2885,6 +2889,8 @@ function renderPage3FishList() {
           if (!w.includes("晴れ")) return false;
         } else if (catWeather === "include_rain") {
           if (!w.includes("雨(雪)")) return false;
+        } else if (catWeather === "include_rainbow") {
+          if (!w.includes("虹")) return false;
         }
       }
       return true;
@@ -3839,6 +3845,8 @@ function initPageTest() {
           if (!w.includes("晴れ")) return false;
         } else if (weather === "include_rain") {
           if (!w.includes("雨(雪)")) return false;
+        } else if (weather === "include_rainbow") {
+          if (!w.includes("虹")) return false;
         }
       }
       return true;
@@ -3863,8 +3871,9 @@ function initPageTest() {
       exclude_sunny: "雨(雪) , 虹",
       exclude_rain: "晴れ , 虹",
       rainbow_only: "虹のみ",
-      include_sunny: "晴れを含む",
-      include_rain: "雨(雪)を含む",
+      include_sunny: "晴れを含む（今晴れ）",
+      include_rain: "雨(雪)を含む（今雨or雪）",
+      include_rainbow: "虹を含む（今虹）",
     };
     const parts = [];
     if (testTimeEl.value)
@@ -3960,6 +3969,8 @@ function initPageTest() {
     // 天候は希少性をより強調するため ×1.5 倍。
     // 時間は各スロットに固定重みを与える: 00-06（深夜帯）= 1、それ以外 = 2。
     // 野鳥観察は双眼鏡が必要で観察難易度が高いため +3 のボーナス。
+    // ★5天候ボーナス: star5Weathersが存在し、かつ現在の天候フィルターにマッチする場合 +5。
+    // ★5時間ボーナス: star5Timesが存在し、かつ現在の時間フィルターにマッチする場合 +3。
     // スコアが大きい（負が小さい）ほど希少として上位に表示される。
     const _normalCreatures = creatures.filter((c) => c.season === "normal");
     const _weatherWeight = {};
@@ -3967,7 +3978,66 @@ function initPageTest() {
       const k = (c.weathers || []).slice().sort().join("+");
       _weatherWeight[k] = (_weatherWeight[k] || 0) + 1;
     });
+    // 天候フィルター値 → 実際に有効な天候セット
+    const _getActiveWeathers = (wf) => {
+      const map = {
+        all_three: ["晴れ", "雨(雪)", "虹"],
+        rainbow_only: ["虹"],
+        exclude_sunny: ["雨(雪)", "虹"],
+        exclude_rain: ["晴れ", "虹"],
+        include_sunny: ["晴れ"],
+        include_rain: ["雨(雪)"],
+        include_rainbow: ["虹"],
+      };
+      return new Set(wf && map[wf] ? map[wf] : ["晴れ", "雨(雪)", "虹"]);
+    };
+    const _activeWeathers = _getActiveWeathers(testWeatherEl.value);
+    const _currentTime = testTimeEl.value;
+    // 「今」天候フィルターが選ばれている場合の実天候
+    const _nowWeatherMap = {
+      include_sunny: "晴れ",
+      include_rain: "雨(雪)",
+      include_rainbow: "虹",
+    };
+    const _nowWeather = _nowWeatherMap[testWeatherEl.value] || null;
+    // 「今」天候フィルター時に、現在の天気で☄5が狙えるか判定
+    // star5Weathersが未定義(駚起、虫等)または空配列(未確認)は常にtrue
+    const canStar5Now = (c) => {
+      const s5w = c.star5Weathers;
+      if (!s5w) return true;
+      if (!_nowWeather) return true;
+      if (s5w.length === 0) return true;
+      return s5w.includes(_nowWeather);
+    };
     const calcRarityScore = (c) => {
+      const wk = (c.weathers || []).slice().sort().join("+");
+      const ws = _weatherWeight[wk] || 0;
+      const ts = (c.times || []).reduce(
+        (sum, t) => sum + (t.startsWith("00") ? 1 : 2),
+        0,
+      );
+      const hobbyBonus = c.hobby === "野鳥観察" ? 3 : 0;
+      // 「今〇〇」フィルター選択時のみ★5ボーナスを加算（それ以外は通常評価）
+      const isNowFilter = !!_nowWeather;
+      const s5w = c.star5Weathers || [];
+      const weatherBonus =
+        isNowFilter && s5w.length > 0
+          ? s5w.includes(_nowWeather)
+            ? 30
+            : 0
+          : 0;
+      const s5t = c.star5Times || [];
+      const timeBonus =
+        isNowFilter &&
+        s5t.length > 0 &&
+        _currentTime &&
+        s5t.includes(_currentTime)
+          ? 15
+          : 0;
+      return -(ws * 1.5 + ts - hobbyBonus - weatherBonus - timeBonus);
+    };
+    // マスター用：★5ボーナスなしの通常評価
+    const calcRarityScoreBase = (c) => {
       const wk = (c.weathers || []).slice().sort().join("+");
       const ws = _weatherWeight[wk] || 0;
       const ts = (c.times || []).reduce(
@@ -4157,7 +4227,7 @@ function initPageTest() {
         );
         const topUnacquired = [...unacquired]
           .filter((c) => Array.isArray(c.times))
-          .sort((a, b) => calcRarityScore(b) - calcRarityScore(a))
+          .sort((a, b) => calcRarityScoreBase(b) - calcRarityScoreBase(a))
           .slice(0, 10);
         if (topUnacquired.length > 0) {
           html += renderSection(
@@ -4194,11 +4264,27 @@ function initPageTest() {
       }
       case "star5": {
         const notStar5 = [...filtered, ...filteredPage2].filter(
-          (c) => !c.fiveStar,
+          (c) => !c.fiveStar && canStar5Now(c),
         );
         const topNotStar5 = [...notStar5]
           .filter((c) => Array.isArray(c.times))
-          .sort((a, b) => calcRarityScore(b) - calcRarityScore(a))
+          .sort((a, b) => {
+            // 「今〇〇」フィルター時: 今の天候でしか★5が出ない鳥のみ優先（それ以外は通常評価）
+            if (_nowWeather) {
+              const aExclusive =
+                (a.star5Weathers || []).length === 1 &&
+                a.star5Weathers[0] === _nowWeather
+                  ? 1
+                  : 0;
+              const bExclusive =
+                (b.star5Weathers || []).length === 1 &&
+                b.star5Weathers[0] === _nowWeather
+                  ? 1
+                  : 0;
+              if (bExclusive !== aExclusive) return bExclusive - aExclusive;
+            }
+            return calcRarityScoreBase(b) - calcRarityScoreBase(a);
+          })
           .slice(0, 10);
         if (topNotStar5.length > 0) {
           html += renderSection(
@@ -4218,7 +4304,7 @@ function initPageTest() {
         );
         const topNotMaster = [...notMaster]
           .filter((c) => Array.isArray(c.times))
-          .sort((a, b) => calcRarityScore(b) - calcRarityScore(a))
+          .sort((a, b) => calcRarityScoreBase(b) - calcRarityScoreBase(a))
           .slice(0, 10);
         if (topNotMaster.length > 0) {
           html += renderSection(

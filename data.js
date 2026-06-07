@@ -1763,6 +1763,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 30 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1774,6 +1776,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 30 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1785,6 +1789,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 30 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1796,6 +1802,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 30 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1807,6 +1815,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 30 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1818,6 +1828,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 30 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1829,6 +1841,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 40 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1840,6 +1854,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 40 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1851,6 +1867,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 40 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1871,6 +1889,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 60 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1882,6 +1902,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 40 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1893,6 +1915,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 50 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1904,7 +1928,10 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 8 }],
+    star5Weathers: ["晴れ", "雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は晴れで確認",
+    //雨、虹で出るか確認
   },
   {
     name: "ゴジュウカラ",
@@ -1915,6 +1942,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 40 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1926,6 +1955,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 40 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1937,6 +1968,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 40 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1948,6 +1981,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 60 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1959,6 +1994,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 60 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1970,6 +2007,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 70 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1981,6 +2020,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 70 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -1992,6 +2033,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 60 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2003,6 +2046,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 40 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -2014,6 +2059,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 40 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -2025,6 +2072,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 40 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -2036,6 +2085,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 70 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -2047,6 +2098,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 70 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -2058,6 +2111,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 70 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2069,6 +2124,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 70 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: ["★５は雨(雪)で確認", "孤島など"],
   },
   {
@@ -2080,6 +2137,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 60 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2091,6 +2150,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "虹"],
     rarityData: [{ star: 2, price: 60 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2102,6 +2163,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 60 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2113,6 +2176,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 60 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2124,6 +2189,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 70 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -2135,6 +2202,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 70 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
   },
   {
@@ -2146,6 +2215,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 90 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2157,6 +2228,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 60 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2168,6 +2241,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 90 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2179,6 +2254,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "虹"],
     rarityData: [{ star: 2, price: 60 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2190,6 +2267,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 110 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2201,6 +2280,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 110 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2212,6 +2293,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 90 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2223,6 +2306,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 60 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2234,6 +2319,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 110 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2245,6 +2332,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 90 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2256,6 +2345,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "虹"],
     rarityData: [{ star: 2, price: 190 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認(頭を回す動作)",
   },
   {
@@ -2267,6 +2358,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 90 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2278,6 +2371,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 90 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2289,6 +2384,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 110 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2300,6 +2397,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["虹"],
     rarityData: [{ star: 2, price: 140 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2311,6 +2410,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "虹"],
     rarityData: [{ star: 2, price: 190 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2322,6 +2423,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 120 }],
+    star5Weathers: ["虹"],
+    star5Times: ["18-00"],
     note: ["★５は虹で確認(18:00-00:00)", "お城の裏庭"],
   },
   {
@@ -2333,6 +2436,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 90 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2344,6 +2449,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 110 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2355,6 +2462,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 260 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2366,6 +2475,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["虹"],
     rarityData: [{ star: 2, price: 120 }],
+    star5Weathers: ["虹"],
+    star5Times: ["18-00"],
     note: ["★５は虹で確認(18:00-00:00)", "森側の郊外"],
   },
   {
@@ -2377,6 +2488,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["虹"],
     rarityData: [{ star: 2, price: 220 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2388,6 +2501,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 150 }],
+    star5Weathers: [],
+    star5Times: [],
     note: ["★５は未確認", "「巣ごもり」追加段階でのみ出現"],
   },
   {
@@ -2399,6 +2514,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 180 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2410,6 +2527,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 180 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認",
   },
   {
@@ -2421,6 +2540,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["虹"],
     rarityData: [{ star: 2, price: 120 }],
+    star5Weathers: ["虹"],
+    star5Times: ["18-00"],
     note: "★５は虹で確認(18:00-00:00)",
   },
   {
@@ -2432,6 +2553,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["虹"],
     rarityData: [{ star: 2, price: 120 }],
+    star5Weathers: ["虹"],
+    star5Times: ["18-00"],
     note: "★５は虹で確認(18:00-00:00)",
   },
   {
@@ -2443,6 +2566,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 260 }],
+    star5Weathers: ["虹"],
+    star5Times: ["18-00"],
     note: "★５は虹で確認(18:00-00:00)",
   },
   {
@@ -2454,6 +2579,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 260 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
     note: "★５は虹で確認(頭を回す動作)",
   },
 ];
@@ -3678,6 +3805,8 @@ const snowseasonCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 80, tc: 60 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
     season: "snowseason",
   },
@@ -3690,6 +3819,8 @@ const snowseasonCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 70, tc: 60 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
     season: "snowseason",
   },
@@ -3702,6 +3833,8 @@ const snowseasonCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 70, tc: 60 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
     season: "snowseason",
   },
@@ -3714,6 +3847,8 @@ const snowseasonCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 70, tc: 60 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: "★５は雨(雪)で確認",
     season: "snowseason",
   },
@@ -3726,6 +3861,8 @@ const snowseasonCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 90, tc: 60 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: ["★５は雨(雪)で確認", "追加段階のみ出現"],
     season: "snowseason",
   },
