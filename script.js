@@ -1886,15 +1886,24 @@ function renderPage2List(targetEl, list, gardenLevel, cookingLevel) {
               ${metaLines.length ? `<div class="meta">${metaLines.join("<br>")}</div>` : ""}
               ${foodItemsMarkup}
               ${
-                isStoreIngredient ||
-                item.name === "不気味な食べ物" ||
-                item.name === "不気味な飲み物"
+                isStoreIngredient
                   ? ""
-                  : `<div class="card-control-row">
-                <label><input type="checkbox" class="card-acquired-checkbox-p2" data-name="${item.name}" ${item.acquired ? "checked" : ""} /> 獲得</label>
-                <label><input type="checkbox" class="card-star5-checkbox-p2" data-name="${item.name}" ${item.fiveStar ? "checked" : ""} /> ★5</label>
-                ${item.season === "normal" ? `<label><input type="checkbox" class="card-master-checkbox-p2" data-name="${item.name}" ${item.master ? "checked" : ""} /> マスター</label>` : ""}
-              </div>`
+                  : (() => {
+                      const isUgly =
+                        item.name === "不気味な食べ物" ||
+                        item.name === "不気味な飲み物";
+                      return (
+                        `<div class="card-control-row">` +
+                        `<label><input type="checkbox" class="card-acquired-checkbox-p2" data-name="${item.name}" ${item.acquired ? "checked" : ""} /> 獲得</label>` +
+                        (isUgly
+                          ? ""
+                          : `<label><input type="checkbox" class="card-star5-checkbox-p2" data-name="${item.name}" ${item.fiveStar ? "checked" : ""} /> ★5</label>` +
+                            (item.season === "normal"
+                              ? `<label><input type="checkbox" class="card-master-checkbox-p2" data-name="${item.name}" ${item.master ? "checked" : ""} /> マスター</label>`
+                              : "")) +
+                        `</div>`
+                      );
+                    })()
               }
             </div>
             <div class="card-back ${cardClass}">
@@ -2157,10 +2166,17 @@ function filterAndRenderPage2() {
   const primary = hobbyFilterPage2.value;
   const secondary = hobbyModeFilterPage2.value;
 
+  const UGLY_FOOD_NAMES = new Set(["不気味な食べ物", "不気味な飲み物"]);
   const filtered = page2Creatures.filter((item) => {
     if (!showAcquiredPage2 && item.acquired) return false;
     if (!showFiveStarPage2 && item.fiveStar) return false;
     if (!showMasterPage2 && item.master) return false;
+    // 不気味な食べ物・飲み物は★5・マスターに無関係のため、それらのtoggleがOFFの時は非表示
+    if (
+      UGLY_FOOD_NAMES.has(item.name) &&
+      (!showFiveStarPage2 || !showMasterPage2)
+    )
+      return false;
     if (
       getEffectiveLevelPage2(item, gardenLevel, cookingLevel) <
       (item.level ?? 1)
@@ -4263,8 +4279,9 @@ function initPageTest() {
         break;
       }
       case "star5": {
+        const _UGLY_NAMES = new Set(["不気味な食べ物", "不気味な飲み物"]);
         const notStar5 = [...filtered, ...filteredPage2].filter(
-          (c) => !c.fiveStar && canStar5Now(c),
+          (c) => !c.fiveStar && canStar5Now(c) && !_UGLY_NAMES.has(c.name),
         );
         const topNotStar5 = [...notStar5]
           .filter((c) => Array.isArray(c.times))
@@ -4301,9 +4318,137 @@ function initPageTest() {
         break;
       }
       case "master": {
+        const _UGLY_NAMES = new Set(["不気味な食べ物", "不気味な飲み物"]);
         const notMaster = [...filtered, ...filteredPage2].filter(
-          (c) => c.season === "normal" && !c.master,
+          (c) => c.season === "normal" && !c.master && !_UGLY_NAMES.has(c.name),
         );
+
+        // ── 生物マスター おすすめ環境（プルダウンに関係なく全体計算） ──
+        // 魚・虫・鳥の3趣味それぞれについて、
+        // (場所1, 時間帯, 天気) の組み合わせごとにマスター未達の通常種が
+        // 何種類出現するかを集計し、最もたくさん一石多鳥できる環境 Top3 を表示する。
+        // スコア = 出現種数 × 1000 + 趣味レベルの合計（高レベル=希少 = ボーナス）
+        const BIO_ENV_TIMES = ["00-06", "06-12", "12-18", "18-00"];
+        const BIO_ENV_WEATHERS = ["晴れ", "雨(雪)", "虹"];
+        const BIO_ENV_TIME_LABELS = {
+          "00-06": "0〜6時🌙",
+          "06-12": "6〜12時🌅",
+          "12-18": "12〜18時☀",
+          "18-00": "18〜24時🌆",
+        };
+        const BIO_ENV_WEATHER_LABELS = {
+          晴れ: "晴れ☀️",
+          "雨(雪)": "雨/雪🌧️",
+          虹: "虹🌈",
+        };
+        const BIO_ENV_HOBBY_META = [
+          { hobby: "釣り", level: fishLevel, icon: "🐟", label: "釣り" },
+          { hobby: "虫捕り", level: insectLevel, icon: "🦋", label: "虫捕り" },
+          {
+            hobby: "野鳥観察",
+            level: birdLevel,
+            icon: "🐦",
+            label: "野鳥観察",
+          },
+        ];
+
+        /**
+         * 指定趣味のマスター未達通常種について、
+         * 最も多くの種が重なる (場所1, 時間帯, 天気) 組み合わせを Top3 返す。
+         * 場所1 が異なる上位3件を返す（同一場所の重複を除く）。
+         */
+        const calcBioEnvTop = (hobbyName, userLevel) => {
+          const targets = creatures.filter(
+            (c) =>
+              c.hobby === hobbyName &&
+              c.season === "normal" &&
+              !c.master &&
+              (c.level ?? 1) <= userLevel,
+          );
+          if (targets.length === 0) return [];
+
+          // 場所2 が空の生物は場所1 をフォールバックとして使う
+          const getEffectivePlaces = (c) => {
+            const p2 = (c.places2 || []).filter((p) => p);
+            return p2.length > 0 ? p2 : c.places1 || [];
+          };
+
+          const allPlace2s = [
+            ...new Set(targets.flatMap((c) => getEffectivePlaces(c))),
+          ];
+          const allCombos = [];
+
+          for (const place of allPlace2s) {
+            for (const time of BIO_ENV_TIMES) {
+              for (const weather of BIO_ENV_WEATHERS) {
+                const matching = targets.filter(
+                  (c) =>
+                    getEffectivePlaces(c).includes(place) &&
+                    (c.times || []).includes(time) &&
+                    (c.weathers || []).includes(weather),
+                );
+                if (matching.length === 0) continue;
+                const count = matching.length;
+                const levelSum = matching.reduce(
+                  (s, c) => s + (c.level ?? 1),
+                  0,
+                );
+                allCombos.push({
+                  place,
+                  time,
+                  weather,
+                  matching,
+                  count,
+                  score: count * 1000 + levelSum,
+                });
+              }
+            }
+          }
+
+          allCombos.sort((a, b) => b.score - a.score);
+
+          // 上位1件のみ返す
+          return allCombos.length > 0 ? [allCombos[0]] : [];
+        };
+
+        // 3趣味の結果を組み立て（趣味ボタンがOFFの場合は非表示）
+        let bioEnvHtml = "";
+        for (const { hobby, level, icon, label } of BIO_ENV_HOBBY_META) {
+          if (!enabledHobbies.has(hobby)) continue;
+          const topCombos = calcBioEnvTop(hobby, level);
+          if (topCombos.length === 0) {
+            bioEnvHtml += `<p class="test-cat-label">${icon} ${label}：マスター未達なし 🎉</p>`;
+            continue;
+          }
+          bioEnvHtml += `<p class="test-cat-label">${icon} ${label}</p>`;
+          const combo = topCombos[0];
+          const envBadge =
+            `<span class="bio-env-badge">` +
+            `📍 ${combo.place}　` +
+            `⏰ ${BIO_ENV_TIME_LABELS[combo.time] ?? combo.time}　` +
+            `🌤 ${BIO_ENV_WEATHER_LABELS[combo.weather] ?? combo.weather}` +
+            `</span>` +
+            `<span class="bio-env-count"> → ${combo.count}種同時マスター狙い可</span>`;
+          const chipsHtml = `<div class="test-chips">${combo.matching
+            .slice()
+            .sort((a, b) => (b.level ?? 1) - (a.level ?? 1))
+            .map((c) => renderChip(c, `Lv${c.level ?? 1}`))
+            .join("")}</div>`;
+          bioEnvHtml +=
+            `<div class="bio-env-combo bio-env-combo--top">` +
+            `<div class="bio-env-combo-header">${envBadge}</div>` +
+            chipsHtml +
+            `</div>`;
+        }
+
+        if (bioEnvHtml) {
+          html += renderSection(
+            `🌿 生物マスター おすすめ環境（趣味Lv以下の未達通常種・全場所計算）`,
+            bioEnvHtml,
+          );
+        }
+
+        // ── 以下、既存の Top10 と全件リスト ──
         const topNotMaster = [...notMaster]
           .filter((c) => Array.isArray(c.times))
           .sort((a, b) => calcRarityScoreBase(b) - calcRarityScoreBase(a))
