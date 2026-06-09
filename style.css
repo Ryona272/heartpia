@@ -2822,7 +2822,8 @@ button.is-pressed,
   padding: 2px 8px;
   font-weight: 700;
   color: #1a4a70;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  min-width: 0;
 }
 .bio-env-combo--top .bio-env-badge {
   background: #fff8d6;
