@@ -2142,6 +2142,25 @@ function updatePage2SubFilterOptions() {
 }
 
 /**
+ * キーワードに対して、名前マッチ＋food配列への直接マッチを返す。
+ * 例: "トマト" → トマト, トマトソース（foodに"トマト"を含む料理）
+ */
+function getIngredientMatchedNames(keyword, items) {
+  const matchedNames = new Set();
+  for (const item of items) {
+    if (item.name.toLowerCase().includes(keyword)) {
+      matchedNames.add(item.name);
+    } else if (
+      Array.isArray(item.food) &&
+      item.food.some((f) => f.toLowerCase().includes(keyword))
+    ) {
+      matchedNames.add(item.name);
+    }
+  }
+  return matchedNames;
+}
+
+/**
  * ページ2の全フィルター値を読み取り、ソート・絞り込みして renderPage2List() を呼び出す。
  */
 function filterAndRenderPage2() {
@@ -2167,6 +2186,9 @@ function filterAndRenderPage2() {
   const secondary = hobbyModeFilterPage2.value;
 
   const UGLY_FOOD_NAMES = new Set(["不気味な食べ物", "不気味な飲み物"]);
+  const ingredientMatchedNames = keyword
+    ? getIngredientMatchedNames(keyword, page2Creatures)
+    : null;
   const filtered = page2Creatures.filter((item) => {
     if (!showAcquiredPage2 && item.acquired) return false;
     if (!showFiveStarPage2 && item.fiveStar) return false;
@@ -2182,7 +2204,7 @@ function filterAndRenderPage2() {
       (item.level ?? 1)
     )
       return false;
-    if (keyword && !item.name.toLowerCase().includes(keyword)) return false;
+    if (keyword && !ingredientMatchedNames.has(item.name)) return false;
 
     // シーズン/フェスフィルター（1つのセレクトボックスで一括管理）
     if (season) {
