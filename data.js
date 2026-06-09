@@ -2504,6 +2504,7 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 150 }],
     star5Weathers: [],
     star5Times: [],
+    noStar5Data: true, // ★５未確認のため非表示。データ追加時はこの行を削除
     note: ["★５は未確認", "「巣ごもり」追加段階でのみ出現"],
   },
   {

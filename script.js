@@ -4289,7 +4289,11 @@ function initPageTest() {
       case "star5": {
         const _UGLY_NAMES = new Set(["不気味な食べ物", "不気味な飲み物"]);
         const notStar5 = [...filtered, ...filteredPage2].filter(
-          (c) => !c.fiveStar && canStar5Now(c) && !_UGLY_NAMES.has(c.name),
+          (c) =>
+            !c.fiveStar &&
+            canStar5Now(c) &&
+            !_UGLY_NAMES.has(c.name) &&
+            !c.noStar5Data,
         );
 
         // ── 生物★5 おすすめ環境（マスターと同じロジック・対象が★5未達に変わる） ──
