@@ -1,4 +1,4 @@
-﻿// =======================
+// =======================
 // DOM 取得
 // =======================
 const bioLevelFishInput = document.getElementById("bioLevelFish");
@@ -887,7 +887,7 @@ function updateFishSubFilterOptions() {
   const prevValue = fishSubFilter.value;
   fishSubFilter.innerHTML = '<option value="">すべて</option>';
   const opts = [
-    { value: "cooking", label: "🐟 魚-食材" },
+    { value: "cooking", label: "\u{1F41F} 魚-食材" },
     { value: "seafish", label: "🌊 海の魚-食材" },
     { value: "cat", label: "🐱 猫-エサ" },
   ];
@@ -1211,9 +1211,9 @@ function renderList(list, hobbyLevelMap) {
     const weatherRowMarkup = `<div class="card-weather-row"><span class="card-row-label">天気：</span>${ALL_WEATHERS_CARD.map((w) => `<span class="card-weather-chip${weatherSet.has(w) ? "" : " card-weather-chip--off"}${star5WeatherSet.has(w) ? " card-weather-chip--star5" : ""}" data-label="${w}"><img class="card-weather-chip-img" src="img/other/${w}.png" alt="${w}" onerror="this.closest('.card-weather-chip').style.display='none'"></span>`).join("")}</div>`;
 
     const TIME_SLOTS = [
-      { key: "00-06", emoji: "🌙", dataLabel: "深夜 00:00～06:00" },
-      { key: "06-12", emoji: "🌅", dataLabel: "朝 06:00～12:00" },
-      { key: "12-18", emoji: "☀️", dataLabel: "昼 12:00～18:00" },
+      { key: "00-06", emoji: "\u{1F319}", dataLabel: "深夜 00:00～06:00" },
+      { key: "06-12", emoji: "\u{1F305}", dataLabel: "朝 06:00～12:00" },
+      { key: "12-18", emoji: "\u2600\uFE0F", dataLabel: "昼 12:00～18:00" },
       { key: "18-00", emoji: "🌇", dataLabel: "夜 18:00～00:00" },
     ];
     const timeSet = new Set(c.times || []);
@@ -1329,7 +1329,7 @@ function renderList(list, hobbyLevelMap) {
                     const icons = [];
                     if (cookingFishNameSet.has(c.name))
                       icons.push(
-                        `<span class="fish-use-icon fish-use-icon--cooking" title="料理「魚」食材">🐟 魚-食材</span>`,
+                        `<span class="fish-use-icon fish-use-icon--cooking" title="料理「魚」食材">\u{1F41F} 魚-食材</span>`,
                       );
                     if (cookingSeaFishNameSet.has(c.name))
                       icons.push(
@@ -3923,7 +3923,7 @@ function initPageTest() {
       );
     if (c.master)
       badges.push(
-        '<span class="test-badge test-badge--master" title="マスター">🏆</span>',
+        '<span class="test-badge test-badge--master" title="マスター">\u{1F3C6}</span>',
       );
     const imgTag = c.img
       ? `<img class="test-chip-img" src="${c.img}" alt="" onerror="this.style.display='none'">`
@@ -3940,7 +3940,7 @@ function initPageTest() {
           : "";
       placesHtml =
         `<div class="test-chip-places">` +
-        `<span class="test-chip-place1">📍 ${p1}</span>` +
+        `<span class="test-chip-place1">\u{1F4CD} ${p1}</span>` +
         (p2 ? `<span class="test-chip-place2">🗺 ${p2}</span>` : "") +
         `</div>`;
     }
@@ -3962,9 +3962,9 @@ function initPageTest() {
   }
 
   // チップグリッドを描画
-  function renderChips(items, priceFn) {
+  function renderChips(items, priceFn, emptyText) {
     if (items.length === 0)
-      return '<p class="test-empty">該当する生き物がいません。</p>';
+      return `<p class="test-empty">${emptyText ?? "該当する生き物がいません。"}</p>`;
     return `<div class="test-chips">${items.map((c) => renderChip(c, priceFn ? priceFn(c) : "")).join("")}</div>`;
   }
 
@@ -4190,17 +4190,20 @@ function initPageTest() {
         };
 
         let gardenContent = "";
-        if (topGardenFood.length > 0) {
-          gardenContent += `<p class="test-cat-label">🥕 食材 Top 5</p>`;
-          gardenContent += renderChips(topGardenFood, gardenLabel);
-        }
-        if (topGardenFlower.length > 0) {
-          gardenContent += `<p class="test-cat-label">🌸 花 Top 5</p>`;
-          gardenContent += renderChips(topGardenFlower, gardenLabel);
-        }
-        if (!gardenContent) {
+        if (!enabledHobbies.has("園芸")) {
+          gardenContent = '<p class="test-empty">園芸は非表示です。</p>';
+        } else if (topGardenFood.length > 0 || topGardenFlower.length > 0) {
+          if (topGardenFood.length > 0) {
+            gardenContent += `<p class="test-cat-label">🥕 食材 Top 5</p>`;
+            gardenContent += renderChips(topGardenFood, gardenLabel);
+          }
+          if (topGardenFlower.length > 0) {
+            gardenContent += `<p class="test-cat-label">🌸 花 Top 5</p>`;
+            gardenContent += renderChips(topGardenFlower, gardenLabel);
+          }
+        } else {
           gardenContent =
-            '<p class="test-empty">解放済みの園芸アイテムがありません。</p>';
+            '<p class="test-empty">条件に合う園芸アイテムがありません。</p>';
         }
 
         // ① 生物（釣り・虫捕り・野鳥観察）
@@ -4217,11 +4220,12 @@ function initPageTest() {
           .slice(0, 10);
 
         html += renderSection(
-          `🐟 ① 生物 相対スコア Top 10（趣味Lv1の平均価格比 , 各生物の出現率を無視）`,
+          `\u{1F41F} ① 生物 相対スコア Top 10（趣味Lv1の平均価格比 , 各生物の出現率を無視）`,
           renderChips(
             topCreatures,
             (c) =>
               `${getScore(c).toFixed(1)}倍${c.hobby === "野鳥観察" ? "（×3）" : ""} / ★1: ${fmt(getStar1Price(c))}`,
+            "今の条件で取れる生き物がありません。",
           ),
         );
         html += renderSection(
@@ -4230,10 +4234,14 @@ function initPageTest() {
         );
         html += renderSection(
           `🍳 ③ 料理 相対スコア Top 10（料理Lv1の平均価格比 , 製作難易度を無視）`,
-          renderChips(
-            topCooking,
-            (c) => `${getScore(c).toFixed(1)}倍 / ★1: ${fmt(getStar1Price(c))}`,
-          ),
+          !enabledHobbies.has("料理")
+            ? '<p class="test-empty">料理は非表示です。</p>'
+            : renderChips(
+                topCooking,
+                (c) =>
+                  `${getScore(c).toFixed(1)}倍 / ★1: ${fmt(getStar1Price(c))}`,
+                "条件に合う料理アイテムがありません。",
+              ),
         );
         break;
       }
@@ -4283,6 +4291,242 @@ function initPageTest() {
         const notStar5 = [...filtered, ...filteredPage2].filter(
           (c) => !c.fiveStar && canStar5Now(c) && !_UGLY_NAMES.has(c.name),
         );
+
+        // ── 生物★5 おすすめ環境（マスターと同じロジック・対象が★5未達に変わる） ──
+        {
+          const S5_TIMES = ["00-06", "06-12", "12-18", "18-00"];
+          const S5_WEATHERS = ["晴れ", "雨(雪)", "虹"];
+          const S5_TIME_LABELS = {
+            "00-06": "0\u301C6\u6642\u{1F319}",
+            "06-12": "6\u301C12\u6642\u{1F305}",
+            "12-18": "12\u301C18\u6642\u2600",
+            "18-00": "18\u301C24\u6642\u{1F306}",
+          };
+          const S5_WEATHER_LABELS = {
+            "\u6674\u308c": "\u2600\uFE0F \u6674\u308c",
+            "\u96e8(\u96ea)": "\u{1F327}\uFE0F \u96e8/\u96ea",
+            "\u8679": "\u{1F308} \u8679",
+          };
+          const S5_HOBBY_META = [
+            {
+              hobby: "\u91e3\u308a",
+              level: fishLevel,
+              icon: "\u{1F41F}",
+              label: "\u91e3\u308a",
+            },
+            {
+              hobby: "\u866B\u6355\u308a",
+              level: insectLevel,
+              icon: "\u{1F98B}",
+              label: "\u866B\u6355\u308a",
+            },
+            {
+              hobby: "\u91ce\u9ce5\u89b3\u5bdf",
+              level: birdLevel,
+              icon: "\u{1F426}",
+              label: "\u91ce\u9ce5\u89b3\u5bdf",
+            },
+          ];
+          const _s5WeatherMap = {
+            all_three: ["\u6674\u308c", "\u96e8(\u96ea)", "\u8679"],
+            rainbow_only: ["\u8679"],
+            exclude_sunny: ["\u96e8(\u96ea)", "\u8679"],
+            exclude_rain: ["\u6674\u308c", "\u8679"],
+            include_sunny: ["\u6674\u308c"],
+            include_rain: ["\u96e8(\u96ea)"],
+            include_rainbow: ["\u8679"],
+          };
+          const _s5NowWeatherMap = {
+            include_sunny: "\u6674\u308c",
+            include_rain: "\u96e8(\u96ea)",
+            include_rainbow: "\u8679",
+          };
+          const _s5SetWeatherMap = {
+            all_three: {
+              required: ["\u6674\u308c", "\u96e8(\u96ea)", "\u8679"],
+              exact: false,
+            },
+            rainbow_only: { required: ["\u8679"], exact: true },
+            exclude_sunny: {
+              required: ["\u96e8(\u96ea)", "\u8679"],
+              exact: true,
+            },
+            exclude_rain: { required: ["\u6674\u308c", "\u8679"], exact: true },
+          };
+          const s5Place1 = testPlace1El.value || "";
+          const s5Place2 = testPlace2El.value || "";
+          const s5Time = testTimeEl.value || "";
+          const s5WeatherRaw = testWeatherEl.value || "";
+          const s5Weathers = s5WeatherRaw
+            ? (_s5WeatherMap[s5WeatherRaw] ?? null)
+            : null;
+          const s5NowWeather = _s5NowWeatherMap[s5WeatherRaw] ?? null;
+          const s5SetWeatherDef = _s5SetWeatherMap[s5WeatherRaw] ?? null;
+          const s5AllFixed = s5Place2 && s5Time && s5WeatherRaw;
+
+          const _s5CondParts = [];
+          if (s5Place1) _s5CondParts.push(`\u{1F4CD}${s5Place1}`);
+          if (s5Place2) _s5CondParts.push(`\u{1F4CD}${s5Place2}`);
+          if (s5Time)
+            _s5CondParts.push(`\u23F0${S5_TIME_LABELS[s5Time] ?? s5Time}`);
+          if (s5WeatherRaw)
+            _s5CondParts.push(
+              `${s5Weathers ? s5Weathers.map((w) => S5_WEATHER_LABELS[w] ?? w).join("/") : s5WeatherRaw}`,
+            );
+          const s5SectionTitle =
+            `\u2B50 \u751f\u7269\u2605\uff15 \u304a\u3059\u3059\u3081\u74b0\u5883\uff08\u4eca\u53d6\u308c\u308b\u4e2d\u3067\u306eTop1\uff09` +
+            (_s5CondParts.length ? `\u3000${_s5CondParts.join("\u3000")}` : "");
+
+          const calcS5EnvTop = (hobbyName, userLevel) => {
+            let targets = creatures.filter(
+              (c) =>
+                c.hobby === hobbyName &&
+                c.season === "normal" &&
+                !c.fiveStar &&
+                (c.level ?? 1) <= userLevel,
+            );
+            if (s5Place1) {
+              targets = targets.filter((c) =>
+                (c.places1 || []).includes(s5Place1),
+              );
+            }
+            if (targets.length === 0) return [];
+
+            const getEffP = (c) => {
+              const p2 = (c.places2 || []).filter((p) => p);
+              return p2.length > 0 ? p2 : c.places1 || [];
+            };
+
+            let wFiltered = targets;
+            if (s5NowWeather) {
+              wFiltered = targets.filter((c) =>
+                (c.weathers || []).includes(s5NowWeather),
+              );
+            } else if (s5SetWeatherDef) {
+              const { required, exact } = s5SetWeatherDef;
+              wFiltered = targets.filter((c) => {
+                const w = c.weathers || [];
+                if (exact)
+                  return (
+                    w.length === required.length &&
+                    required.every((wx) => w.includes(wx))
+                  );
+                return required.every((wx) => w.includes(wx));
+              });
+            }
+            if (wFiltered.length === 0) return [];
+
+            const placesToSearch = s5Place2
+              ? [s5Place2]
+              : [...new Set(wFiltered.flatMap((c) => getEffP(c)))];
+            const timesToSearch = s5Time ? [s5Time] : S5_TIMES;
+            const allCombos = [];
+
+            if (s5NowWeather || !s5SetWeatherDef) {
+              const wIter = s5NowWeather ? [s5NowWeather] : S5_WEATHERS;
+              for (const place of placesToSearch) {
+                for (const time of timesToSearch) {
+                  for (const weather of wIter) {
+                    const matching = wFiltered.filter(
+                      (c) =>
+                        getEffP(c).includes(place) &&
+                        (c.times || []).includes(time) &&
+                        (c.weathers || []).includes(weather),
+                    );
+                    if (!matching.length) continue;
+                    allCombos.push({
+                      place,
+                      time,
+                      weather,
+                      matching,
+                      count: matching.length,
+                      score:
+                        matching.length * 1000 +
+                        matching.reduce((s, c) => s + (c.level ?? 1), 0),
+                    });
+                  }
+                }
+              }
+            } else {
+              const wLabel = s5SetWeatherDef.required.join("/");
+              for (const place of placesToSearch) {
+                for (const time of timesToSearch) {
+                  const matching = wFiltered.filter(
+                    (c) =>
+                      getEffP(c).includes(place) &&
+                      (c.times || []).includes(time),
+                  );
+                  if (!matching.length) continue;
+                  allCombos.push({
+                    place,
+                    time,
+                    weather: wLabel,
+                    matching,
+                    count: matching.length,
+                    score:
+                      matching.length * 1000 +
+                      matching.reduce((s, c) => s + (c.level ?? 1), 0),
+                  });
+                }
+              }
+            }
+
+            allCombos.sort((a, b) => b.score - a.score);
+            if (!allCombos.length) return [];
+            const best = allCombos[0];
+            const bestNames = new Set(best.matching.map((c) => c.name));
+            const eqTimes = allCombos
+              .filter(
+                (co) =>
+                  co.place === best.place &&
+                  co.weather === best.weather &&
+                  co.matching.length === best.matching.length &&
+                  co.matching.every((c) => bestNames.has(c.name)),
+              )
+              .map((co) => co.time);
+            return [
+              { ...best, times: S5_TIMES.filter((t) => eqTimes.includes(t)) },
+            ];
+          };
+
+          let s5EnvHtml = "";
+          if (!s5AllFixed) {
+            for (const { hobby, level, icon, label } of S5_HOBBY_META) {
+              if (!enabledHobbies.has(hobby)) continue;
+              const topCombos = calcS5EnvTop(hobby, level);
+              if (topCombos.length === 0) {
+                s5EnvHtml += `<p class="test-cat-label">${icon} ${label}\uff1a\u2605\uff15\u672a\u9054\u306a\u3057</p>`;
+                continue;
+              }
+              s5EnvHtml += `<p class="test-cat-label">${icon} ${label}</p>`;
+              const combo = topCombos[0];
+              const timesArr = combo.times ?? [combo.time];
+              const timeLabel = s5Time
+                ? (S5_TIME_LABELS[s5Time] ?? s5Time)
+                : timesArr.length === S5_TIMES.length
+                  ? "\u5168\u6642\u9593"
+                  : timesArr.map((t) => S5_TIME_LABELS[t] ?? t).join(" / ");
+              const envBadge =
+                `<span class="bio-env-badge">` +
+                `\u{1F4CD} ${combo.place}\u3000` +
+                `\u23F0 ${timeLabel}\u3000` +
+                `${S5_WEATHER_LABELS[combo.weather] ?? combo.weather}` +
+                `</span>` +
+                `<span class="bio-env-count"> \u2192 ${combo.count}\u7a2e\u540c\u6642\u2605\uff15\u72d9\u3044\u53ef</span>`;
+              const chipsHtml = `<div class="test-chips">${combo.matching
+                .slice()
+                .sort((a, b) => (b.level ?? 1) - (a.level ?? 1))
+                .map((c) => renderChip(c, `Lv${c.level ?? 1}`))
+                .join("")}</div>`;
+              s5EnvHtml +=
+                `<div class="bio-env-combo bio-env-combo--top">` +
+                `<div class="bio-env-combo-header">${envBadge}</div>` +
+                chipsHtml +
+                `</div>`;
+            }
+          }
+          if (s5EnvHtml) html += renderSection(s5SectionTitle, s5EnvHtml);
+        }
         const topNotStar5 = [...notStar5]
           .filter((c) => Array.isArray(c.times))
           .sort((a, b) => {
@@ -4323,48 +4567,112 @@ function initPageTest() {
           (c) => c.season === "normal" && !c.master && !_UGLY_NAMES.has(c.name),
         );
 
-        // ── 生物マスター おすすめ環境（プルダウンに関係なく全体計算） ──
-        // 魚・虫・鳥の3趣味それぞれについて、
-        // (場所1, 時間帯, 天気) の組み合わせごとにマスター未達の通常種が
-        // 何種類出現するかを集計し、最もたくさん一石多鳥できる環境 Top3 を表示する。
-        // スコア = 出現種数 × 1000 + 趣味レベルの合計（高レベル=希少 = ボーナス）
+        // ── 生物マスター おすすめ環境 ──
+        // 場所2・時間・天気のプルダウンを考慮して探索範囲を絞る。
+        // 3つすべて指定済みの場合はセクション自体を非表示にする。
         const BIO_ENV_TIMES = ["00-06", "06-12", "12-18", "18-00"];
         const BIO_ENV_WEATHERS = ["晴れ", "雨(雪)", "虹"];
         const BIO_ENV_TIME_LABELS = {
-          "00-06": "0〜6時🌙",
-          "06-12": "6〜12時🌅",
-          "12-18": "12〜18時☀",
-          "18-00": "18〜24時🌆",
+          "00-06": "0〜6時\u{1F319}",
+          "06-12": "6〜12時\u{1F305}",
+          "12-18": "12〜18時\u2600",
+          "18-00": "18〜24時\u{1F306}",
         };
         const BIO_ENV_WEATHER_LABELS = {
-          晴れ: "晴れ☀️",
-          "雨(雪)": "雨/雪🌧️",
-          虹: "虹🌈",
+          晴れ: "\u2600\uFE0F 晴れ",
+          "雨(雪)": "\u{1F327}\uFE0F 雨/雪",
+          虹: "\u{1F308} 虹",
         };
         const BIO_ENV_HOBBY_META = [
-          { hobby: "釣り", level: fishLevel, icon: "🐟", label: "釣り" },
-          { hobby: "虫捕り", level: insectLevel, icon: "🦋", label: "虫捕り" },
+          { hobby: "釣り", level: fishLevel, icon: "\u{1F41F}", label: "釣り" },
+          {
+            hobby: "虫捕り",
+            level: insectLevel,
+            icon: "\u{1F98B}",
+            label: "虫捕り",
+          },
           {
             hobby: "野鳥観察",
             level: birdLevel,
-            icon: "🐦",
+            icon: "\u{1F426}",
             label: "野鳥観察",
           },
         ];
 
+        // 天候フィルター値 → 実際の天候リスト（null = 制約なし）
+        const _bioWeatherMap = {
+          all_three: ["晴れ", "雨(雪)", "虹"],
+          rainbow_only: ["虹"],
+          exclude_sunny: ["雨(雪)", "虹"],
+          exclude_rain: ["晴れ", "虹"],
+          include_sunny: ["晴れ"],
+          include_rain: ["雨(雪)"],
+          include_rainbow: ["虹"],
+        };
+        // 「今 X」型：その天候を含む生物なら対象（OR的）
+        const _bioNowWeatherMap = {
+          include_sunny: "晴れ",
+          include_rain: "雨(雪)",
+          include_rainbow: "虹",
+        };
+        // AND型セット：生物の出現天候が指定セットを全て含む必要がある
+        //   exact=true の場合は exactly その1種のみ（rainbow_only）
+        const _bioSetWeatherMap = {
+          all_three: { required: ["晴れ", "雨(雪)", "虹"], exact: false },
+          rainbow_only: { required: ["虹"], exact: true },
+          exclude_sunny: { required: ["雨(雪)", "虹"], exact: true },
+          exclude_rain: { required: ["晴れ", "虹"], exact: true },
+        };
+        const bioFixedPlace1 = testPlace1El.value || "";
+        const bioFixedPlace2 = testPlace2El.value || "";
+        const bioFixedTime = testTimeEl.value || "";
+        const bioFixedWeathersRaw = testWeatherEl.value || "";
+        const bioFixedWeathers = bioFixedWeathersRaw
+          ? (_bioWeatherMap[bioFixedWeathersRaw] ?? null)
+          : null;
+        // 天候フィルター種別を判定
+        const bioNowWeather = _bioNowWeatherMap[bioFixedWeathersRaw] ?? null;
+        const bioSetWeatherDef = _bioSetWeatherMap[bioFixedWeathersRaw] ?? null;
+
+        // 場所2 + 時間 + 天気 すべて指定されたらセクションを表示しない
+        const bioAllFixed =
+          bioFixedPlace2 && bioFixedTime && bioFixedWeathersRaw;
+
+        // セクションタイトルに絞り込み条件を付記
+        const _bioCondParts = [];
+        if (bioFixedPlace1) _bioCondParts.push(`\u{1F4CD}${bioFixedPlace1}`);
+        if (bioFixedPlace2) _bioCondParts.push(`\u{1F4CD}${bioFixedPlace2}`);
+        if (bioFixedTime)
+          _bioCondParts.push(
+            `\u23F0${BIO_ENV_TIME_LABELS[bioFixedTime] ?? bioFixedTime}`,
+          );
+        if (bioFixedWeathersRaw)
+          _bioCondParts.push(
+            `${bioFixedWeathers ? bioFixedWeathers.map((w) => BIO_ENV_WEATHER_LABELS[w] ?? w).join("/") : bioFixedWeathersRaw}`,
+          );
+        const bioEnvSectionTitle =
+          `\u{1F3C6} 生物マスター おすすめ環境（今取れる中でのTop1）` +
+          (_bioCondParts.length ? `　${_bioCondParts.join("　")}` : "");
+
         /**
          * 指定趣味のマスター未達通常種について、
-         * 最も多くの種が重なる (場所1, 時間帯, 天気) 組み合わせを Top3 返す。
-         * 場所1 が異なる上位3件を返す（同一場所の重複を除く）。
+         * 最も多くの種が重なる (場所2, 時間帯, 天気) 組み合わせ Top1 を返す。
+         * プルダウンで指定済みの軸はその値に固定して探索する。
          */
         const calcBioEnvTop = (hobbyName, userLevel) => {
-          const targets = creatures.filter(
+          let targets = creatures.filter(
             (c) =>
               c.hobby === hobbyName &&
               c.season === "normal" &&
               !c.master &&
               (c.level ?? 1) <= userLevel,
           );
+          // 場所1 指定時：その場所1 に出現する生物のみに絞る
+          if (bioFixedPlace1) {
+            targets = targets.filter((c) =>
+              (c.places1 || []).includes(bioFixedPlace1),
+            );
+          }
           if (targets.length === 0) return [];
 
           // 場所2 が空の生物は場所1 をフォールバックとして使う
@@ -4373,19 +4681,84 @@ function initPageTest() {
             return p2.length > 0 ? p2 : c.places1 || [];
           };
 
-          const allPlace2s = [
-            ...new Set(targets.flatMap((c) => getEffectivePlaces(c))),
-          ];
+          // ── 天候による事前フィルタリング ──
+          // 「今 X」型：creature.weathers に X が含まれていればOK（OR的）
+          // AND型セット：creature.weathers が required を全て含む必要がある
+          //              rainbow_only は exact = true で weathers が ["虹"] のみ
+          let weatherFiltered = targets;
+          if (bioNowWeather) {
+            weatherFiltered = targets.filter((c) =>
+              (c.weathers || []).includes(bioNowWeather),
+            );
+          } else if (bioSetWeatherDef) {
+            const { required, exact } = bioSetWeatherDef;
+            weatherFiltered = targets.filter((c) => {
+              const w = c.weathers || [];
+              if (exact) {
+                return (
+                  w.length === required.length &&
+                  required.every((wx) => w.includes(wx))
+                );
+              }
+              return required.every((wx) => w.includes(wx));
+            });
+          }
+          if (weatherFiltered.length === 0) return [];
+
+          // 探索範囲：place2 指定があればその値に固定
+          // place1 指定時はその場所1 配下の place2 候補のみに絞る
+          const placesToSearch = bioFixedPlace2
+            ? [bioFixedPlace2]
+            : [
+                ...new Set(
+                  weatherFiltered.flatMap((c) => getEffectivePlaces(c)),
+                ),
+              ];
+          const timesToSearch = bioFixedTime ? [bioFixedTime] : BIO_ENV_TIMES;
+
           const allCombos = [];
 
-          for (const place of allPlace2s) {
-            for (const time of BIO_ENV_TIMES) {
-              for (const weather of BIO_ENV_WEATHERS) {
-                const matching = targets.filter(
+          if (bioNowWeather || !bioSetWeatherDef) {
+            // 「今 X」型 or 天候指定なし：weather 軸もループ
+            const weathersToIterate = bioNowWeather
+              ? [bioNowWeather]
+              : BIO_ENV_WEATHERS;
+            for (const place of placesToSearch) {
+              for (const time of timesToSearch) {
+                for (const weather of weathersToIterate) {
+                  const matching = weatherFiltered.filter(
+                    (c) =>
+                      getEffectivePlaces(c).includes(place) &&
+                      (c.times || []).includes(time) &&
+                      (c.weathers || []).includes(weather),
+                  );
+                  if (matching.length === 0) continue;
+                  const count = matching.length;
+                  const levelSum = matching.reduce(
+                    (s, c) => s + (c.level ?? 1),
+                    0,
+                  );
+                  allCombos.push({
+                    place,
+                    time,
+                    weather,
+                    matching,
+                    count,
+                    score: count * 1000 + levelSum,
+                  });
+                }
+              }
+            }
+          } else {
+            // AND型セット：weather 軸なし、事前フィルタ済みの生物だけで (place, time) を探索
+            // combo.weather にはセットのラベルを入れる
+            const weatherLabel = bioSetWeatherDef.required.join("/");
+            for (const place of placesToSearch) {
+              for (const time of timesToSearch) {
+                const matching = weatherFiltered.filter(
                   (c) =>
                     getEffectivePlaces(c).includes(place) &&
-                    (c.times || []).includes(time) &&
-                    (c.weathers || []).includes(weather),
+                    (c.times || []).includes(time),
                 );
                 if (matching.length === 0) continue;
                 const count = matching.length;
@@ -4396,7 +4769,7 @@ function initPageTest() {
                 allCombos.push({
                   place,
                   time,
-                  weather,
+                  weather: weatherLabel,
                   matching,
                   count,
                   score: count * 1000 + levelSum,
@@ -4406,46 +4779,70 @@ function initPageTest() {
           }
 
           allCombos.sort((a, b) => b.score - a.score);
+          if (allCombos.length === 0) return [];
 
-          // 上位1件のみ返す
-          return allCombos.length > 0 ? [allCombos[0]] : [];
+          const best = allCombos[0];
+          const bestNames = new Set(best.matching.map((c) => c.name));
+
+          // 同じ place・weather で matching セットが一致する全時間帯を収集
+          const equivalentTimes = allCombos
+            .filter(
+              (co) =>
+                co.place === best.place &&
+                co.weather === best.weather &&
+                co.matching.length === best.matching.length &&
+                co.matching.every((c) => bestNames.has(c.name)),
+            )
+            .map((co) => co.time);
+
+          // BIO_ENV_TIMES の順番で並べる
+          const sortedTimes = BIO_ENV_TIMES.filter((t) =>
+            equivalentTimes.includes(t),
+          );
+
+          return [{ ...best, times: sortedTimes }];
         };
 
-        // 3趣味の結果を組み立て（趣味ボタンがOFFの場合は非表示）
+        // 3趣味の結果を組み立て（趣味ボタンがOFFの場合 or 全軸指定済みは非表示）
         let bioEnvHtml = "";
-        for (const { hobby, level, icon, label } of BIO_ENV_HOBBY_META) {
-          if (!enabledHobbies.has(hobby)) continue;
-          const topCombos = calcBioEnvTop(hobby, level);
-          if (topCombos.length === 0) {
-            bioEnvHtml += `<p class="test-cat-label">${icon} ${label}：マスター未達なし 🎉</p>`;
-            continue;
+        if (!bioAllFixed) {
+          for (const { hobby, level, icon, label } of BIO_ENV_HOBBY_META) {
+            if (!enabledHobbies.has(hobby)) continue;
+            const topCombos = calcBioEnvTop(hobby, level);
+            if (topCombos.length === 0) {
+              bioEnvHtml += `<p class="test-cat-label">${icon} ${label}：マスター未達なし</p>`;
+              continue;
+            }
+            bioEnvHtml += `<p class="test-cat-label">${icon} ${label}</p>`;
+            const combo = topCombos[0];
+            const timesArr = combo.times ?? [combo.time];
+            const timeLabel = bioFixedTime
+              ? (BIO_ENV_TIME_LABELS[bioFixedTime] ?? bioFixedTime)
+              : timesArr.length === BIO_ENV_TIMES.length
+                ? "全時間"
+                : timesArr.map((t) => BIO_ENV_TIME_LABELS[t] ?? t).join(" / ");
+            const envBadge =
+              `<span class="bio-env-badge">` +
+              `\u{1F4CD} ${combo.place}\u3000` +
+              `\u23F0 ${timeLabel}\u3000` +
+              `${BIO_ENV_WEATHER_LABELS[combo.weather] ?? combo.weather}` +
+              `</span>` +
+              `<span class="bio-env-count"> \u2192 ${combo.count}種同時マスター狙い可</span>`;
+            const chipsHtml = `<div class="test-chips">${combo.matching
+              .slice()
+              .sort((a, b) => (b.level ?? 1) - (a.level ?? 1))
+              .map((c) => renderChip(c, `Lv${c.level ?? 1}`))
+              .join("")}</div>`;
+            bioEnvHtml +=
+              `<div class="bio-env-combo bio-env-combo--top">` +
+              `<div class="bio-env-combo-header">${envBadge}</div>` +
+              chipsHtml +
+              `</div>`;
           }
-          bioEnvHtml += `<p class="test-cat-label">${icon} ${label}</p>`;
-          const combo = topCombos[0];
-          const envBadge =
-            `<span class="bio-env-badge">` +
-            `📍 ${combo.place}　` +
-            `⏰ ${BIO_ENV_TIME_LABELS[combo.time] ?? combo.time}　` +
-            `🌤 ${BIO_ENV_WEATHER_LABELS[combo.weather] ?? combo.weather}` +
-            `</span>` +
-            `<span class="bio-env-count"> → ${combo.count}種同時マスター狙い可</span>`;
-          const chipsHtml = `<div class="test-chips">${combo.matching
-            .slice()
-            .sort((a, b) => (b.level ?? 1) - (a.level ?? 1))
-            .map((c) => renderChip(c, `Lv${c.level ?? 1}`))
-            .join("")}</div>`;
-          bioEnvHtml +=
-            `<div class="bio-env-combo bio-env-combo--top">` +
-            `<div class="bio-env-combo-header">${envBadge}</div>` +
-            chipsHtml +
-            `</div>`;
         }
 
         if (bioEnvHtml) {
-          html += renderSection(
-            `🌿 生物マスター おすすめ環境（趣味Lv以下の未達通常種・全場所計算）`,
-            bioEnvHtml,
-          );
+          html += renderSection(bioEnvSectionTitle, bioEnvHtml);
         }
 
         // ── 以下、既存の Top10 と全件リスト ──
@@ -4455,12 +4852,12 @@ function initPageTest() {
           .slice(0, 10);
         if (topNotMaster.length > 0) {
           html += renderSection(
-            `🏆 おすすめの今取れるマスター未達 Top10（出現条件が厳しい順）`,
+            `\u{1F3C6} おすすめの今取れるマスター未達 Top10（出現条件が厳しい順）`,
             renderChips(topNotMaster),
           );
         }
         html += renderSection(
-          `🏆 マスターを増やす ─ 今取れるマスター未達の通常種（${notMaster.length}種）`,
+          `\u{1F3C6} マスターを増やす ─ 今取れるマスター未達の通常種（${notMaster.length}種）`,
           renderChips(notMaster),
         );
         break;
@@ -4511,7 +4908,7 @@ function initPageTest() {
           .slice(0, 10);
         if (topFood.length > 0) {
           html += renderSection(
-            `🐟 おすすめ Top10（希少・猫チェック少ない順）`,
+            `\u{1F41F} おすすめ Top10（希少・猫チェック少ない順）`,
             `<div class="test-chips">${topFood.map((c) => renderChip(c, "", allFavNameSet.has(c.name) ? "test-chip--favorite" : "")).join("")}</div>`,
           );
         }
@@ -4538,7 +4935,7 @@ function initPageTest() {
 
     // ── 末尾：今の状況で捕れる生き物 ──
     /* html += renderSection(
-      `📍 ${situationText}で捕れる生き物（${filtered.length}種）`,
+      `\u{1F4CD} ${situationText}で捕れる生き物（${filtered.length}種）`,
       renderChips(filtered, (c) => fmt(getStar2Price(c))),
     ); */
 
