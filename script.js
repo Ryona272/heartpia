@@ -41,6 +41,7 @@ const displayCountPage2El = document.getElementById("displayCountPage2");
 const acquiredCountPage2El = document.getElementById("acquiredCountPage2");
 const star5CountPage2El = document.getElementById("star5CountPage2");
 const masterCountPage2El = document.getElementById("masterCountPage2");
+const recommendPage2El = document.getElementById("recommendPage2");
 const catTabsEl = document.getElementById("catTabs");
 const catNameInput = document.getElementById("catNameInput");
 const catResetBtn = document.getElementById("catResetBtn");
@@ -2160,6 +2161,159 @@ function getIngredientMatchedNames(keyword, items) {
   return matchedNames;
 }
 
+// =======================
+// おすすめTop5（ページ2：園芸・料理）
+// =======================
+
+/**
+ * 全調理レシピ（全シーズン含む）を走査して
+ * 食材名 → 使用延べ回数 のマップを返す。
+ * 同レシピ内に同名食材が複数あれば複数カウント。
+ */
+function buildGardeningIngredientUsageMap() {
+  const map = new Map();
+  for (const item of page2Creatures) {
+    if (!isPage2Cooking(item)) continue;
+    if (!Array.isArray(item.food)) continue;
+    for (const ingredient of item.food) {
+      map.set(ingredient, (map.get(ingredient) || 0) + 1);
+    }
+  }
+  return map;
+}
+
+/**
+ * 園芸アイテムのおすすめスコアを返す。
+ * 1次: 料理レシピでの使用延べ回数（多いほど高い）
+ * 2次: 育成時間の短さ（同列差別化用・重みは小）
+ */
+function computeGardeningRecommendScore(item, usageMap) {
+  const usage = usageMap.get(item.name) || 0;
+  const time = item.time ?? 9999;
+  return usage * 10000 - time;
+}
+
+/**
+ * 料理アイテムのおすすめスコアを返す。
+ * 1次: 他の料理の食材になっている（hobby に "食材" を含む）かどうか
+ */
+function computeCookingRecommendScore(item) {
+  return getPage2HobbyParts(item).includes("食材") ? 1 : 0;
+}
+
+/**
+ * ページ2のおすすめTop5セクションを描画する。
+ * ★5 / マスター toggle が ON のとき各々のパネルを表示する。
+ * 通常シーズン・レベル解放済みのアイテムのみが対象。
+ * 天候・時間に関係なく常時表示。
+ */
+function renderPage2RecommendTop5(gardenLevel, cookingLevel) {
+  if (!recommendPage2El) return;
+
+  const TOP_N = 5;
+  const EXCLUDED_NAMES = new Set(["不気味な食べ物", "不気味な飲み物"]);
+  const isNormalSeason = (item) => !item.season || item.season === "normal";
+  const isLevelOk = (item) =>
+    getEffectiveLevelPage2(item, gardenLevel, cookingLevel) >= (item.level ?? 1);
+  const usageMap = buildGardeningIngredientUsageMap();
+
+  const gardenCandidates = page2Creatures.filter(
+    (item) =>
+      isPage2Gardening(item) &&
+      isNormalSeason(item) &&
+      !EXCLUDED_NAMES.has(item.name) &&
+      isLevelOk(item),
+  );
+
+  const cookingCandidates = page2Creatures.filter(
+    (item) =>
+      isPage2Cooking(item) &&
+      isNormalSeason(item) &&
+      !EXCLUDED_NAMES.has(item.name) &&
+      isLevelOk(item),
+  );
+
+  const getTop5 = (candidates, scoreFn, excludeFn) =>
+    candidates
+      .filter((item) => !excludeFn(item))
+      .map((item) => ({ item, score: scoreFn(item) }))
+      .sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        return page2Creatures.indexOf(a.item) - page2Creatures.indexOf(b.item);
+      })
+      .slice(0, TOP_N);
+
+  const renderRankRow = (rank, item, metaLabel) =>
+    `<div class="recommend-row">` +
+    `<span class="recommend-rank">${rank}</span>` +
+    (item.img
+      ? `<img class="recommend-img" src="${item.img}" alt="${item.name}" loading="eager" onerror="this.style.display='none'">`
+      : "") +
+    `<span class="recommend-name">${item.name}</span>` +
+    `<span class="recommend-meta">${metaLabel}</span>` +
+    `</div>`;
+
+  const buildGardenRows = (excludeFn) =>
+    getTop5(
+      gardenCandidates,
+      (i) => computeGardeningRecommendScore(i, usageMap),
+      excludeFn,
+    ).map(({ item }, i) => {
+      const usage = usageMap.get(item.name) || 0;
+      const label =
+        usage > 0
+          ? `料理で${usage}回使用`
+          : `育成${formatHourToJpTime(item.time ?? 0)}`;
+      return renderRankRow(i + 1, item, label);
+    });
+
+  const buildCookingRows = (excludeFn) =>
+    getTop5(cookingCandidates, computeCookingRecommendScore, excludeFn).map(
+      ({ item }, i) => {
+        const label = getPage2HobbyParts(item).includes("食材")
+          ? "料理食材"
+          : "料理のみ";
+        return renderRankRow(i + 1, item, label);
+      },
+    );
+
+  const renderPanel = (title, rows) =>
+    `<div class="recommend-panel">` +
+    `<div class="recommend-panel-title">${title}</div>` +
+    (rows.length > 0
+      ? rows.join("")
+      : `<p class="recommend-empty">対象なし</p>`) +
+    `</div>`;
+
+  const renderSection = (titleText, gardenRows, cookingRows) =>
+    `<div class="recommend-section">` +
+    `<div class="recommend-section-title">${titleText}</div>` +
+    `<div class="recommend-panels">` +
+    renderPanel("🌿 園芸", gardenRows) +
+    renderPanel("🍳 料理", cookingRows) +
+    `</div></div>`;
+
+  let html = "";
+
+  if (showFiveStarPage2) {
+    html += renderSection(
+      `★5 おすすめ順 Top${TOP_N}`,
+      buildGardenRows((item) => item.fiveStar),
+      buildCookingRows((item) => item.fiveStar),
+    );
+  }
+
+  if (showMasterPage2) {
+    html += renderSection(
+      `マスター おすすめ順 Top${TOP_N}`,
+      buildGardenRows((item) => item.master),
+      buildCookingRows((item) => item.master),
+    );
+  }
+
+  recommendPage2El.innerHTML = html;
+}
+
 /**
  * ページ2の全フィルター値を読み取り、ソート・絞り込みして renderPage2List() を呼び出す。
  */
@@ -2284,6 +2438,7 @@ function filterAndRenderPage2() {
 
   renderPage2List(resultPage2, sorted, gardenLevel, cookingLevel);
   updateCountersPage2(sorted);
+  renderPage2RecommendTop5(gardenLevel, cookingLevel);
 }
 
 /**

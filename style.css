@@ -2879,3 +2879,114 @@ button.is-pressed,
 .test-chip.chip-cooking .test-chip-name { color: #835700; }
 .test-chip.chip-cooking .test-chip-hobby { color: #a06700; }
 
+/* =======================
+   おすすめTop5（ページ2：園芸・料理）
+   ======================= */
+.recommend-top5-wrap {
+  margin-bottom: 20px;
+}
+
+.recommend-section {
+  margin-bottom: 16px;
+  background: rgba(255, 253, 244, 0.85);
+  border: 1px solid rgba(193, 164, 101, 0.3);
+  border-radius: 12px;
+  padding: 12px 14px 14px;
+  box-shadow: 0 2px 8px rgba(46, 56, 64, 0.07);
+}
+
+.recommend-section-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff9ee;
+  background: linear-gradient(90deg, var(--tab-active), #e8ad6a);
+  border-radius: 8px;
+  padding: 5px 12px;
+  margin-bottom: 10px;
+  letter-spacing: 0.04em;
+}
+
+.recommend-panels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.recommend-panel {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(193, 164, 101, 0.2);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.recommend-panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--tab-active);
+  margin-bottom: 6px;
+  border-bottom: 1px solid rgba(193, 164, 101, 0.25);
+  padding-bottom: 4px;
+}
+
+.recommend-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 2px;
+  border-bottom: 1px solid rgba(193, 164, 101, 0.1);
+  font-size: 13px;
+}
+
+.recommend-row:last-child {
+  border-bottom: none;
+}
+
+.recommend-rank {
+  flex-shrink: 0;
+  width: 18px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--tab-active);
+  text-align: right;
+}
+
+.recommend-img {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.recommend-name {
+  flex: 1;
+  font-weight: 600;
+  color: #3a2e1e;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recommend-meta {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: #7a6040;
+  background: rgba(219, 151, 82, 0.12);
+  border-radius: 4px;
+  padding: 1px 5px;
+  white-space: nowrap;
+}
+
+.recommend-empty {
+  font-size: 12px;
+  color: #999;
+  margin: 4px 0 0;
+}
+
+@media (max-width: 480px) {
+  .recommend-panels {
+    grid-template-columns: 1fr;
+  }
+}
+
