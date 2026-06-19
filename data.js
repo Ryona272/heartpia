@@ -2987,7 +2987,7 @@ const cookingCreatures = [
     note: "「オリジナルロールケーキ」の材料を変えることでレシピを獲得",
   },
   {
-    name: "青いロールケーキ",
+    name: "水色ロールケーキ",
     hobby: ["料理"],
     level: 1,
     food: ["卵", "牛乳", "青のキャンディ", "青のキャンディ"],
@@ -2997,7 +2997,7 @@ const cookingCreatures = [
     note: "「オリジナルロールケーキ」の材料を変えることでレシピを獲得",
   },
   {
-    name: "ブルーロールケーキ",
+    name: "青いロールケーキ",
     hobby: ["料理"],
     level: 1,
     food: ["卵", "牛乳", "ブルーキャンディ", "ブルーキャンディ"],
@@ -5264,6 +5264,107 @@ const otherEventPage2Creatures = [
     season: ["otherevent", "normal"],
     eventname: "虹色のことば",
   },
+  {
+    name: "三角の白米ちまき",
+    hobby: ["料理"],
+    level: 1,
+    food: ["ちまきの葉", "稲", "あずき", "あずき"],
+    rarityData: [{ star: 1, price: 240 }],
+    staminaRecovery: "25",
+    buff: "なし",
+    note: [
+      "「仲夏の端陽」の交換商店にてレシピを購入",
+      "あずきは稲,卵,肉でも代用可能",
+      "ちまきの葉は交換商店で購入",
+    ],
+    season: ["otherevent", "normal"],
+    eventname: "仲夏の端陽",
+  },
+  {
+    name: "三角のあずきちまき",
+    hobby: ["料理"],
+    level: 1,
+    food: ["ちまきの葉", "稲", "あずき", "あずき"],
+    rarityData: [{ star: 1, price: 260 }],
+    staminaRecovery: "25",
+    buff: "なし",
+    note: [
+      "三角の白米ちまきを作成中、確率でレシピを取得",
+      "ちまきの葉は交換商店で購入",
+    ],
+    season: ["otherevent", "normal"],
+    eventname: "仲夏の端陽",
+  },
+  {
+    name: "三角の卵黄入り肉ちまき",
+    hobby: ["料理"],
+    level: 1,
+    food: ["ちまきの葉", "稲", "卵", "肉"],
+    rarityData: [{ star: 1, price: 460 }],
+    staminaRecovery: "40",
+    buff: "なし",
+    note: [
+      "三角の白米ちまきのあずきを卵と肉に変えるとレシピを取得",
+      "ちまきの葉は交換商店で購入",
+    ],
+    season: ["otherevent", "normal"],
+    eventname: "仲夏の端陽",
+  },
+  {
+    name: "枕型の白米ちまき",
+    hobby: ["料理"],
+    level: 1,
+    food: ["ちまきの葉", "稲", "あずき", "あずき"],
+    rarityData: [{ star: 1, price: 240 }],
+    staminaRecovery: "25",
+    buff: "なし",
+    note: [
+      "「仲夏の端陽」の交換商店にてレシピを購入",
+      "あずきは稲,卵,肉でも代用可能",
+      "ちまきの葉は交換商店で購入",
+    ],
+    season: ["otherevent", "normal"],
+    eventname: "仲夏の端陽",
+  },
+  {
+    name: "枕型のこしあんちまき",
+    hobby: ["料理"],
+    level: 1,
+    food: ["ちまきの葉", "稲", "あずき", "あずき"],
+    rarityData: [{ star: 1, price: 260 }],
+    staminaRecovery: "25",
+    buff: "なし",
+    note: [
+      "枕型の白米ちまきを作成中、確率でレシピを取得",
+      "ちまきの葉は交換商店で購入",
+    ],
+    season: ["otherevent", "normal"],
+    eventname: "仲夏の端陽",
+  },
+  {
+    name: "枕型の卵黄入り肉ちまき",
+    hobby: ["料理"],
+    level: 1,
+    food: ["ちまきの葉", "稲", "卵", "肉"],
+    rarityData: [{ star: 1, price: 460 }],
+    staminaRecovery: "40",
+    buff: "なし",
+    note: [
+      "枕型の白米ちまきのあずきを卵と肉に変えるとレシピを取得",
+      "ちまきの葉は交換商店で購入",
+    ],
+    season: ["otherevent", "normal"],
+    eventname: "仲夏の端陽",
+  },
+  {
+    name: "ちまきの葉",
+    hobby: ["販売", "食材"],
+    price: { buy: 50, sell: 25 },
+    level: 1,
+    note: "「仲夏の端陽」の交換商店にて購入",
+    season: ["otherevent"],
+    eventname: "仲夏の端陽",
+  },
 ];
 
 //シーズン/フェス生物をメイン配列に通合
@@ -5773,3 +5874,6 @@ const wildAnimalData = [
     eventActive: true, // イベント開催中: true / 終了: false
   },
 ];
+
+//★販売食材など、獲得チェックボックスを付ける
+//料理ページのおススメをおススメの方にもっていく
