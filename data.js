@@ -1765,7 +1765,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 30 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "シジュウカラ",
@@ -1778,7 +1781,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 30 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ミソサザイ",
@@ -1791,7 +1797,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 30 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ウソ",
@@ -1804,7 +1813,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 30 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ズアオアトリ",
@@ -1817,7 +1829,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 30 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ルリコンゴウインコ",
@@ -1830,7 +1845,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 30 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ヒメモリバト",
@@ -1843,7 +1861,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 40 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "シラコバト",
@@ -1856,7 +1877,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 40 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ソデグロバト",
@@ -1869,7 +1893,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 40 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "オオフラミンゴ",
@@ -1891,7 +1918,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 60 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "インドクジャク",
@@ -1904,7 +1934,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 40 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "マガモ",
@@ -1917,7 +1950,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 50 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "エナガ",
@@ -1930,7 +1966,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 8 }],
     star5Weathers: ["晴れ", "雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は晴れで確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
     //雨、虹で出るか確認
   },
   {
@@ -1944,7 +1983,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 40 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ヒゲガラ",
@@ -1957,7 +1999,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 40 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ズアカモズ",
@@ -1970,7 +2015,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 40 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ウォンガバト",
@@ -1983,7 +2031,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 60 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "コアオバト",
@@ -1996,7 +2047,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 60 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ヒドリガモ",
@@ -2009,7 +2063,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 70 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "カモメ",
@@ -2022,7 +2079,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 70 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ニシコウライウグイス",
@@ -2035,7 +2095,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 60 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "カノコスズメ",
@@ -2048,7 +2111,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 40 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "シマエナガ",
@@ -2061,7 +2127,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 40 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ベニコンゴウインコ",
@@ -2074,7 +2143,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 40 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "アカツクシガモ",
@@ -2087,7 +2159,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 70 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ケワタガモ",
@@ -2100,7 +2175,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 70 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "オデュアンカモメ",
@@ -2113,7 +2191,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 70 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ヨーロッパヒメウ",
@@ -2126,7 +2207,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 70 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: ["★５は雨(雪)で確認", "孤島など"],
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "タイリクハクセキレイ",
@@ -2139,7 +2223,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 60 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ハイズキンダルマエナガ",
@@ -2152,7 +2239,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 60 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ギンザンマシコ",
@@ -2165,7 +2255,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 60 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "フウチョウモドキ",
@@ -2178,7 +2271,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 60 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "キンミノヒメアオバト",
@@ -2191,7 +2287,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 70 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ギンケイ",
@@ -2204,7 +2303,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 70 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ミコアイサ",
@@ -2217,7 +2319,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 90 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "キバラメジロハエトリ",
@@ -2230,7 +2335,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 60 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ヨーロッパハチクイ",
@@ -2243,7 +2351,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 90 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ヒワコンゴウインコ",
@@ -2256,7 +2367,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 60 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "オリーブバト",
@@ -2269,7 +2383,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 110 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "コフラミンゴ",
@@ -2282,7 +2399,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 110 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "クロアジサシ",
@@ -2295,7 +2415,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 90 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "シメ",
@@ -2308,7 +2431,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 60 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "キンムネバト",
@@ -2321,7 +2447,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 110 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "チシマウガラス",
@@ -2334,7 +2463,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 90 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "トラフズク",
@@ -2347,7 +2479,11 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 190 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認(頭を回す動作)",
+    note: [
+      "★５は頭を回す動作",
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ルリガラ",
@@ -2360,7 +2496,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 90 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "スミレコンゴウインコ",
@@ -2373,7 +2512,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 90 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ボタンバト",
@@ -2386,7 +2528,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 110 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "アジサシ",
@@ -2399,7 +2544,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 140 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "チョウゲンボウ",
@@ -2412,7 +2560,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 190 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ルリツグミ",
@@ -2425,7 +2576,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 120 }],
     star5Weathers: ["虹"],
     star5Times: ["18-00"],
-    note: ["★５は虹で確認(18:00-00:00)", "お城の裏庭"],
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ベニヒワ",
@@ -2438,7 +2592,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 90 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "モモイロバト",
@@ -2451,7 +2608,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 110 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ハヤブサ",
@@ -2464,7 +2624,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 260 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ナナイロフウキンチョウ",
@@ -2477,7 +2640,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 120 }],
     star5Weathers: ["虹"],
     star5Times: ["18-00"],
-    note: ["★５は虹で確認(18:00-00:00)", "森側の郊外"],
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ベニイロフラミンゴ",
@@ -2490,10 +2656,13 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 220 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
-    name: "マクジャク", //★要調べ
+    name: "マクジャク",
     hobby: "野鳥観察",
     level: 9,
     places1: ["漁村"],
@@ -2501,11 +2670,14 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 150 }],
-    star5Weathers: [],
-    star5Times: [],
-    noStar5Data: true, // ★５未確認のため非表示。データ追加時はこの行を削除
-    note: ["★５は未確認", "「巣ごもり」追加段階でのみ出現"],
-    //晴れ,12-18,巣ごもり：一匹も現れず
+    star5Weathers: ["虹"],
+    star5Times: ["12-18"],
+    note: [
+      "「巣ごもり」追加段階でのみ出現",
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
+    //晴れと雨,12-18,巣ごもり：一匹も現れず
   },
   {
     name: "カオジロオタテガモ",
@@ -2518,7 +2690,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 180 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "インペリアルシャグ",
@@ -2531,7 +2706,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 180 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "アゾレスウソ",
@@ -2544,7 +2722,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 120 }],
     star5Weathers: ["虹"],
     star5Times: ["18-00"],
-    note: "★５は虹で確認(18:00-00:00)",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ロクショウヒタキ",
@@ -2557,7 +2738,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 120 }],
     star5Weathers: ["虹"],
     star5Times: ["18-00"],
-    note: "★５は虹で確認(18:00-00:00)",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "アカアシチョウゲンボウ",
@@ -2570,7 +2754,10 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 260 }],
     star5Weathers: ["虹"],
     star5Times: ["18-00"],
-    note: "★５は虹で確認(18:00-00:00)",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
   {
     name: "ワシミミズク",
@@ -2583,7 +2770,92 @@ const birdCreatures = [
     rarityData: [{ star: 2, price: 260 }],
     star5Weathers: ["虹"],
     star5Times: [],
-    note: "★５は虹で確認(頭を回す動作)",
+    note: [
+      "★５は頭を回す動作",
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
+  },
+  {
+    name: "コムクドリ",
+    hobby: "野鳥観察",
+    level: 11,
+    places1: ["花畑"],
+    places2: ["風車の花畑"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["晴れ", "雨(雪)", "虹"],
+    rarityData: [{ star: 2, price: 120 }],
+    star5Weathers: ["虹"],
+    star5Times: [], //夜時間の可能性
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
+  },
+  {
+    name: "クロヒゲバト",
+    hobby: "野鳥観察",
+    level: 11,
+    places1: ["郊外"],
+    places2: [],
+    times: ["00-06", "12-18", "18-00"],
+    weathers: ["晴れ", "虹"],
+    rarityData: [{ star: 2, price: 150 }],
+    star5Weathers: ["虹"],
+    star5Times: ["12-18"],
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
+  },
+  {
+    name: "トモエガモ",
+    hobby: "野鳥観察",
+    level: 11,
+    places1: ["温泉山"],
+    places2: ["温泉山の湖"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["虹"],
+    rarityData: [{ star: 2, price: 180 }],
+    star5Weathers: ["虹"],
+    star5Times: ["12-18"],
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
+  },
+  {
+    name: "インカアジサシ",
+    hobby: "野鳥観察",
+    level: 11,
+    places1: ["温泉山"],
+    places2: ["旧海"],
+    times: ["06-12", "12-18", "18-00"],
+    weathers: ["雨(雪)", "虹"],
+    rarityData: [{ star: 2, price: 180 }],
+    star5Weathers: ["虹"],
+    star5Times: ["12-18"],
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
+  },
+  {
+    name: "シロクジャク", //★要確認
+    hobby: "野鳥観察",
+    level: 11,
+    places1: ["漁村"],
+    places2: ["「巣ごもり」"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["晴れ", "雨(雪)", "虹"],
+    rarityData: [{ star: 2, price: 0 }],
+    star5Weathers: ["虹"],
+    star5Times: [],
+    note: [
+      "「巣ごもり」追加段階でのみ出現",
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
   },
 ];
 
@@ -3809,7 +4081,10 @@ const snowseasonCreatures = [
     rarityData: [{ star: 2, price: 80, tc: 60 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
     season: "snowseason",
   },
   {
@@ -3823,7 +4098,10 @@ const snowseasonCreatures = [
     rarityData: [{ star: 2, price: 70, tc: 60 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
     season: "snowseason",
   },
   {
@@ -3837,7 +4115,10 @@ const snowseasonCreatures = [
     rarityData: [{ star: 2, price: 70, tc: 60 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
     season: "snowseason",
   },
   {
@@ -3851,7 +4132,10 @@ const snowseasonCreatures = [
     rarityData: [{ star: 2, price: 70, tc: 60 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: "★５は雨(雪)で確認",
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
     season: "snowseason",
   },
   {
