@@ -2367,6 +2367,19 @@ button.is-pressed,
   color: #5f4a22;
 }
 
+/* おすすめページ: 目的ボタン（filter-toggleを上書き） */
+.test-goal-btn {
+  font-size: 13px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  box-shadow: none;
+  letter-spacing: 0.01em;
+}
+.test-goal-btn.active {
+  background: #4e3b18;
+  border-color: #4e3b18;
+}
+
 /* 趣味フィルターボタン行 */
 .test-hobby-filter-row {
   display: flex;
@@ -2430,20 +2443,23 @@ button.is-pressed,
 }
 
 .test-section {
-  background: #fffef9;
+  margin-bottom: 16px;
+  background: rgba(255, 253, 244, 0.85);
+  border: 1px solid rgba(193, 164, 101, 0.3);
   border-radius: 12px;
-  padding: 14px;
-  border: 1px solid rgba(193, 164, 101, 0.2);
-  box-shadow: 0 3px 10px rgba(46, 56, 64, 0.06);
+  padding: 12px 14px 14px;
+  box-shadow: 0 2px 8px rgba(46, 56, 64, 0.07);
 }
 
 .test-section-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: #5f4a22;
+  font-size: 15px;
+  font-weight: 800;
+  color: #fff9ee;
+  background: linear-gradient(90deg, var(--tab-active), #e8ad6a);
+  border-radius: 8px;
+  padding: 5px 12px;
   margin: 0 0 10px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid rgba(193, 164, 101, 0.25);
+  letter-spacing: 0.04em;
 }
 
 .test-chips {
@@ -2790,8 +2806,9 @@ button.is-pressed,
 .test-cat-label {
   font-size: 13px;
   font-weight: 700;
-  color: #6b5c3e;
-  margin: 8px 0 4px;
+  color: #4e3b18;
+  margin: 10px 0 4px;
+  letter-spacing: 0.01em;
 }
 
 /* ===== 生物マスターおすすめ環境 ===== */
@@ -2834,6 +2851,60 @@ button.is-pressed,
   font-size: 12px;
   color: #555;
   font-weight: 600;
+}
+.env-time-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1.5px solid rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  font-size: 1.1rem;
+  line-height: 1;
+  vertical-align: middle;
+  overflow: hidden;
+}
+.env-time-badge--off {
+  opacity: 0.3;
+  filter: grayscale(1);
+}
+.env-time-badge .card-time-start,
+.env-time-badge .card-time-end {
+  position: absolute;
+  font-size: 0.32rem;
+  font-weight: 700;
+  color: #444;
+  line-height: 1;
+  pointer-events: none;
+}
+.env-time-badge .card-time-start { top: 2px; left: 2px; }
+.env-time-badge .card-time-end   { bottom: 2px; right: 2px; }
+.env-weather-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  overflow: hidden;
+  vertical-align: middle;
+}
+.env-weather-chip .env-weather-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.env-weather-img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  vertical-align: middle;
 }
 
 /* ===== チE��ト�Eージ チッチEホビー別カラー ===== */
