@@ -1671,6 +1671,7 @@ function isPage2Cooking(item) {
 const COOKING_WAGON_IMAGE_BY_TYPE = {
   stove: "img/other/コンロ.png",
   "penguin-stove": "img/other/ペンギンコンロ.png",
+  "whale-stove": "img/other/潮汐コンロ.png",
   "popcorn-wagon": "img/other/ポップコーン移動ワゴン.png",
   "block-wagon": "img/other/積み木移動ワゴン.png",
 };
