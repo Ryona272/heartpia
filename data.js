@@ -4229,8 +4229,8 @@ const whaleseasonCreatures = [
     places2: ["クジラ海", "「浅海の魚群」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0, tc: 0 }],
-    note: "", //★要調べ魚影
+    rarityData: [{ star: 1, price: 100, tc: 40 }],
+    note: "魚影：小",
     season: "whaleseason",
   },
   {
@@ -4241,8 +4241,8 @@ const whaleseasonCreatures = [
     places2: ["クジラ海", "「浅海の魚群」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0, tc: 0 }],
-    note: "", //★要調べ魚影
+    rarityData: [{ star: 1, price: 100, tc: 40 }],
+    note: "魚影：小",
     season: "whaleseason",
   },
   {
@@ -4253,8 +4253,8 @@ const whaleseasonCreatures = [
     places2: ["「浅海の魚群」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0, tc: 0 }],
-    note: "追加段階のみ出現", //★要調べ魚影
+    rarityData: [{ star: 1, price: 150, tc: 60 }],
+    note: ["魚影：小", "追加段階のみ出現"],
     season: "whaleseason",
   },
   {
@@ -4265,8 +4265,8 @@ const whaleseasonCreatures = [
     places2: ["クジラ海", "「浅海の魚群」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0, tc: 0 }],
-    note: "", //★要調べ魚影
+    rarityData: [{ star: 1, price: 155, tc: 70 }],
+    note: "魚影：中",
     season: "whaleseason",
   },
   {
@@ -4277,8 +4277,8 @@ const whaleseasonCreatures = [
     places2: ["クジラ海", "「浅海の魚群」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0, tc: 0 }],
-    note: "", //★要調べ魚影
+    rarityData: [{ star: 1, price: 100, tc: 40 }],
+    note: "魚影：小",
     season: "whaleseason",
   },
   {
@@ -4289,8 +4289,8 @@ const whaleseasonCreatures = [
     places2: ["クジラ海", "「浅海の魚群」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0, tc: 0 }],
-    note: "", //★要調べ魚影
+    rarityData: [{ star: 1, price: 155, tc: 70 }],
+    note: "魚影：中",
     season: "whaleseason",
   },
   {
@@ -4301,8 +4301,8 @@ const whaleseasonCreatures = [
     places2: ["クジラ海", "「浅海の魚群」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0, tc: 0 }],
-    note: "", //★要調べ魚影
+    rarityData: [{ star: 1, price: 155, tc: 70 }],
+    note: "魚影：中",
     season: "whaleseason",
   },
   {
@@ -4373,7 +4373,7 @@ const whaleseasonCreatures = [
     places2: ["クジラ山"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 2, price: 0, tc: 0 }],
+    rarityData: [{ star: 2, price: 60, tc: 40 }],
     star5Weathers: [], //★要確認
     star5Times: [], //★要確認
     note: [
@@ -4390,7 +4390,7 @@ const whaleseasonCreatures = [
     places2: ["クジラ山", "風車の花畑", "パープルビーチ"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 2, price: 0, tc: 0 }],
+    rarityData: [{ star: 2, price: 60, tc: 40 }],
     star5Weathers: [], //★要確認
     star5Times: [], //★要確認
     note: [
@@ -4407,7 +4407,7 @@ const whaleseasonCreatures = [
     places2: ["温泉山の湖"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 2, price: 0, tc: 0 }],
+    rarityData: [{ star: 2, price: 80, tc: 40 }],
     star5Weathers: [], //★要確認
     star5Times: [], //★要確認
     note: [
@@ -4424,7 +4424,7 @@ const whaleseasonCreatures = [
     places2: ["パープルビーチ"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 2, price: 0, tc: 0 }],
+    rarityData: [{ star: 2, price: 60, tc: 40 }],
     star5Weathers: [], //★要確認
     star5Times: [], //★要確認
     note: [
@@ -4441,7 +4441,7 @@ const whaleseasonCreatures = [
     places2: ["石海岸の崖"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 2, price: 0, tc: 0 }],
+    rarityData: [{ star: 2, price: 60, tc: 40 }],
     star5Weathers: [], //★要確認
     star5Times: [], //★要確認
     note: [
@@ -5688,7 +5688,7 @@ const blockfesPage2Creatures = [
     hobby: ["料理", "食材"],
     level: 1,
     food: ["練乳", "積み木アイス", "いちご", "いちご"],
-    rarityData: [{ star: 1, price: 1120, tc: 175 }],
+    rarityData: [{ star: 1, price: 900, tc: 175 }],
     staminaRecovery: 65,
     buff: "なし",
     note: "積み木ボウルフルーツかき氷の果物をいちごに変える",
@@ -5699,7 +5699,7 @@ const blockfesPage2Creatures = [
     hobby: ["料理", "食材"],
     level: 1,
     food: ["練乳", "積み木アイス", "ブドウ", "ブドウ"],
-    rarityData: [{ star: 1, price: 1330, tc: 220 }],
+    rarityData: [{ star: 1, price: 1110, tc: 220 }],
     staminaRecovery: 80,
     buff: "なし",
     note: "積み木ボウルフルーツかき氷の果物をブドウに変える",
@@ -5710,7 +5710,7 @@ const blockfesPage2Creatures = [
     hobby: ["料理", "食材"],
     level: 1,
     food: ["練乳", "積み木アイス", "パイナップル", "パイナップル"],
-    rarityData: [{ star: 1, price: 480, tc: 55 }],
+    rarityData: [{ star: 1, price: 260, tc: 55 }],
     staminaRecovery: 25,
     buff: "なし",
     note: "積み木ボウルフルーツかき氷の果物をパイナップルに変える",
