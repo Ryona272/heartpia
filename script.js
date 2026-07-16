@@ -5085,7 +5085,19 @@ function initPageTest() {
           html += renderSection(bioEnvSectionTitle, bioEnvHtml);
         }
 
-        // ── 以下、既存の Top10 と全件リスト ──
+        // ── 以下、Top10 と全件リスト ──
+        const notMasterGarden = filteredPage2.filter(
+          (item) =>
+            isPage2Gardening(item) &&
+            !item.master &&
+            !_UGLY_NAMES.has(item.name),
+        );
+        const notMasterCooking = filteredPage2.filter(
+          (item) =>
+            !isPage2Gardening(item) &&
+            !item.master &&
+            !_UGLY_NAMES.has(item.name),
+        );
         const topNotMaster = [...notMaster]
           .filter((c) => Array.isArray(c.times))
           .sort((a, b) => calcRarityScoreBase(b) - calcRarityScoreBase(a))
@@ -5096,44 +5108,58 @@ function initPageTest() {
             renderChips(topNotMaster),
           );
         }
+        // 園芸・料理 マスター おすすめ Top10（趣味ボタンがONのときのみ表示）
+        if (enabledHobbies.has("園芸") && notMasterGarden.length > 0) {
+          const _usageMap = buildGardeningIngredientUsageMap();
+          const topNotMasterGarden = [...notMasterGarden]
+            .sort(
+              (a, b) =>
+                computeGardeningRecommendScore(b, _usageMap) -
+                computeGardeningRecommendScore(a, _usageMap),
+            )
+            .slice(0, 10);
+          html += renderSection(
+            `🏆 園芸 マスター おすすめ Top10 ─ 料理での使用回数順`,
+            renderChips(topNotMasterGarden),
+          );
+        }
+        if (enabledHobbies.has("料理") && notMasterCooking.length > 0) {
+          const topNotMasterCooking = [...notMasterCooking]
+            .sort(
+              (a, b) =>
+                computeCookingRecommendScore(b) -
+                computeCookingRecommendScore(a),
+            )
+            .slice(0, 10);
+          html += renderSection(
+            `🏆 料理 マスター おすすめ Top10 ─ 食材にもなる料理を優先`,
+            renderChips(topNotMasterCooking),
+          );
+        }
         html += renderSection(
           `🏆 生物 マスターを増やす ─ 今取れる通常種${notMaster.length}種`,
           renderChips(notMaster),
         );
-        // 園芸・料理 マスター未達セクション（趣味ボタンがONのときのみ表示）
-        {
-          const notMasterGarden = filteredPage2.filter(
-            (item) =>
-              isPage2Gardening(item) &&
-              !item.master &&
-              !_UGLY_NAMES.has(item.name),
+        // 園芸・料理 マスター全件（趣味ボタンがONのときのみ表示）
+        if (enabledHobbies.has("園芸")) {
+          html += renderSection(
+            `🏆 園芸 マスターを増やす ─ ${notMasterGarden.length}種`,
+            renderChips(
+              notMasterGarden,
+              null,
+              "マスター未達の園芸アイテムはありません。",
+            ),
           );
-          const notMasterCooking = filteredPage2.filter(
-            (item) =>
-              !isPage2Gardening(item) &&
-              !item.master &&
-              !_UGLY_NAMES.has(item.name),
+        }
+        if (enabledHobbies.has("料理")) {
+          html += renderSection(
+            `🏆 料理 マスターを増やす ─ ${notMasterCooking.length}種`,
+            renderChips(
+              notMasterCooking,
+              null,
+              "マスター未達の料理アイテムはありません。",
+            ),
           );
-          if (enabledHobbies.has("園芸")) {
-            html += renderSection(
-              `🏆 園芸 マスターを増やす ─ ${notMasterGarden.length}種`,
-              renderChips(
-                notMasterGarden,
-                null,
-                "マスター未達の園芸アイテムはありません。",
-              ),
-            );
-          }
-          if (enabledHobbies.has("料理")) {
-            html += renderSection(
-              `🏆 料理 マスターを増やす ─ ${notMasterCooking.length}種`,
-              renderChips(
-                notMasterCooking,
-                null,
-                "マスター未達の料理アイテムはありません。",
-              ),
-            );
-          }
         }
         break;
       }
