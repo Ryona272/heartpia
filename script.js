@@ -5110,12 +5110,28 @@ function initPageTest() {
         }
         // 園芸・料理 マスター おすすめ Top10（趣味ボタンがONのときのみ表示）
         if (enabledHobbies.has("園芸") && notMasterGarden.length > 0) {
-          const _usageMap = buildGardeningIngredientUsageMap();
+          // マスター用使用マップ：
+          //   - season === "normal" の文字列のみ（イベント通常化アイテムを除外）
+          //   - マスター完了済みの料理は除外（残りのマスター目標に必要な食材のみ集計）
+          //   - item.food 内の重複食材はそのまま複数カウント（例：ジャム系は同一食材4個）
+          const _masterCookingUsageMap = new Map();
+          for (const cookItem of page2Creatures) {
+            if (!isPage2Cooking(cookItem)) continue;
+            if (cookItem.season !== "normal") continue;
+            if (cookItem.master) continue;
+            if (!Array.isArray(cookItem.food)) continue;
+            for (const ingredient of cookItem.food) {
+              _masterCookingUsageMap.set(
+                ingredient,
+                (_masterCookingUsageMap.get(ingredient) || 0) + 1,
+              );
+            }
+          }
           const topNotMasterGarden = [...notMasterGarden]
             .sort(
               (a, b) =>
-                computeGardeningRecommendScore(b, _usageMap) -
-                computeGardeningRecommendScore(a, _usageMap),
+                computeGardeningRecommendScore(b, _masterCookingUsageMap) -
+                computeGardeningRecommendScore(a, _masterCookingUsageMap),
             )
             .slice(0, 10);
           html += renderSection(
