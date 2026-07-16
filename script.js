@@ -5140,15 +5140,31 @@ function initPageTest() {
           );
         }
         if (enabledHobbies.has("料理") && notMasterCooking.length > 0) {
+          // 料理マスター用使用マップ：
+          //   - season === "normal" の文字列のみ（イベント通常化アイテムを除外）
+          //   - マスター完了済みでも走査対象に含める
+          //   - item.food 内の重複食材はそのまま複数カウント
+          const _masterCookingIngredientMap = new Map();
+          for (const cookItem of page2Creatures) {
+            if (!isPage2Cooking(cookItem)) continue;
+            if (cookItem.season !== "normal") continue;
+            if (!Array.isArray(cookItem.food)) continue;
+            for (const ingredient of cookItem.food) {
+              _masterCookingIngredientMap.set(
+                ingredient,
+                (_masterCookingIngredientMap.get(ingredient) || 0) + 1,
+              );
+            }
+          }
           const topNotMasterCooking = [...notMasterCooking]
             .sort(
               (a, b) =>
-                computeCookingRecommendScore(b) -
-                computeCookingRecommendScore(a),
+                (_masterCookingIngredientMap.get(b.name) || 0) -
+                (_masterCookingIngredientMap.get(a.name) || 0),
             )
             .slice(0, 10);
           html += renderSection(
-            `🏆 料理 マスター おすすめ Top10 ─ 食材にもなる料理を優先`,
+            `🏆 料理 マスター おすすめ Top10 ─ 他レシピの食材になる回数順`,
             renderChips(topNotMasterCooking),
           );
         }
