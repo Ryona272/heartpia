@@ -4476,7 +4476,7 @@ function initPageTest() {
       }
       case "star5": {
         const _UGLY_NAMES = new Set(["不気味な食べ物", "不気味な飲み物"]);
-        const notStar5 = [...filtered, ...filteredPage2].filter(
+        const notStar5 = [...filtered].filter(
           (c) =>
             !c.fiveStar &&
             canStar5Now(c) &&
@@ -4754,16 +4754,50 @@ function initPageTest() {
             renderChips(topNotStar5),
           );
         }
-        html += `<div id="recommendPage2Anchor"></div>`;
         html += renderSection(
-          `⭐ ★5を増やす ─ 今取れる${notStar5.length}種`,
+          `⭐ 生物 ★5を増やす ─ 今取れる${notStar5.length}種`,
           renderChips(notStar5, (c) => `★5: ${fmt(getStar5Price(c))}`),
         );
+        // 園芸・料理 ★5未達セクション（趣味ボタンがONのときのみ表示）
+        {
+          const notStar5Garden = filteredPage2.filter(
+            (item) =>
+              isPage2Gardening(item) &&
+              !item.fiveStar &&
+              !_UGLY_NAMES.has(item.name),
+          );
+          const notStar5Cooking = filteredPage2.filter(
+            (item) =>
+              !isPage2Gardening(item) &&
+              !item.fiveStar &&
+              !_UGLY_NAMES.has(item.name),
+          );
+          if (enabledHobbies.has("園芸")) {
+            html += renderSection(
+              `⭐ 園芸 ★5を増やす ─ ${notStar5Garden.length}種`,
+              renderChips(
+                notStar5Garden,
+                null,
+                "★5未達の園芸アイテムはありません。",
+              ),
+            );
+          }
+          if (enabledHobbies.has("料理")) {
+            html += renderSection(
+              `⭐ 料理 ★5を増やす ─ ${notStar5Cooking.length}種`,
+              renderChips(
+                notStar5Cooking,
+                null,
+                "★5未達の料理アイテムはありません。",
+              ),
+            );
+          }
+        }
         break;
       }
       case "master": {
         const _UGLY_NAMES = new Set(["不気味な食べ物", "不気味な飲み物"]);
-        const notMaster = [...filtered, ...filteredPage2].filter(
+        const notMaster = [...filtered].filter(
           (c) => c.season === "normal" && !c.master && !_UGLY_NAMES.has(c.name),
         );
 
@@ -5063,9 +5097,44 @@ function initPageTest() {
           );
         }
         html += renderSection(
-          `🏆 マスターを増やす ─ 今取れる通常種${notMaster.length}種`,
+          `🏆 生物 マスターを増やす ─ 今取れる通常種${notMaster.length}種`,
           renderChips(notMaster),
         );
+        // 園芸・料理 マスター未達セクション（趣味ボタンがONのときのみ表示）
+        {
+          const notMasterGarden = filteredPage2.filter(
+            (item) =>
+              isPage2Gardening(item) &&
+              !item.master &&
+              !_UGLY_NAMES.has(item.name),
+          );
+          const notMasterCooking = filteredPage2.filter(
+            (item) =>
+              !isPage2Gardening(item) &&
+              !item.master &&
+              !_UGLY_NAMES.has(item.name),
+          );
+          if (enabledHobbies.has("園芸")) {
+            html += renderSection(
+              `🏆 園芸 マスターを増やす ─ ${notMasterGarden.length}種`,
+              renderChips(
+                notMasterGarden,
+                null,
+                "マスター未達の園芸アイテムはありません。",
+              ),
+            );
+          }
+          if (enabledHobbies.has("料理")) {
+            html += renderSection(
+              `🏆 料理 マスターを増やす ─ ${notMasterCooking.length}種`,
+              renderChips(
+                notMasterCooking,
+                null,
+                "マスター未達の料理アイテムはありません。",
+              ),
+            );
+          }
+        }
         break;
       }
       case "cat": {
@@ -5385,13 +5454,8 @@ function initPageTest() {
 
     testResultEl.innerHTML = html;
 
-    // recommendPage2 の配置：★5ゴール時は Top10 と一覧の間に挿入、それ以外は testResult の直後
-    const _rec2Anchor = testResultEl.querySelector("#recommendPage2Anchor");
-    if (_rec2Anchor && recommendPage2El) {
-      _rec2Anchor.replaceWith(recommendPage2El);
-    } else if (recommendPage2El) {
-      testResultEl.insertAdjacentElement("afterend", recommendPage2El);
-    }
+    // recommendPage2 の内容をクリア（各 goal で直接レンダリングしているため不要）
+    if (recommendPage2El) recommendPage2El.innerHTML = "";
   }
 }
 
