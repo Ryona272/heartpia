@@ -5518,6 +5518,14 @@ function initPageTest() {
 
         break;
       }
+      case "whatnow": {
+        // ── 何をしよう？（ロジック未実装） ──
+        html += renderSection(
+          `🤔 何をしよう？`,
+          '<p class="test-empty">このゴールのロジックはまだ実装中です。</p>',
+        );
+        break;
+      }
     }
 
     // ── 末尾：今の状況で捕れる生き物 ──
