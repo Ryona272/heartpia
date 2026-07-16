@@ -5156,15 +5156,31 @@ function initPageTest() {
               );
             }
           }
+          const _dogFoodSet = new Set(dogFoodList);
+          // スコア優先順位：食材使用回数 > スタミナ回復量 = 売値 > わんこエサ > バフ
+          const _cookScore = (item) => {
+            const ingredientCount =
+              _masterCookingIngredientMap.get(item.name) || 0;
+            // "75*4" → 300、単値 75 → 75
+            const staminaTotal = String(item.staminaRecovery || 0)
+              .split("*")
+              .reduce((a, b) => Number(a) * Number(b), 1);
+            const price = item.rarityData?.[0]?.price ?? 0;
+            const dogBonus = _dogFoodSet.has(item.name) ? 10 : 0;
+            const buffBonus = item.buff && item.buff !== "なし" ? 1 : 0;
+            return (
+              ingredientCount * 10000 +
+              staminaTotal +
+              price +
+              dogBonus +
+              buffBonus
+            );
+          };
           const topNotMasterCooking = [...notMasterCooking]
-            .sort(
-              (a, b) =>
-                (_masterCookingIngredientMap.get(b.name) || 0) -
-                (_masterCookingIngredientMap.get(a.name) || 0),
-            )
+            .sort((a, b) => _cookScore(b) - _cookScore(a))
             .slice(0, 10);
           html += renderSection(
-            `🏆 料理 マスター おすすめ Top10 ─ 他レシピの食材になる回数順`,
+            `🏆 料理 マスター おすすめ Top10 ─ 食材回数・スタミナ・売値順`,
             renderChips(topNotMasterCooking),
           );
         }
