@@ -2946,6 +2946,15 @@ const gardeningCreatures = [
     note: "特になし",
   },
   {
+    name: "稲",
+    hobby: ["園芸", "食材"],
+    level: 1,
+    seedprice: 12,
+    time: 1 / 3,
+    rarityData: [{ star: 1, price: 37 }],
+    note: "特になし",
+  },
+  {
     name: "小麦",
     hobby: ["園芸", "食材"],
     level: 2,
@@ -3642,7 +3651,7 @@ const cookingCreatures = [
     rarityData: [{ star: 1, price: 2260 }],
     staminaRecovery: "100*4",
     buff: "無限パワー",
-    note: "マッシモからレシピを入手",
+    note: ["マッシモからレシピを入手", "カフェラテでも可"],
   },
   {
     name: "英式アフタヌーンティー",
@@ -3652,7 +3661,7 @@ const cookingCreatures = [
     rarityData: [{ star: 1, price: 710 }],
     staminaRecovery: "25*4",
     buff: "元気いっぱい",
-    note: "マッシモからレシピを入手",
+    note: ["マッシモからレシピを入手", "ジャムならなんでも"],
   },
   {
     name: "ミートバーガー",
