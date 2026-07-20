@@ -2786,7 +2786,7 @@ const birdCreatures = [
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 120 }],
     star5Weathers: ["虹"],
-    star5Times: [], //★要確認/夜時間の可能性
+    star5Times: [], //★要調べ/夜時間の可能性
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
@@ -2841,14 +2841,14 @@ const birdCreatures = [
     ],
   },
   {
-    name: "シロクジャク", //★要確認
+    name: "シロクジャク",
     hobby: "野鳥観察",
     level: 11,
     places1: ["漁村"],
     places2: ["「巣ごもり」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 2, price: 0 }],
+    rarityData: [{ star: 2, price: 0 }], //★要調べ
     star5Weathers: ["虹"],
     star5Times: [],
     note: [
@@ -2865,9 +2865,9 @@ const birdCreatures = [
     places2: ["火山湖"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["虹"],
-    rarityData: [{ star: 2, price: 0 }],
+    rarityData: [{ star: 2, price: 0 }], //★要調べ
     star5Weathers: ["虹"],
-    star5Times: [], //★要確認/夜時間の可能性
+    star5Times: [], //★要調べ
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
@@ -2881,7 +2881,7 @@ const birdCreatures = [
     places2: ["クジラ海"],
     times: ["00-06", "06-12", "18-00"],
     weathers: ["晴れ", "虹"],
-    rarityData: [{ star: 2, price: 0 }],
+    rarityData: [{ star: 2, price: 0 }], //★要調べ
     star5Weathers: ["虹"],
     star5Times: ["06-12"],
     note: [
@@ -2897,24 +2897,24 @@ const birdCreatures = [
     places2: ["そよ風の海"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
-    rarityData: [{ star: 2, price: 0 }],
+    rarityData: [{ star: 2, price: 0 }], //★要調べ
     star5Weathers: ["虹"],
-    star5Times: [], //★要確認/夜時間の可能性
+    star5Times: [], //★要調べ
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
     ],
   },
   {
-    name: "シロフクロウ", //★要確認
+    name: "シロフクロウ",
     hobby: "野鳥観察",
     level: 12,
     places1: ["森林"],
     places2: ["不思議な松林"],
     times: ["12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 2, price: 0 }],
-    star5Weathers: [],
+    rarityData: [{ star: 2, price: 0 }], //★要調べ
+    star5Weathers: [], //★要調べ
     star5Times: [],
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
@@ -4253,12 +4253,16 @@ const snowseasonCreatures = [
     rarityData: [{ star: 2, price: 90, tc: 60 }],
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
-    note: ["★５は雨(雪)で確認", "追加段階のみ出現"],
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+      "追加段階のみ出現",
+    ],
     season: "snowseason",
   },
 ];
 
-// ホエールシーズン限定生物//★要調べ
+// ホエールシーズン限定生物
 const whaleseasonCreatures = [
   {
     name: "ホタテ",
@@ -4408,13 +4412,13 @@ const whaleseasonCreatures = [
     name: "ハジロクロハラアジサシ",
     hobby: "野鳥観察",
     level: 1,
-    places1: ["花畑"],
-    places2: ["クジラ山"],
+    places1: ["花畑", "森林"],
+    places2: ["クジラ山", "「迷子鳥」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 60, tc: 40 }],
-    star5Weathers: [], //★要確認
-    star5Times: [], //★要確認
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
@@ -4425,13 +4429,13 @@ const whaleseasonCreatures = [
     name: "トウゾクカモメ",
     hobby: "野鳥観察",
     level: 1,
-    places1: ["花畑"],
-    places2: ["クジラ山", "風車の花畑", "パープルビーチ"],
+    places1: ["花畑", "森林"],
+    places2: ["クジラ山", "風車の花畑", "パープルビーチ", "「迷子鳥」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 60, tc: 40 }],
-    star5Weathers: [], //★要確認
-    star5Times: [], //★要確認
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
@@ -4442,13 +4446,13 @@ const whaleseasonCreatures = [
     name: "ヘラサギ",
     hobby: "野鳥観察",
     level: 1,
-    places1: ["温泉山"],
-    places2: ["温泉山の湖"],
+    places1: ["温泉山", "森林"],
+    places2: ["温泉山の湖", "「迷子鳥」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 80, tc: 40 }],
-    star5Weathers: [], //★要確認
-    star5Times: [], //★要確認
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
@@ -4459,13 +4463,13 @@ const whaleseasonCreatures = [
     name: "ワタリアホウドリ",
     hobby: "野鳥観察",
     level: 1,
-    places1: ["花畑"],
-    places2: ["パープルビーチ"],
+    places1: ["花畑", "森林"],
+    places2: ["パープルビーチ", "「迷子鳥」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 60, tc: 40 }],
-    star5Weathers: [], //★要確認
-    star5Times: [], //★要確認
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
@@ -4476,13 +4480,13 @@ const whaleseasonCreatures = [
     name: "ハイイロアホウドリ",
     hobby: "野鳥観察",
     level: 1,
-    places1: ["温泉山"],
-    places2: ["石海岸の崖"],
+    places1: ["温泉山", "森林"],
+    places2: ["石海岸の崖", "「迷子鳥」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 60, tc: 40 }],
-    star5Weathers: [], //★要確認
-    star5Times: [], //★要確認
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
@@ -4490,19 +4494,20 @@ const whaleseasonCreatures = [
     season: "whaleseason",
   },
   {
-    name: "",
+    name: "ベニヘラサギ",
     hobby: "野鳥観察",
     level: 1,
-    places1: [],
-    places2: [],
+    places1: ["森林"],
+    places2: ["「迷子鳥」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 2, price: 0, tc: 0 }],
-    star5Weathers: [], //★要確認
-    star5Times: [], //★要確認
+    rarityData: [{ star: 2, price: 110, tc: 60 }],
+    star5Weathers: ["雨(雪)", "虹"],
+    star5Times: [],
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
+      "追加段階のみ出現",
     ],
     season: "whaleseason",
   },
@@ -4867,12 +4872,12 @@ const whaleseasonPage2Creatures = [
     season: "whaleseason",
   },
   {
-    name: "",
+    name: "スイセン",
     hobby: ["園芸", "花"],
     level: 1,
-    seedprice: 0,
-    time: 0,
-    rarityData: [{ star: 1, price: 0, tc: 0 }],
+    seedprice: 30,
+    time: 24,
+    rarityData: [{ star: 1, price: 125, tc: 70 }],
     note: "",
     season: "whaleseason",
   },
@@ -6248,6 +6253,42 @@ const otherEventPage2Creatures = [
     note: "「仲夏の端陽」の交換商店にて購入",
     season: ["otherevent"],
     eventname: "仲夏の端陽",
+  },
+  {
+    name: "シナモンロールのクレープ",
+    hobby: ["料理"],
+    level: 1,
+    food: ["小麦", "バター", "卵", "コーヒー豆"],
+    rarityData: [{ star: 1, price: 670 }],
+    staminaRecovery: "0",
+    buff: "なし",
+    note: ["ガチャ累計回数５回でレシピを入手"],
+    season: ["otherevent", "normal"],
+    eventname: "サンリオキャラクターズの夢みる世界❤",
+  },
+  {
+    name: "クロミのクレープ",
+    hobby: ["料理"],
+    level: 1,
+    food: ["小麦", "バター", "卵", "ラズベリー"],
+    rarityData: [{ star: 1, price: 670 }],
+    staminaRecovery: "0",
+    buff: "なし",
+    note: ["ガチャ累計回数７回でレシピを入手"],
+    season: ["otherevent", "normal"],
+    eventname: "サンリオキャラクターズの夢みる世界❤",
+  },
+  {
+    name: "マイメロディのクレープ",
+    hobby: ["料理"],
+    level: 1,
+    food: ["小麦", "バター", "卵", "牛乳"],
+    rarityData: [{ star: 1, price: 670 }],
+    staminaRecovery: "0",
+    buff: "なし",
+    note: ["ガチャ累計回数３回でレシピを入手"],
+    season: ["otherevent", "normal"],
+    eventname: "サンリオキャラクターズの夢みる世界❤",
   },
 ];
 
