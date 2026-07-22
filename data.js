@@ -6878,6 +6878,18 @@ const wildAnimalData = [
     ],
     favoriteWeather: ["晴れ", "虹"],
     category: "イベント",
+    eventActive: false, // イベント開催中: true / 終了: false
+  },
+  {
+    name: "イルカ",
+    img: "img/animal/イルカ.png",
+    favorites: [
+      { name: "ニシイワシ", img: "img/fish/ニシイワシ.png" },
+      { name: "スズキ", img: "img/fish/スズキ.png" },
+      { name: "マアジ", img: "img/fish/マアジ.png" },
+    ],
+    favoriteWeather: ["晴れ"],
+    category: "イベント",
     eventActive: true, // イベント開催中: true / 終了: false
   },
 ];
