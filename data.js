@@ -2850,7 +2850,7 @@ const birdCreatures = [
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 0 }], //★要調べ
     star5Weathers: ["虹"],
-    star5Times: [],
+    star5Times: [], //★要調べ
     note: [
       "「巣ごもり」追加段階でのみ出現",
       "時間と天気の金縁は★５動作をする環境を表しています",
@@ -2865,7 +2865,7 @@ const birdCreatures = [
     places2: ["火山湖"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["虹"],
-    rarityData: [{ star: 2, price: 0 }], //★要調べ
+    rarityData: [{ star: 2, price: 120 }],
     star5Weathers: ["虹"],
     star5Times: [], //★要調べ
     note: [
@@ -2881,7 +2881,7 @@ const birdCreatures = [
     places2: ["クジラ海"],
     times: ["00-06", "06-12", "18-00"],
     weathers: ["晴れ", "虹"],
-    rarityData: [{ star: 2, price: 0 }], //★要調べ
+    rarityData: [{ star: 2, price: 180 }],
     star5Weathers: ["虹"],
     star5Times: ["06-12"],
     note: [
@@ -2897,7 +2897,7 @@ const birdCreatures = [
     places2: ["そよ風の海"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
-    rarityData: [{ star: 2, price: 0 }], //★要調べ
+    rarityData: [{ star: 2, price: 180 }],
     star5Weathers: ["虹"],
     star5Times: [], //★要調べ
     note: [
@@ -2913,9 +2913,89 @@ const birdCreatures = [
     places2: ["不思議な松林"],
     times: ["12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
+    rarityData: [{ star: 2, price: 260 }],
+    star5Weathers: [], //★要調べ
+    star5Times: [], //★要調べ
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
+  },
+  {
+    name: "クロクジャク",
+    hobby: "野鳥観察",
+    level: 13,
+    places1: ["漁村"],
+    places2: ["「巣ごもり」"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 0 }], //★要調べ
     star5Weathers: [], //★要調べ
-    star5Times: [],
+    star5Times: [], //★要調べ
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
+  },
+  {
+    name: "オオハクチョウ",
+    hobby: "野鳥観察",
+    level: 13,
+    places1: ["郊外"],
+    places2: ["郊外の湖"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["晴れ", "虹"],
+    rarityData: [{ star: 2, price: 180 }],
+    star5Weathers: [], //★要調べ
+    star5Times: [], //★要調べ
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
+  },
+  {
+    name: "コクチョウ",
+    hobby: "野鳥観察",
+    level: 14,
+    places1: ["郊外"],
+    places2: ["郊外の湖"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["雨(雪)", "虹"],
+    rarityData: [{ star: 2, price: 0 }], //★要調べ
+    star5Weathers: [], //★要調べ
+    star5Times: [], //★要調べ
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
+  },
+  {
+    name: "メガネフクロウ",
+    hobby: "野鳥観察",
+    level: 14,
+    places1: ["森林"],
+    places2: ["ジャンプステージ"],
+    times: ["06-12"],
+    weathers: ["晴れ", "雨(雪)", "虹"],
+    rarityData: [{ star: 2, price: 0 }], //★要調べ
+    star5Weathers: [], //★要調べ
+    star5Times: [], //★要調べ
+    note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
+  },
+  {
+    name: "ナベコウ",
+    hobby: "野鳥観察",
+    level: 14,
+    places1: ["花畑"],
+    places2: ["草原の湖"],
+    times: ["00-06", "12-18", "18-00"],
+    weathers: ["晴れ", "雨(雪)", "虹"],
+    rarityData: [{ star: 2, price: 220 }],
+    star5Weathers: [], //★要調べ
+    star5Times: [], //★要調べ
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
