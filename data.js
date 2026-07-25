@@ -2809,6 +2809,23 @@ const birdCreatures = [
     ],
   },
   {
+    name: "シロクジャク",
+    hobby: "野鳥観察",
+    level: 11,
+    places1: ["漁村"],
+    places2: ["「巣ごもり」"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["晴れ", "雨(雪)", "虹"],
+    rarityData: [{ star: 2, price: 150 }],
+    star5Weathers: ["虹"],
+    star5Times: ["12-18"],
+    note: [
+      "「巣ごもり」追加段階でのみ出現",
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
+  },
+  {
     name: "トモエガモ",
     hobby: "野鳥観察",
     level: 11,
@@ -2836,23 +2853,6 @@ const birdCreatures = [
     star5Weathers: ["虹"],
     star5Times: ["12-18"],
     note: [
-      "時間と天気の金縁は★５動作をする環境を表しています",
-      "表記の環境以外で出る可能性もあります",
-    ],
-  },
-  {
-    name: "シロクジャク",
-    hobby: "野鳥観察",
-    level: 11,
-    places1: ["漁村"],
-    places2: ["「巣ごもり」"],
-    times: ["00-06", "06-12", "12-18", "18-00"],
-    weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 2, price: 0 }], //★要調べ
-    star5Weathers: ["虹"],
-    star5Times: [], //★要調べ
-    note: [
-      "「巣ごもり」追加段階でのみ出現",
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
     ],
@@ -2962,27 +2962,10 @@ const birdCreatures = [
     places2: ["郊外の湖"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
-    rarityData: [{ star: 2, price: 0 }], //★要調べ
+    rarityData: [{ star: 2, price: 180 }],
     star5Weathers: ["虹"],
     star5Times: ["12-18"],
     note: [
-      "時間と天気の金縁は★５動作をする環境を表しています",
-      "表記の環境以外で出る可能性もあります",
-    ],
-  },
-  {
-    name: "メガネフクロウ",
-    hobby: "野鳥観察",
-    level: 14,
-    places1: ["森林"],
-    places2: ["ジャンプステージ"],
-    times: ["06-12"],
-    weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 2, price: 0 }], //★要調べ
-    star5Weathers: [], //★要調べ
-    star5Times: [], //★要調べ
-    note: [
-      "★５は頭を回す動作",
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
     ],
@@ -2999,6 +2982,23 @@ const birdCreatures = [
     star5Weathers: ["虹"],
     star5Times: ["12-18"],
     note: [
+      "時間と天気の金縁は★５動作をする環境を表しています",
+      "表記の環境以外で出る可能性もあります",
+    ],
+  },
+  {
+    name: "メガネフクロウ",
+    hobby: "野鳥観察",
+    level: 14,
+    places1: ["森林"],
+    places2: ["ジャンプステージ"],
+    times: ["00-06", "06-12"],
+    weathers: ["晴れ", "雨(雪)", "虹"],
+    rarityData: [{ star: 2, price: 260 }],
+    star5Weathers: [], //★要調べ
+    star5Times: [], //★要調べ
+    note: [
+      "★５は頭を回す動作",
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
     ],
