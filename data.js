@@ -2867,7 +2867,7 @@ const birdCreatures = [
     weathers: ["虹"],
     rarityData: [{ star: 2, price: 120 }],
     star5Weathers: ["虹"],
-    star5Times: [], //★要調べ
+    star5Times: [], //★要調べ,夜時間の可能性
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
@@ -2899,7 +2899,7 @@ const birdCreatures = [
     weathers: ["雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 180 }],
     star5Weathers: ["虹"],
-    star5Times: [], //★要調べ
+    star5Times: ["12-18"],
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
@@ -2914,9 +2914,10 @@ const birdCreatures = [
     times: ["12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 260 }],
-    star5Weathers: [], //★要調べ
-    star5Times: [], //★要調べ
+    star5Weathers: ["虹"],
+    star5Times: [], //★要調べ,夜時間の可能性
     note: [
+      "★５は頭を回す動作",
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
     ],
@@ -2946,8 +2947,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "虹"],
     rarityData: [{ star: 2, price: 180 }],
-    star5Weathers: [], //★要調べ
-    star5Times: [], //★要調べ
+    star5Weathers: ["虹"],
+    star5Times: ["12-18"],
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
@@ -2962,8 +2963,8 @@ const birdCreatures = [
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 0 }], //★要調べ
-    star5Weathers: [], //★要調べ
-    star5Times: [], //★要調べ
+    star5Weathers: ["虹"],
+    star5Times: ["12-18"],
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
@@ -2981,6 +2982,7 @@ const birdCreatures = [
     star5Weathers: [], //★要調べ
     star5Times: [], //★要調べ
     note: [
+      "★５は頭を回す動作",
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
     ],
@@ -2994,8 +2996,8 @@ const birdCreatures = [
     times: ["00-06", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 220 }],
-    star5Weathers: [], //★要調べ
-    star5Times: [], //★要調べ
+    star5Weathers: ["虹"],
+    star5Times: ["12-18"],
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
