@@ -6890,11 +6890,12 @@ const wildAnimalData = [
       { name: "スズキ", img: "img/fish/スズキ.png" },
       { name: "マアジ", img: "img/fish/マアジ.png" },
     ],
-    favoriteWeather: ["晴れ"],
+    favoriteWeather: ["晴れ", "虹"],
     category: "イベント",
     eventActive: true, // イベント開催中: true / 終了: false
   },
 ];
 
 //★販売食材など、獲得チェックボックスを付ける
-//料理ページのおススメをおススメの方にもっていく
+//おすすめページで料理や園芸のみなのに生物マスターが表示されてしまう
+//生物のおススメ環境、特に天気で晴れや雨や虹がどれも一位タイなら晴れから優先表示する
