@@ -2674,6 +2674,7 @@ const birdCreatures = [
     star5Times: ["12-18"],
     note: [
       "「巣ごもり」追加段階でのみ出現",
+      "※追加段階ではマクジャク,シロクジャク,クロクジャクからランダムに1種が出現",
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
     ],
@@ -2737,7 +2738,7 @@ const birdCreatures = [
     weathers: ["虹"],
     rarityData: [{ star: 2, price: 120 }],
     star5Weathers: ["虹"],
-    star5Times: ["18-00"],
+    star5Times: ["18-00"], //12-18は出ず
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
@@ -2821,6 +2822,7 @@ const birdCreatures = [
     star5Times: ["12-18"],
     note: [
       "「巣ごもり」追加段階でのみ出現",
+      "※追加段階ではマクジャク,シロクジャク,クロクジャクからランダムに1種が出現",
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
     ],
@@ -2934,6 +2936,8 @@ const birdCreatures = [
     star5Weathers: [], //★要調べ
     star5Times: [], //★要調べ
     note: [
+      "「巣ごもり」追加段階でのみ出現",
+      "※追加段階ではマクジャク,シロクジャク,クロクジャクからランダムに1種が出現",
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
     ],
@@ -6371,6 +6375,30 @@ const otherEventPage2Creatures = [
     note: ["ガチャ累計回数３回でレシピを入手"],
     season: ["otherevent", "normal"],
     eventname: "サンリオキャラクターズの夢みる世界❤",
+  },
+  {
+    name: "バンチョおすすめエビフライ寿司",
+    hobby: ["料理"],
+    level: 1,
+    food: ["稲", "料理油", "コウライエビ", "ウミエビ"],
+    rarityData: [{ star: 1, price: 430 }],
+    staminaRecovery: "45",
+    buff: "なし",
+    note: ["「エア漏れ厳禁！」のイベントでレシピを入手"],
+    season: ["otherevent", "normal"],
+    eventname: "エア漏れ厳禁！",
+  },
+  {
+    name: "バンチョおすすめ玉子丼",
+    hobby: ["料理"],
+    level: 1,
+    food: ["稲", "稲", "卵", "海ぶどう"],
+    rarityData: [{ star: 1, price: 310 }],
+    staminaRecovery: "40",
+    buff: "なし",
+    note: ["「エア漏れ厳禁！」のイベントでレシピを入手"],
+    season: ["otherevent", "normal"],
+    eventname: "エア漏れ厳禁！",
   },
 ];
 
