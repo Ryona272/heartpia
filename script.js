@@ -126,7 +126,9 @@ const FESTIVAL_SEASON_VALUES = new Set(["dreamlightfes", "blockfes"]);
 const OTHER_EVENT_SEASON_VALUES = new Set(["otherevent"]);
 
 // 現在開催中のシーズン・フェス（ここを編集して開催状況を管理）
-const ACTIVE_SEASONS = new Set(["whaleseason"]);
+const ACTIVE_SEASONS = new Set(["whaleseason", "otherevent"]);
+// 現在開催中のその他イベント名（ここを編集して開催状況を管理）
+const ACTIVE_EVENT_NAMES = new Set(["エア漏れ厳禁！"]);
 
 // シーズン・フェスのラベルマップ
 const SEASON_LABELS = {
@@ -5701,7 +5703,7 @@ function init() {
   page1Eventnames.forEach((name) => {
     const opt = document.createElement("option");
     opt.value = name;
-    opt.textContent = name;
+    opt.textContent = name + (ACTIVE_EVENT_NAMES.has(name) ? " 🔥" : "");
     eventnameFilter.appendChild(opt);
   });
   if (page1Eventnames.length === 0) {
@@ -5717,7 +5719,7 @@ function init() {
   page2Eventnames.forEach((name) => {
     const opt = document.createElement("option");
     opt.value = name;
-    opt.textContent = name;
+    opt.textContent = name + (ACTIVE_EVENT_NAMES.has(name) ? " 🔥" : "");
     eventnameFilterPage2.appendChild(opt);
   });
   // イベント名フィルターは「その他イベント」選択時のみ表示
