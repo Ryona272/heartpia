@@ -26,17 +26,14 @@
   <body>
     <!-- ▼ 上部ナビ（デスクトップ/タブレット用） -->
     <nav class="nav-tabs top-nav" role="navigation" aria-label="上部ナビ">
-      <button class="tab active" data-target="page-zukan">生物図鑑</button>
-      <button class="tab" data-target="page-info">園芸・料理</button>
-      <button class="tab" data-target="page-cat">動物</button>
-      <button class="tab" data-target="page-test">おすすめ</button>
-      <button class="tab" data-target="page-settings">そのた</button>
+      <!-- PAGE_DEFSからJSで自動生成 -->
     </nav>
 
     <!-- ▼ 図鑑ページ -->
     <main>
       <section
         id="page-zukan"
+        data-page-id="zukan"
         class="page active"
         aria-labelledby="zukan-title"
       >
@@ -76,21 +73,24 @@
         </div>
 
         <div class="status-summary">
-          <span id="totalCount">全件：0</span>
-          <span id="displayCount">表示：0</span>
-          <span id="acquiredCount">獲得：0</span>
-          <span id="star5Count">★5：0</span>
-          <span id="masterCount">マスター：0</span>
+          <span class="stat-badge stat-badge--total" id="totalCount">全件：0</span>
+          <span class="stat-badge stat-badge--display" id="displayCount">表示：0</span>
+          <span class="stat-badge stat-badge--acquired" id="acquiredCount">獲得：0</span>
+          <span class="stat-badge stat-badge--star5" id="star5Count">★5：0</span>
+          <span class="stat-badge stat-badge--master" id="masterCount">マスター：0</span>
         </div>
 
         <div class="search-box">
-          <input
-            type="text"
-            id="searchInput"
-            placeholder="名前で検索…"
-            aria-label="検索"
-          />
-          <button id="resetFilterBtn" type="button" class="reset-filter-btn">検索リセット</button>
+          <div class="search-input-wrap">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="名前で検索…"
+              aria-label="検索"
+            />
+            <button id="clearSearchBtn" type="button" class="search-clear-btn" aria-label="検索をクリア">×</button>
+          </div>
+          <button id="resetFilterBtn" type="button" class="reset-filter-btn">条件リセット</button>
           <label for="sortBio" class="sort-inline-label">ソート：</label>
           <select id="sortBio" class="sort-inline-select">
             <option value="default">デフォルト</option>
@@ -100,7 +100,12 @@
           </select>
         </div>
 
-        <section class="controls" aria-label="フィルター">
+        <button id="filterToggleBtn1" class="filter-panel-toggle" type="button" aria-expanded="false">
+          🔍 フィルター <span class="filter-chevron">▾</span>
+        </button>
+        <div id="activeChips1" class="active-chips" aria-live="polite"></div>
+
+        <section class="controls filter-panel" id="filterPanel1" aria-label="フィルター" hidden>
           <div class="test-level-row">
             <span class="test-level-label">趣味Lv：</span>
             <div class="test-level-items">
@@ -173,7 +178,7 @@
       </section>
 
       <!-- ▼ 情報ページ -->
-      <section id="page-info" class="page" aria-labelledby="info-title">
+      <section id="page-info" data-page-id="info" class="page" aria-labelledby="info-title">
         <h2 id="info-title">ハートピアスローライフ 園芸・料理・販売食材図鑑</h2>
 
         <div class="view-switch" role="toolbar" aria-label="表示切替">
@@ -189,21 +194,24 @@
         </div>
 
         <div class="status-summary">
-          <span id="totalCountPage2">全件：0</span>
-          <span id="displayCountPage2">表示：0</span>
-          <span id="acquiredCountPage2">獲得：0</span>
-          <span id="star5CountPage2">★5：0</span>
-          <span id="masterCountPage2">マスター：0</span>
+          <span class="stat-badge stat-badge--total" id="totalCountPage2">全件：0</span>
+          <span class="stat-badge stat-badge--display" id="displayCountPage2">表示：0</span>
+          <span class="stat-badge stat-badge--acquired" id="acquiredCountPage2">獲得：0</span>
+          <span class="stat-badge stat-badge--star5" id="star5CountPage2">★5：0</span>
+          <span class="stat-badge stat-badge--master" id="masterCountPage2">マスター：0</span>
         </div>
 
         <div class="search-box">
-          <input
-            type="text"
-            id="searchInputPage2"
-            placeholder="名前で検索…"
-            aria-label="ページ2検索"
-          />
-          <button id="resetFilterBtnPage2" type="button" class="reset-filter-btn">検索リセット</button>
+          <div class="search-input-wrap">
+            <input
+              type="text"
+              id="searchInputPage2"
+              placeholder="名前で検索…"
+              aria-label="ページ2検索"
+            />
+            <button id="clearSearchBtnPage2" type="button" class="search-clear-btn" aria-label="検索をクリア">×</button>
+          </div>
+          <button id="resetFilterBtnPage2" type="button" class="reset-filter-btn">条件リセット</button>
           <label for="sortPage2" class="sort-inline-label">ソート：</label>
           <select id="sortPage2" class="sort-inline-select">
             <option value="default">デフォルト</option>
@@ -214,7 +222,12 @@
           </select>
         </div>
 
-        <section class="controls controls-page2" aria-label="ページ2フィルター">
+        <button id="filterToggleBtn2" class="filter-panel-toggle" type="button" aria-expanded="false">
+          🔍 フィルター <span class="filter-chevron">▾</span>
+        </button>
+        <div id="activeChips2" class="active-chips" aria-live="polite"></div>
+
+        <section class="controls controls-page2 filter-panel" id="filterPanel2" aria-label="ページ2フィルター" hidden>
           <div class="test-level-row">
             <span class="test-level-label">趣味Lv：</span>
             <div class="test-level-items">
@@ -264,7 +277,7 @@
       </section>
 
       <!-- ▼ 動物ライフページ -->
-      <section id="page-cat" class="page" aria-labelledby="cat-title">
+      <section id="page-cat" data-page-id="cat" class="page" aria-labelledby="cat-title">
         <h2 id="cat-title">動物ライフ</h2>
         <p class="cat-help">動物のお世話をします。</p>
 
@@ -376,7 +389,7 @@
       </section>
 
       <!-- ▼ おすすめページ -->
-      <section id="page-test" class="page" aria-labelledby="test-title">
+      <section id="page-test" data-page-id="test" class="page" aria-labelledby="test-title">
         <h2 id="test-title">おすすめ</h2>
         <p class="test-desc">今の状況と目的を選ぶと、おすすめの行動を提案します。</p>
 
@@ -441,7 +454,7 @@
       </section>
 
       <!-- ▼ 設定ページ -->
-      <section id="page-settings" class="page" aria-labelledby="settings-title">
+      <section id="page-settings" data-page-id="settings" class="page" aria-labelledby="settings-title">
         <h2 id="settings-title">そのた</h2>
         <p>作成者：りょーな</p>
         <p>heartpiaID：1hbmee1k</p>
@@ -483,21 +496,7 @@
 
     <!-- ▼ 下部ナビ（スマホ向け固定） -->
     <nav class="nav-tabs bottom-nav" role="navigation" aria-label="下部ナビ">
-      <button class="tab active" data-target="page-zukan" aria-label="生物図鑑">
-        生物図鑑
-      </button>
-      <button class="tab" data-target="page-info" aria-label="園芸・料理">
-        園芸・料理
-      </button>
-      <button class="tab" data-target="page-cat" aria-label="動物">
-        動物
-      </button>
-      <button class="tab" data-target="page-test" aria-label="おすすめ">
-        おすすめ
-      </button>
-      <button class="tab" data-target="page-settings" aria-label="そのた">
-        そのた
-      </button>
+      <!-- PAGE_DEFSからJSで自動生成 -->
     </nav>
 
     <button id="backToTop" aria-label="先頭に戻る" hidden>▲</button>

@@ -295,6 +295,81 @@ const PLACE2_SEASON_TAGS = {
 };
 
 // =======================
+// 趣味カード色ヘルパー（CSS変数でインライン設定）
+// 新趣味追加時はここにエントリを追加するだけでよい
+// =======================
+const HOBBY_CARD_COLORS = {
+  釣り: {
+    from: "#77adda",
+    to: "#c2e0f7",
+    text: "#0d47a1",
+    fromL: "#e3f2fd",
+    toL: "#f1f8ff",
+  },
+  虫捕り: {
+    from: "#7eca81",
+    to: "#c5efcf",
+    text: "#1b5e20",
+    fromL: "#e8f5e9",
+    toL: "#f1f8f6",
+  },
+  野鳥観察: {
+    from: "#edbd74",
+    to: "#ebd6a9",
+    text: "#f55617",
+    fromL: "#fff9e6",
+    toL: "#fffef0",
+  },
+  "園芸(花)": {
+    from: "#f48cb1",
+    to: "#fde0ec",
+    text: "#7b1a4b",
+    fromL: "#fce8f3",
+    toL: "#fff5fb",
+  },
+  販売食材: {
+    from: "#7ec8ff",
+    to: "#dff3ff",
+    text: "#0d4f7a",
+    fromL: "#e8f5ff",
+    toL: "#f6fbff",
+  },
+  料理: {
+    from: "#ffd45a",
+    to: "#ffefb4",
+    text: "#835700",
+    fromL: "#fff5d9",
+    toL: "#fffcef",
+  },
+  園芸: {
+    from: "#f48cb1",
+    to: "#fde0ec",
+    text: "#7b1a4b",
+    fromL: "#fce8f3",
+    toL: "#fff5fb",
+  },
+};
+
+function getHobbyCardStyle(hobby, unlocked) {
+  const c = HOBBY_CARD_COLORS[hobby];
+  if (!c) return "";
+  return unlocked
+    ? `--hc-from:${c.from};--hc-to:${c.to};--hc-text:${c.text}`
+    : `--hc-from:${c.fromL};--hc-to:${c.toL};--hc-text:#666`;
+}
+
+function getPage2HobbyCardStyle(item, gardenLevel, cookingLevel) {
+  const unlocked =
+    getEffectiveLevelPage2(item, gardenLevel, cookingLevel) >=
+    (item.level ?? 1);
+  let key = "料理";
+  if (isPage2GardeningFlower(item) || isPage2GardeningFood(item))
+    key = "園芸(花)";
+  else if (isPage2StoreIngredient(item)) key = "販売食材";
+  return getHobbyCardStyle(key, unlocked);
+}
+
+// =======================
 // 検索リセット
 // =======================
 
@@ -314,16 +389,42 @@ function applyDefaultSeasons() {
   }
 }
 
-/** ページ1（生物図鑑）の名前検索をリセット */
+/** ページ1（生物図鑑）の全フィルター条件をリセット */
 function resetFiltersPage1() {
   if (searchInput) searchInput.value = "";
+  if (hobbyFilter) hobbyFilter.value = "";
+  if (fishSubFilter) {
+    fishSubFilter.value = "";
+    fishSubFilter.style.visibility = "hidden";
+  }
+  if (seasonFilter) {
+    seasonFilter.value = "";
+  }
+  if (eventnameFilter) {
+    eventnameFilter.value = "";
+    eventnameFilter.style.visibility = "hidden";
+  }
+  if (place1Filter) place1Filter.value = "";
+  updatePlace2Options();
+  if (place2Filter) place2Filter.value = "";
+  if (timeFilter) timeFilter.value = "";
+  if (weatherFilter) weatherFilter.value = "";
   saveFilterState();
   filterCreatures();
 }
 
-/** ページ2（園芸・料理）の名前検索をリセット */
+/** ページ2（園芸・料理）の全フィルター条件をリセット */
 function resetFiltersPage2() {
   if (searchInputPage2) searchInputPage2.value = "";
+  if (seasonFilterPage2) seasonFilterPage2.value = "";
+  if (eventnameFilterPage2) {
+    eventnameFilterPage2.value = "";
+    eventnameFilterPage2.style.visibility = "hidden";
+  }
+  const hf = document.getElementById("hobbyFilterPage2");
+  if (hf) hf.value = "";
+  const hmf = document.getElementById("hobbyModeFilterPage2");
+  if (hmf) hmf.value = "";
   saveFilterState();
   filterAndRenderPage2();
 }
@@ -332,6 +433,147 @@ function resetFiltersPage2() {
 function resetFiltersCat() {
   if (catSearchInput) catSearchInput.value = "";
   renderPage3FishList();
+}
+
+// =======================
+// アクティブフィルターチップ
+// =======================
+
+/** ページ1のアクティブなフィルター条件をチップとして表示し、クリックで解除できるようにする */
+function updateActiveChips1() {
+  const container = document.getElementById("activeChips1");
+  if (!container) return;
+  container.innerHTML = "";
+
+  const chips = [];
+  const season = seasonFilter?.value;
+  if (season) {
+    const evName = eventnameFilter?.value;
+    const label = evName ? evName : SEASON_LABELS[season] || season;
+    chips.push({
+      label,
+      clear: () => {
+        if (seasonFilter) seasonFilter.value = "";
+        if (eventnameFilter) {
+          eventnameFilter.value = "";
+          eventnameFilter.style.visibility = "hidden";
+        }
+      },
+    });
+  }
+  if (hobbyFilter?.value) {
+    chips.push({
+      label: `趣味：${hobbyFilter.value}`,
+      clear: () => {
+        hobbyFilter.value = "";
+        if (fishSubFilter) {
+          fishSubFilter.value = "";
+          fishSubFilter.style.visibility = "hidden";
+        }
+      },
+    });
+  }
+  if (place1Filter?.value)
+    chips.push({
+      label: `場所1：${place1Filter.value}`,
+      clear: () => {
+        place1Filter.value = "";
+        updatePlace2Options();
+        if (place2Filter) place2Filter.value = "";
+      },
+    });
+  if (place2Filter?.value)
+    chips.push({
+      label: `場所2：${place2Filter.value}`,
+      clear: () => {
+        place2Filter.value = "";
+      },
+    });
+  if (timeFilter?.value)
+    chips.push({
+      label: `時間：${timeFilter.value}`,
+      clear: () => {
+        timeFilter.value = "";
+      },
+    });
+  if (weatherFilter?.value)
+    chips.push({
+      label: `天候`,
+      clear: () => {
+        weatherFilter.value = "";
+      },
+    });
+
+  chips.forEach(({ label, clear }) => {
+    const chip = document.createElement("button");
+    chip.className = "active-chip";
+    chip.type = "button";
+    chip.innerHTML = `${label} <span class="active-chip-x">×</span>`;
+    chip.addEventListener("click", () => {
+      clear();
+      saveFilterState();
+      filterCreatures();
+    });
+    container.appendChild(chip);
+  });
+
+  if (typeof updateFilterBadge === "function")
+    updateFilterBadge("filterToggleBtn1", chips.length);
+}
+
+/** ページ2のアクティブなフィルター条件をチップとして表示する */
+function updateActiveChips2() {
+  const container = document.getElementById("activeChips2");
+  if (!container) return;
+  container.innerHTML = "";
+
+  const chips = [];
+  const season2 = seasonFilterPage2?.value;
+  if (season2) {
+    const evName2 = eventnameFilterPage2?.value;
+    chips.push({
+      label: evName2 || SEASON_LABELS[season2] || season2,
+      clear: () => {
+        if (seasonFilterPage2) seasonFilterPage2.value = "";
+        if (eventnameFilterPage2) {
+          eventnameFilterPage2.value = "";
+          eventnameFilterPage2.style.visibility = "hidden";
+        }
+      },
+    });
+  }
+  const hf = document.getElementById("hobbyFilterPage2");
+  if (hf?.value)
+    chips.push({
+      label: `趣味：${hf.value}`,
+      clear: () => {
+        hf.value = "";
+      },
+    });
+  const hmf = document.getElementById("hobbyModeFilterPage2");
+  if (hmf?.value)
+    chips.push({
+      label: `種別：${hmf.value}`,
+      clear: () => {
+        hmf.value = "";
+      },
+    });
+
+  chips.forEach(({ label, clear }) => {
+    const chip = document.createElement("button");
+    chip.className = "active-chip";
+    chip.type = "button";
+    chip.innerHTML = `${label} <span class="active-chip-x">×</span>`;
+    chip.addEventListener("click", () => {
+      clear();
+      saveFilterState();
+      filterAndRenderPage2();
+    });
+    container.appendChild(chip);
+  });
+
+  if (typeof updateFilterBadge === "function")
+    updateFilterBadge("filterToggleBtn2", chips.length);
 }
 
 // =======================
@@ -487,6 +729,7 @@ function filterCreatures() {
   }
 
   renderList(filtered, hobbyLevelMap);
+  updateActiveChips1();
 }
 
 /**
@@ -1176,21 +1419,63 @@ function renderList(list, hobbyLevelMap) {
     if (topName) topPriceNames.add(topName);
   });
 
+  // 各（場所2×時間×天候）ごとの生物数を集計し、各生物の最少競合環境を算出
+  const envCountByP2 = new Map();
+  list.forEach((c) => {
+    for (const p2 of c.places2 || []) {
+      for (const t of c.times || []) {
+        for (const w of c.weathers || []) {
+          const key = `${p2}|${t}|${w}`;
+          envCountByP2.set(key, (envCountByP2.get(key) || 0) + 1);
+        }
+      }
+    }
+  });
+  list.forEach((c) => {
+    if (c.hobby !== "釣り") {
+      c._bestEnv = [];
+      return;
+    }
+    const p2s = c.places2 || [];
+    const times = c.times || [];
+    const weathers = c.weathers || [];
+    if (!p2s.length || !times.length || !weathers.length) {
+      c._bestEnv = [];
+      return;
+    }
+    let min = Infinity;
+    const bestCombos = [];
+    for (const p2 of p2s) {
+      for (const t of times) {
+        for (const w of weathers) {
+          const rivals = (envCountByP2.get(`${p2}|${t}|${w}`) || 1) - 1;
+          if (rivals < min) {
+            min = rivals;
+            bestCombos.length = 0;
+            bestCombos.push({ p2, t, w });
+          } else if (rivals === min) bestCombos.push({ p2, t, w });
+        }
+      }
+    }
+    const bestEnvP2s = new Set(bestCombos.map((b) => b.p2));
+    const bestEnvUniq = [];
+    for (const { t, w } of bestCombos) {
+      if (!bestEnvUniq.some((b) => b.t === t && b.w === w))
+        bestEnvUniq.push({ t, w });
+    }
+    c._bestEnv = bestEnvUniq;
+    c._bestEnvP2s = bestEnvP2s;
+    c._bestEnvRivals = min;
+  });
+
   // カード生成用ヘルパー関数：1件のクリーチャーカードHTMLを返す
   const generateCard = (c) => {
     // 金縁表示対象かどうか
     const isTopPrice = topPriceNames.has(c.name);
     // 趣味レベルでアンロック済みかどうか
     const unlocked = (hobbyLevelMap[c.hobby] ?? 10) >= c.level;
-    let hobbyClass = "";
-    if (c.hobby === "釣り") {
-      hobbyClass = unlocked ? "card-fishing-unlocked" : "card-fishing-locked";
-    } else if (c.hobby === "虫捕り") {
-      hobbyClass = unlocked ? "card-insect-unlocked" : "card-insect-locked";
-    } else if (c.hobby === "野鳥観察") {
-      hobbyClass = unlocked ? "card-bird-unlocked" : "card-bird-locked";
-    }
-    const cardClass = `card ${hobbyClass}`;
+    const hobbyStyle = getHobbyCardStyle(c.hobby, unlocked);
+    const cardClass = `card card-hobby`;
     // 場所1の背景画像を取得（場所への視覚的ヒント）
     const placeBackgroundName = getPlace1BackgroundName(c.places1);
     const placeBackgroundMarkup = placeBackgroundName
@@ -1207,7 +1492,10 @@ function renderList(list, hobbyLevelMap) {
 
     const metaLines = [];
     if (c.places2?.length) {
-      metaLines.push(`場所2：${c.places2.join(" / ")}`);
+      const p2Parts = c.places2.map((p) =>
+        c._bestEnvP2s?.has(p) ? `<span class="place2-best-env">${p}</span>` : p,
+      );
+      metaLines.push(`場所2：${p2Parts.join(" / ")}`);
     }
     if (c.weathers) {
       // 天候は画像行で表示するため metaLines には追加しない
@@ -1216,7 +1504,9 @@ function renderList(list, hobbyLevelMap) {
     const ALL_WEATHERS_CARD = ["晴れ", "雨(雪)", "虹"];
     const weatherSet = new Set(c.weathers || []);
     const star5WeatherSet = new Set(c.star5Weathers || []);
-    const weatherRowMarkup = `<div class="card-weather-row"><span class="card-row-label">天気：</span>${ALL_WEATHERS_CARD.map((w) => `<span class="card-weather-chip${weatherSet.has(w) ? "" : " card-weather-chip--off"}${star5WeatherSet.has(w) ? " card-weather-chip--star5" : ""}" data-label="${w}"><img class="card-weather-chip-img" src="img/other/${w}.png" alt="${w}" onerror="this.closest('.card-weather-chip').style.display='none'"></span>`).join("")}</div>`;
+    const bestEnvTimeSet = new Set((c._bestEnv || []).map((e) => e.t));
+    const bestEnvWeatherSet = new Set((c._bestEnv || []).map((e) => e.w));
+    const weatherRowMarkup = `<div class="card-weather-row"><span class="card-row-label">天気：</span>${ALL_WEATHERS_CARD.map((w) => `<span class="card-weather-chip${weatherSet.has(w) ? "" : " card-weather-chip--off"}${star5WeatherSet.has(w) ? " card-weather-chip--star5" : ""}${bestEnvWeatherSet.has(w) ? " card-weather-chip--best-env" : ""}" data-label="${w}"><img class="card-weather-chip-img" src="img/other/${w}.png" alt="${w}" onerror="this.closest('.card-weather-chip').style.display='none'"></span>`).join("")}</div>`;
 
     const TIME_SLOTS = [
       { key: "00-06", emoji: "\u{1F319}", dataLabel: "深夜 00:00～06:00" },
@@ -1229,7 +1519,7 @@ function renderList(list, hobbyLevelMap) {
     const timeRowMarkup = `<div class="card-time-row"><span class="card-row-label">時間：</span>${TIME_SLOTS.map(
       ({ key, emoji, dataLabel }) => {
         const [tStart, tEnd] = key.split("-");
-        return `<span class="card-time-badge${timeSet.has(key) ? " card-time-badge--on" : " card-time-badge--off"}${star5TimeSet.size > 0 && star5TimeSet.has(key) ? " card-time-badge--star5" : ""}" data-label="${dataLabel}"><span class="card-time-start">${tStart}</span>${emoji}<span class="card-time-end">${tEnd}</span></span>`;
+        return `<span class="card-time-badge${timeSet.has(key) ? " card-time-badge--on" : " card-time-badge--off"}${star5TimeSet.size > 0 && star5TimeSet.has(key) ? " card-time-badge--star5" : ""}${bestEnvTimeSet.has(key) ? " card-time-badge--best-env" : ""}" data-label="${dataLabel}"><span class="card-time-start">${tStart}</span>${emoji}<span class="card-time-end">${tEnd}</span></span>`;
       },
     ).join("")}</div>`;
 
@@ -1302,6 +1592,9 @@ function renderList(list, hobbyLevelMap) {
       .join("");
 
     const noteLines = getNoteLines(c.note);
+    if (c._bestEnv?.length) {
+      noteLines.push("緑枠は単体狙いのおすすめの環境を表しています。");
+    }
 
     // --- にゃんこカード用：好物・偏食・チェックボタン追加 ---
     let catInfoBlock = "";
@@ -1319,7 +1612,7 @@ function renderList(list, hobbyLevelMap) {
     return `
       <div class="card card-flip${c.acquired ? "" : " card-not-acquired"}" data-name="${c.name}" role="button" tabindex="0" aria-label="${c.name}の詳細カードを裏返す">
         <div class="card-inner">
-          <div class="card-front ${cardClass}">
+          <div class="card-front ${cardClass}" style="${hobbyStyle}">
             ${placeBackgroundMarkup}
             ${placeBadgeMarkup}
             ${c.img ? `<img class="card-img" src="${c.img}" alt="${c.name}" loading="eager">` : ""}
@@ -1370,7 +1663,7 @@ function renderList(list, hobbyLevelMap) {
               ${c.season === "normal" ? `<label><input type="checkbox" class="card-master-checkbox" data-name="${c.name}" ${c.master ? "checked" : ""} /> マスター</label>` : ""}
             </div>
           </div>
-          <div class="card-back ${cardClass}">
+          <div class="card-back ${cardClass}" style="${hobbyStyle}">
             ${placeBackgroundMarkup}
             <div class="rarity-list">
               ${rarityBlocks}
@@ -1833,7 +2126,8 @@ function renderPage2List(targetEl, list, gardenLevel, cookingLevel) {
 
   const generateItemCard = (item) => {
     const isTopPrice = topPriceNamesP2.has(item.name);
-    const cardClass = getPage2CardClass(item, gardenLevel, cookingLevel);
+    const cardClass = `card card-hobby`;
+    const hobbyStyle = getPage2HobbyCardStyle(item, gardenLevel, cookingLevel);
     const metaLines = [];
     const isStoreIngredient = isPage2StoreIngredient(item);
     const cookingWagonImage = getPage2CookingWagonImage(item);
@@ -1885,8 +2179,7 @@ function renderPage2List(targetEl, list, gardenLevel, cookingLevel) {
     return `
         <article class="card card-flip${item.acquired ? "" : " card-not-acquired"}" data-name="${item.name}" role="button" tabindex="0" aria-label="${item.name}の詳細カードを裏返す">
           <div class="card-inner">
-            <div class="card-front ${cardClass}">
-              ${cookingWagonMarkup}
+            <div class="card-front ${cardClass}" style="${hobbyStyle}">
               ${item.img ? `<img class="card-img" src="${item.img}" alt="${item.name}" loading="eager">` : ""}
               <div class="card-header">
                 <span class="card-name">${item.name}</span>
@@ -1915,7 +2208,7 @@ function renderPage2List(targetEl, list, gardenLevel, cookingLevel) {
                     })()
               }
             </div>
-            <div class="card-back ${cardClass}">
+            <div class="card-back ${cardClass}" style="${hobbyStyle}">
               ${cookingWagonMarkup}
               <div class="rarity-list">
                 ${backContent}
@@ -2455,6 +2748,7 @@ function filterAndRenderPage2() {
   renderPage2List(resultPage2, sorted, gardenLevel, cookingLevel);
   updateCountersPage2(sorted);
   renderPage2RecommendTop5(gardenLevel, cookingLevel);
+  updateActiveChips2();
 }
 
 /**

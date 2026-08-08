@@ -1,3 +1,150 @@
+// =======================
+// ページ定義（ここに1行追加するだけで新ページ対応）
+// =======================
+// drawerOnly: true のページはドロワーメニューに格納される
+const PAGE_DEFS = [
+  { id: "page-zukan", label: "生物図鑑", shortLabel: "生物", icon: "🐟" },
+  { id: "page-info", label: "園芸・料理", shortLabel: "生産", icon: "🌿" },
+  { id: "page-cat", label: "動物", shortLabel: "ペット", icon: "🐱" },
+  { id: "page-test", label: "おすすめ", shortLabel: "おすすめ", icon: "⭐" },
+  {
+    id: "page-settings",
+    label: "そのた",
+    shortLabel: "その他",
+    icon: "⚙️",
+    drawerOnly: true,
+  },
+];
+
+// =======================
+// ナビボタン生成
+// =======================
+function buildNav() {
+  const mainPages = PAGE_DEFS.filter((p) => !p.drawerOnly);
+  const drawerPages = PAGE_DEFS.filter((p) => p.drawerOnly);
+
+  [".top-nav", ".bottom-nav"].forEach((selector) => {
+    const nav = document.querySelector(selector);
+    if (!nav) return;
+    nav.innerHTML = "";
+
+    // メインタブを生成
+    mainPages.forEach((p) => {
+      const btn = document.createElement("button");
+      btn.className = "tab";
+      btn.dataset.target = p.id;
+      btn.setAttribute("aria-label", p.label);
+      btn.innerHTML = `<span class="nav-tab-icon">${p.icon}</span><span class="nav-tab-label">${p.shortLabel}</span>`;
+      nav.appendChild(btn);
+    });
+
+    // ドロワーページがあれば「≡」ボタン＋ドロワーを追加
+    if (drawerPages.length > 0) {
+      const wrap = document.createElement("div");
+      wrap.className = "nav-drawer-wrap";
+
+      const drawerBtn = document.createElement("button");
+      drawerBtn.className = "nav-drawer-btn";
+      drawerBtn.setAttribute("aria-expanded", "false");
+      drawerBtn.setAttribute("aria-label", "その他のページ");
+      drawerBtn.textContent = "≡";
+
+      const drawer = document.createElement("div");
+      drawer.className = "nav-drawer";
+      drawer.hidden = true;
+
+      drawerPages.forEach((p) => {
+        const item = document.createElement("button");
+        item.className = "drawer-item";
+        item.dataset.target = p.id;
+        item.innerHTML = `<span class="drawer-item-icon">${p.icon}</span>${p.label}`;
+        item.addEventListener("click", () => {
+          switchTab(p.id);
+          closeDrawer(drawerBtn, drawer);
+        });
+        drawer.appendChild(item);
+      });
+
+      drawerBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = drawerBtn.getAttribute("aria-expanded") === "true";
+        if (isOpen) {
+          closeDrawer(drawerBtn, drawer);
+        } else {
+          openDrawer(drawerBtn, drawer);
+        }
+      });
+
+      wrap.appendChild(drawerBtn);
+      wrap.appendChild(drawer);
+      nav.appendChild(wrap);
+    }
+  });
+}
+
+function openDrawer(btn, drawer) {
+  btn.setAttribute("aria-expanded", "true");
+  drawer.hidden = false;
+}
+
+function closeDrawer(btn, drawer) {
+  btn.setAttribute("aria-expanded", "false");
+  drawer.hidden = true;
+}
+
+// ドロワー外クリックで閉じる
+document.addEventListener("click", () => {
+  document
+    .querySelectorAll(".nav-drawer-btn[aria-expanded='true']")
+    .forEach((btn) => {
+      const drawer = btn.nextElementSibling;
+      if (drawer) closeDrawer(btn, drawer);
+    });
+});
+
+// =======================
+// フィルターパネル トグル
+// =======================
+function setupFilterPanel(toggleBtnId, panelId, chipsId, filterFn) {
+  const btn = document.getElementById(toggleBtnId);
+  const panel = document.getElementById(panelId);
+  if (!btn || !panel) return;
+
+  // localStorageでパネル開閉状態を保存
+  const stateKey = "filterPanel_" + panelId;
+  const savedOpen = localStorage.getItem(stateKey) === "true";
+  setFilterPanelState(btn, panel, savedOpen);
+
+  btn.addEventListener("click", () => {
+    const isOpen = btn.getAttribute("aria-expanded") === "true";
+    const next = !isOpen;
+    setFilterPanelState(btn, panel, next);
+    localStorage.setItem(stateKey, next);
+  });
+}
+
+function setFilterPanelState(btn, panel, open) {
+  btn.setAttribute("aria-expanded", open ? "true" : "false");
+  panel.hidden = !open;
+}
+
+/** フィルターパネルトグルボタンのバッジ数を更新する */
+function updateFilterBadge(toggleBtnId, count) {
+  const btn = document.getElementById(toggleBtnId);
+  if (!btn) return;
+  let badge = btn.querySelector(".filter-badge");
+  if (count > 0) {
+    if (!badge) {
+      badge = document.createElement("span");
+      badge.className = "filter-badge";
+      btn.insertBefore(badge, btn.querySelector(".filter-chevron"));
+    }
+    badge.textContent = count;
+  } else {
+    if (badge) badge.remove();
+  }
+}
+
 // ▼ タブ切り替え（上部／下部共通）
 
 /**
@@ -21,6 +168,19 @@ function switchTab(target) {
     t.classList.toggle("active", isTarget);
     t.setAttribute("aria-pressed", isTarget ? "true" : "false");
   });
+  // ドロワーアイテムのアクティブ状態も更新
+  document.querySelectorAll(".nav-drawer .drawer-item").forEach((t) => {
+    t.classList.toggle("active", t.dataset.target === target);
+  });
+  // ドロワーボタン自体のアクティブ状態（ドロワー内ページが選択中なら強調）
+  document.querySelectorAll(".nav-drawer-btn").forEach((btn) => {
+    const drawer = btn.nextElementSibling;
+    if (!drawer) return;
+    const hasActive = [...drawer.querySelectorAll(".drawer-item")].some(
+      (it) => it.dataset.target === target,
+    );
+    btn.classList.toggle("active", hasActive);
+  });
   document
     .querySelectorAll(".page")
     .forEach((p) => p.classList.remove("active"));
@@ -34,11 +194,40 @@ function switchTab(target) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  // ナビを PAGE_DEFS から生成
+  buildNav();
+
   document.querySelectorAll(".nav-tabs .tab").forEach((tab) => {
     tab.addEventListener("click", () => {
       switchTab(tab.dataset.target);
     });
   });
+
+  // フィルターパネルのトグルセットアップ
+  setupFilterPanel("filterToggleBtn1", "filterPanel1", "activeChips1");
+  setupFilterPanel("filterToggleBtn2", "filterPanel2", "activeChips2");
+
+  // 検索クリア（×）ボタン
+  const clearSearch1 = document.getElementById("clearSearchBtn");
+  const clearSearch2 = document.getElementById("clearSearchBtnPage2");
+  if (clearSearch1) {
+    clearSearch1.addEventListener("click", () => {
+      const inp = document.getElementById("searchInput");
+      if (inp) {
+        inp.value = "";
+        inp.dispatchEvent(new Event("input"));
+      }
+    });
+  }
+  if (clearSearch2) {
+    clearSearch2.addEventListener("click", () => {
+      const inp = document.getElementById("searchInputPage2");
+      if (inp) {
+        inp.value = "";
+        inp.dispatchEvent(new Event("input"));
+      }
+    });
+  }
 
   // リロード時に最後に開いていたタブを復元
   const savedTab = localStorage.getItem("activeTab");
