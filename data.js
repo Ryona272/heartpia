@@ -2787,7 +2787,7 @@ const birdCreatures = [
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 120 }],
     star5Weathers: ["虹"],
-    star5Times: [], //★要調べ/夜時間の可能性
+    star5Times: ["18-00"],
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
@@ -2869,7 +2869,7 @@ const birdCreatures = [
     weathers: ["虹"],
     rarityData: [{ star: 2, price: 120 }],
     star5Weathers: ["虹"],
-    star5Times: [], //★要調べ,夜時間の可能性
+    star5Times: ["18-00"],
     note: [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
@@ -2917,7 +2917,7 @@ const birdCreatures = [
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 260 }],
     star5Weathers: ["虹"],
-    star5Times: [], //★要調べ,夜時間の可能性
+    star5Times: ["18-00"],
     note: [
       "★５は頭を回す動作",
       "時間と天気の金縁は★５動作をする環境を表しています",
