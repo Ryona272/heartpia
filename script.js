@@ -1420,8 +1420,9 @@ function renderList(list, hobbyLevelMap) {
   });
 
   // 各（場所2×時間×天候）ごとの生物数を集計し、各生物の最少競合環境を算出
+  // 絞り込み条件によらず常に同じおススメ環境を返すため全件(creatures)で集計する
   const envCountByP2 = new Map();
-  list.forEach((c) => {
+  creatures.forEach((c) => {
     for (const p2 of c.places2 || []) {
       for (const t of c.times || []) {
         for (const w of c.weathers || []) {
@@ -1431,7 +1432,7 @@ function renderList(list, hobbyLevelMap) {
       }
     }
   });
-  list.forEach((c) => {
+  creatures.forEach((c) => {
     if (c.hobby !== "釣り") {
       c._bestEnv = [];
       return;
@@ -1782,6 +1783,13 @@ const INGREDIENT_IMAGE_MAP = (() => {
   add("img/insect", insectCreatures);
   add("img/bird", birdCreatures);
   add("img/store-ingredient", storeIngredientCreatures);
+  // シーズン・フェス生物も食材マップに追加（whaleseasonCreatures 等の未登録を補完）
+  (allSeasonalCreatures || []).forEach((c) => {
+    if (!c.name) return;
+    if (c.hobby === "釣り") map.set(c.name, "img/fish");
+    else if (c.hobby === "虫捕り") map.set(c.name, "img/insect");
+    else if (c.hobby === "野鳥観察") map.set(c.name, "img/bird");
+  });
   // page2Creatures は hobby 配列で判定
   ([...page2Creatures, ...otherEventPage2Creatures] || []).forEach((c) => {
     if (!c.name) return;

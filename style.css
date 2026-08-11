@@ -165,6 +165,12 @@ body::before {
     inset 0 -2px 0 rgba(119, 54, 20, 0.25);
 }
 
+/* 空タブ：スペース確保のまま不可視・操作無効 */
+.nav-tabs .tab.nav-tab-empty {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 /* ペ�Eジ刁E�� */
 .page {
   display: none;
@@ -215,12 +221,12 @@ body::before {
   --page-bg-img: none;
   --page-bg-size: auto 15rem;
   background-image:
+    var(--page-bg-img),
     linear-gradient(120deg, rgba(235, 239, 216, 0.9), transparent 38%),
-    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.72), transparent 50%),
-    var(--page-bg-img);
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.72), transparent 50%);
   background-repeat: no-repeat;
-  background-position: 0 0, 0 0, right 16px top 16px;
-  background-size: auto, auto, var(--page-bg-size);
+  background-position: right 16px top 16px, 0 0, 0 0;
+  background-size: var(--page-bg-size), auto, auto;
   background-clip: border-box;
   background-origin: padding-box;
 }
@@ -2891,7 +2897,7 @@ button.is-pressed,
 }
 
 /* =======================
-   ドロワーナビ（B案：オーバーフローページを格納）
+   ドロワーナビ（4列グリッド形式）
    ======================= */
 .nav-drawer-btn {
   flex: 0 0 auto;
@@ -2908,9 +2914,7 @@ button.is-pressed,
   line-height: 1;
   text-align: center;
   transition: background 0.18s ease, box-shadow 0.18s ease;
-  position: relative;
 }
-.nav-drawer-btn.active,
 .nav-drawer-btn[aria-expanded="true"] {
   background: var(--tab-active);
   color: #fff9e8;
@@ -2918,39 +2922,56 @@ button.is-pressed,
   box-shadow: 0 6px 20px rgba(184, 100, 35, 0.28), inset 0 -2px 0 rgba(119, 54, 20, 0.25);
 }
 
+/* nav 直接の子要素としてナビ全幅に配置 */
 .nav-drawer {
   position: absolute;
-  top: calc(100% + 8px);
   right: 0;
-  min-width: 140px;
+  width: min(300px, 100%);
   background: var(--nav-bg);
   backdrop-filter: blur(8px);
   border-radius: 12px;
   border: 1px solid rgba(167, 133, 62, 0.35);
   box-shadow: 0 8px 28px rgba(73, 62, 23, 0.18);
   z-index: 1200;
-  padding: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  padding: 10px;
+}
+.top-nav .nav-drawer {
+  top: calc(100% + 6px);
+}
+.bottom-nav .nav-drawer {
+  bottom: calc(100% + 6px);
 }
 .nav-drawer[hidden] { display: none; }
 
+/* 行区切り線 */
+.nav-drawer-sep {
+  height: 1px;
+  background: rgba(167, 133, 62, 0.3);
+  margin: 8px 0;
+}
+
+/* 1行 = 最大10個（不足分は自動で少ない） */
+.nav-drawer-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
 .nav-drawer .drawer-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 4px;
   border-radius: 8px;
   background: transparent;
   border: none;
   cursor: pointer;
   font-family: inherit;
-  font-size: 14px;
   font-weight: 700;
   color: #5f4a22;
-  text-align: left;
-  width: 100%;
+  text-align: center;
   transition: background 0.15s ease;
 }
 .nav-drawer .drawer-item:hover,
@@ -2961,9 +2982,10 @@ button.is-pressed,
   background: rgba(219, 151, 82, 0.25);
   color: #8b4e14;
 }
-.nav-drawer .drawer-item-icon { font-size: 1.2em; }
+.nav-drawer .drawer-item-icon { font-size: 1.4em; line-height: 1; }
+.nav-drawer .drawer-item-label { font-size: 11px; line-height: 1.2; white-space: nowrap; }
 
-/* ドロワーボタンラッパー（positionの基点） */
+/* ドロワーボタンラッパー */
 .nav-drawer-wrap {
   position: relative;
 }
