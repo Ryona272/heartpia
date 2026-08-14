@@ -4115,19 +4115,13 @@ function formatHourToJpTime(hourValue) {
 // ============================================================
 // ページ1（生物図鑑）用: 釣り・虫捕り・野鳥観察を統合した配列
 // ============================================================
-const creatures = [
-  ...fishingCreatures,
-  ...insectCreatures,
-  ...birdCreatures,
-  ...oceanCleaningCreatures,
-];
+const creatures = [...fishingCreatures, ...insectCreatures, ...birdCreatures];
 creatures.forEach((c) => {
   let folder = "";
 
   if (c.hobby === "釣り") folder = "fish";
   else if (c.hobby === "虫捕り") folder = "insect";
   else if (c.hobby === "野鳥観察") folder = "bird";
-  else if (c.hobby === "海洋清掃") folder = "shell";
 
   c.img = `img/${folder}/${c.name}.png`;
 
@@ -6417,6 +6411,10 @@ const oceanCleaningCreatures = [
     season: "normal",
   },
 ];
+creatures.push(...oceanCleaningCreatures);
+oceanCleaningCreatures.forEach((c) => {
+  c.img = `img/shell/${c.name}.png`;
+});
 
 // その他イベント限定生物（今のところなし）
 const otherEventCreatures = [
