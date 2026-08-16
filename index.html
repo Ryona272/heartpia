@@ -453,6 +453,86 @@
         <div id="recommendPage2" class="recommend-top5-wrap"></div>
       </section>
 
+      <!-- ▼ 海洋清掃ページ -->
+      <section id="page-shell" data-page-id="shell" class="page" aria-labelledby="shell-title">
+        <header class="page-header">
+          <h1 id="shell-title">海洋清掃</h1>
+        </header>
+
+        <div class="view-switch" role="toolbar" aria-label="表示切替">
+          <div class="view-buttons">
+            <button id="view1Shell" aria-pressed="false">1列</button>
+            <button id="view2Shell" class="active" aria-pressed="true">2列</button>
+          </div>
+          <div class="status-buttons" aria-label="表示切替フィルター">
+            <button id="acquiredToggleShell" class="filter-toggle active" aria-pressed="true">獲得 ON</button>
+            <button id="star5ToggleShell" class="filter-toggle active" aria-pressed="true">★5 ON</button>
+            <button id="masterToggleShell" class="filter-toggle active" aria-pressed="true">マスター ON</button>
+          </div>
+        </div>
+
+        <div class="status-summary">
+          <span class="stat-badge stat-badge--total" id="totalCountShell">全件：0</span>
+          <span class="stat-badge stat-badge--display" id="displayCountShell">表示：0</span>
+          <span class="stat-badge stat-badge--acquired" id="acquiredCountShell">獲得：0</span>
+          <span class="stat-badge stat-badge--star5" id="star5CountShell">★5：0</span>
+          <span class="stat-badge stat-badge--master" id="masterCountShell">マスター：0</span>
+        </div>
+
+        <div class="search-box">
+          <div class="search-input-wrap">
+            <input type="text" id="searchInputShell" placeholder="名前で検索…" aria-label="検索" />
+            <button id="clearSearchBtnShell" type="button" class="search-clear-btn" aria-label="検索をクリア">×</button>
+          </div>
+          <button id="resetFilterBtnShell" type="button" class="reset-filter-btn">条件リセット</button>
+          <label for="sortShell" class="sort-inline-label">ソート：</label>
+          <select id="sortShell" class="sort-inline-select">
+            <option value="default">デフォルト</option>
+            <option value="level">趣味レベル順</option>
+            <option value="sell">売値順</option>
+            <option value="name">名前順</option>
+          </select>
+        </div>
+
+        <button id="filterToggleBtnShell" class="filter-panel-toggle" type="button" aria-expanded="false">
+          🔍 フィルター <span class="filter-chevron">▾</span>
+        </button>
+        <div id="activeChipsShell" class="active-chips" aria-live="polite"></div>
+
+        <section class="controls filter-panel" id="filterPanelShell" aria-label="フィルター" hidden>
+          <div class="test-level-row">
+            <span class="test-level-label">趣味Lv：</span>
+            <div class="test-level-items">
+              <div class="test-level-item">
+                <label for="bioLevelShell">海洋清掃🐚</label>
+                <select id="bioLevelShell"></select>
+              </div>
+            </div>
+          </div>
+          <div class="controls-season-row">
+            <div>
+              <label for="timeFilterShell">時間：</label>
+              <select id="timeFilterShell"></select>
+            </div>
+            <div>
+              <label for="weatherFilterShell">天候：</label>
+              <select id="weatherFilterShell">
+                <option value="">すべて</option>
+                <option value="all_three">晴れ , 雨(雪) , 虹</option>
+                <option value="exclude_sunny">雨(雪) , 虹</option>
+                <option value="exclude_rain">晴れ , 虹</option>
+                <option value="rainbow_only">虹のみ</option>
+                <option value="include_sunny">今 晴れ</option>
+                <option value="include_rain">今 雨or雪</option>
+                <option value="include_rainbow">今 虹</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section id="resultShell" class="result" aria-live="polite"></section>
+      </section>
+
       <!-- ▼ 設定ページ -->
       <section id="page-settings" data-page-id="settings" class="page" aria-labelledby="settings-title">
         <h2 id="settings-title">そのた</h2>

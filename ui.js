@@ -26,6 +26,13 @@ const PAGE_DEFS = [
     row: 1,
   },
   {
+    id: "page-shell",
+    label: "海洋清掃",
+    shortLabel: "海洋清掃",
+    icon: "🐚",
+    row: 1,
+  },
+  {
     id: "page-settings",
     label: "そのた",
     shortLabel: "その他",
@@ -272,10 +279,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // フィルターパネルのトグルセットアップ
   setupFilterPanel("filterToggleBtn1", "filterPanel1", "activeChips1");
   setupFilterPanel("filterToggleBtn2", "filterPanel2", "activeChips2");
+  setupFilterPanel(
+    "filterToggleBtnShell",
+    "filterPanelShell",
+    "activeChipsShell",
+  );
 
   // 検索クリア（×）ボタン
   const clearSearch1 = document.getElementById("clearSearchBtn");
   const clearSearch2 = document.getElementById("clearSearchBtnPage2");
+  const clearSearchShell = document.getElementById("clearSearchBtnShell");
   if (clearSearch1) {
     clearSearch1.addEventListener("click", () => {
       const inp = document.getElementById("searchInput");
@@ -288,6 +301,15 @@ document.addEventListener("DOMContentLoaded", () => {
   if (clearSearch2) {
     clearSearch2.addEventListener("click", () => {
       const inp = document.getElementById("searchInputPage2");
+      if (inp) {
+        inp.value = "";
+        inp.dispatchEvent(new Event("input"));
+      }
+    });
+  }
+  if (clearSearchShell) {
+    clearSearchShell.addEventListener("click", () => {
+      const inp = document.getElementById("searchInputShell");
       if (inp) {
         inp.value = "";
         inp.dispatchEvent(new Event("input"));
@@ -386,6 +408,29 @@ view2.addEventListener("click", () => {
   updateViewButtons();
   if (typeof saveFilterState === "function") saveFilterState();
 });
+
+// ▼ 表示列切り替え（海洋清掃ページ）
+const view1Shell = document.getElementById("view1Shell");
+const view2Shell = document.getElementById("view2Shell");
+
+if (view1Shell && view2Shell) {
+  view1Shell.addEventListener("click", () => {
+    document.getElementById("resultShell")?.classList.add("one-column");
+    view1Shell.classList.add("active");
+    view2Shell.classList.remove("active");
+    view1Shell.setAttribute("aria-pressed", "true");
+    view2Shell.setAttribute("aria-pressed", "false");
+    if (typeof saveFilterState === "function") saveFilterState();
+  });
+  view2Shell.addEventListener("click", () => {
+    document.getElementById("resultShell")?.classList.remove("one-column");
+    view2Shell.classList.add("active");
+    view1Shell.classList.remove("active");
+    view2Shell.setAttribute("aria-pressed", "true");
+    view1Shell.setAttribute("aria-pressed", "false");
+    if (typeof saveFilterState === "function") saveFilterState();
+  });
+}
 
 // ▼ 表示列切り替え（ページ2）
 // ページ2用の1列/2列表示ボタン（存在する場合のみセットアップ）
