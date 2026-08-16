@@ -6776,7 +6776,7 @@ const otherEventPage2Creatures = [
     hobby: ["料理"],
     level: 1,
     food: ["小麦", "小麦", "卵", "料理油"],
-    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    rarityData: [{ star: 1, price: 830 }],
     staminaRecovery: "100",
     buff: "なし",
     note: ["「蘭月遊園会」のイベントでレシピを入手"],

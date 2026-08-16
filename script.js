@@ -4282,7 +4282,14 @@ function initPageTest() {
     return;
 
   let selectedGoal = null;
-  const ALL_HOBBIES = ["釣り", "虫捕り", "野鳥観察", "園芸", "料理"];
+  const ALL_HOBBIES = [
+    "釣り",
+    "虫捕り",
+    "野鳥観察",
+    "園芸",
+    "料理",
+    "海洋清掃",
+  ];
   const enabledHobbies = new Set(ALL_HOBBIES);
 
   // 場所1プルダウンを初期化（通常シーズン・生物のみ）
@@ -4350,6 +4357,7 @@ function initPageTest() {
       "虫寄せ装置",
       "「巣ごもり」",
       "ブランクの頭",
+      "「海洋清掃」",
     ];
     const sorted = priorityOrder2.filter((p) => places.has(p));
     sorted.forEach((p) => {
@@ -4517,6 +4525,7 @@ function initPageTest() {
       釣り: Number(bioLevelFishInput?.value) || 1,
       虫捕り: Number(bioLevelInsectInput?.value) || 1,
       野鳥観察: Number(bioLevelBirdInput?.value) || 1,
+      海洋清掃: Number(bioLevelShellInput?.value) || 1,
     };
     const place1 = testPlace1El.value;
     const place2 = testPlace2El.value;
@@ -4753,12 +4762,14 @@ function initPageTest() {
     const fishLevel = Number(bioLevelFishInput?.value) || 1;
     const insectLevel = Number(bioLevelInsectInput?.value) || 1;
     const birdLevel = Number(bioLevelBirdInput?.value) || 1;
+    const cleaningLevel = Number(bioLevelShellInput?.value) || 1;
     const gardenLevel = Number(userLevelGardenPage2Input?.value) || 1;
     const cookingLevel = Number(userLevelCookingPage2Input?.value) || 1;
     const creatureLvls = {
       釣り: fishLevel,
       虫捕り: insectLevel,
       野鳥観察: birdLevel,
+      海洋清掃: cleaningLevel,
     };
     const situationText = buildSituationText();
     let html = "";
@@ -4790,27 +4801,29 @@ function initPageTest() {
           ),
         ];
         const baselines = {};
-        ["釣り", "虫捕り", "野鳥観察", "園芸", "料理"].forEach((key) => {
-          const hobbyItems = allForBaseline.filter(
-            (c) => getItemHobbyKey(c) === key && (c.level ?? 1) <= 1,
-          );
-          const prices = hobbyItems
-            .map((c) => {
-              if (!Array.isArray(c.rarityData) || c.rarityData.length === 0)
-                return 0;
-              if (c.hobby === "野鳥観察") {
-                const s2 = c.rarityData.find((r) => r.star === 2);
-                const s1 = c.rarityData.find((r) => r.star === 1);
-                return s2?.price ?? (s1 ? s1.price * 4 : 0);
-              }
-              return c.rarityData.find((r) => r.star === 1)?.price ?? 0;
-            })
-            .filter((p) => p > 0);
-          baselines[key] =
-            prices.length > 0
-              ? prices.reduce((a, b) => a + b, 0) / prices.length
-              : 1;
-        });
+        ["釣り", "虫捕り", "野鳥観察", "園芸", "料理", "海洋清掃"].forEach(
+          (key) => {
+            const hobbyItems = allForBaseline.filter(
+              (c) => getItemHobbyKey(c) === key && (c.level ?? 1) <= 1,
+            );
+            const prices = hobbyItems
+              .map((c) => {
+                if (!Array.isArray(c.rarityData) || c.rarityData.length === 0)
+                  return 0;
+                if (c.hobby === "野鳥観察") {
+                  const s2 = c.rarityData.find((r) => r.star === 2);
+                  const s1 = c.rarityData.find((r) => r.star === 1);
+                  return s2?.price ?? (s1 ? s1.price * 4 : 0);
+                }
+                return c.rarityData.find((r) => r.star === 1)?.price ?? 0;
+              })
+              .filter((p) => p > 0);
+            baselines[key] =
+              prices.length > 0
+                ? prices.reduce((a, b) => a + b, 0) / prices.length
+                : 1;
+          },
+        );
 
         // 生物・料理は★1価格ベース（★5は確約できないため）÷ 趣味Lv1アイテムの平均価格
         // 野鳥観察は1回で3羽取れるため×3
@@ -5016,6 +5029,12 @@ function initPageTest() {
               level: birdLevel,
               icon: "\u{1F426}",
               label: "\u91ce\u9ce5\u89b3\u5bdf",
+            },
+            {
+              hobby: "\u6d77\u6d0b\u6e05\u6383",
+              level: cleaningLevel,
+              icon: "\u{1F41A}",
+              label: "\u6d77\u6d0b\u6e05\u6383",
             },
           ];
           const _s5WeatherMap = {
@@ -5327,6 +5346,12 @@ function initPageTest() {
             level: birdLevel,
             icon: "\u{1F426}",
             label: "野鳥観察",
+          },
+          {
+            hobby: "海洋清掃",
+            level: cleaningLevel,
+            icon: "\u{1F41A}",
+            label: "海洋清掃",
           },
         ];
 
@@ -6087,6 +6112,7 @@ function init() {
   // hobby / time / weather
   const hobbies = new Set(creatures.map((c) => c.hobby));
   hobbies.forEach((h) => {
+    if (h === "海洋清掃") return; // 海洋清掃は専用ページで管理
     const opt = document.createElement("option");
     opt.value = h;
     opt.textContent = h;

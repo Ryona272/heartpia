@@ -2249,6 +2249,11 @@ button.is-pressed,
   color: #835700;
   border-color: rgba(131, 87, 0, 0.4);
 }
+.test-hobby-btn.active.hobby-cleaning {
+  background: linear-gradient(180deg, #3db8ce, #a8e4f0);
+  color: #0a4f64;
+  border-color: rgba(10, 79, 100, 0.4);
+}
 
 .test-result {
   display: flex;
