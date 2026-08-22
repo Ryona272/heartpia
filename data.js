@@ -7303,7 +7303,7 @@ const wildAnimalData = [
     ],
     favoriteWeather: ["晴れ", "虹"],
     category: "イベント",
-    eventActive: true, // イベント開催中: true / 終了: false
+    eventActive: false, // イベント開催中: true / 終了: false
   },
 ];
 
