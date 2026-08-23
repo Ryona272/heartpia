@@ -4988,6 +4988,7 @@ function initPageTest() {
         const notStar5 = [...filtered].filter(
           (c) =>
             !c.fiveStar &&
+            !c.noStar &&
             canStar5Now(c) &&
             !_UGLY_NAMES.has(c.name) &&
             !c.noStar5Data,
@@ -5092,6 +5093,7 @@ function initPageTest() {
                 c.hobby === hobbyName &&
                 c.season === "normal" &&
                 !c.fiveStar &&
+                !c.noStar &&
                 (c.level ?? 1) <= userLevel,
             );
             if (s5Place1) {
@@ -5313,7 +5315,11 @@ function initPageTest() {
       case "master": {
         const _UGLY_NAMES = new Set(["不気味な食べ物", "不気味な飲み物"]);
         const notMaster = [...filtered].filter(
-          (c) => c.season === "normal" && !c.master && !_UGLY_NAMES.has(c.name),
+          (c) =>
+            c.season === "normal" &&
+            !c.master &&
+            !c.noStar &&
+            !_UGLY_NAMES.has(c.name),
         );
 
         // ── 生物マスター おすすめ環境 ──
@@ -5419,6 +5425,7 @@ function initPageTest() {
               c.hobby === hobbyName &&
               c.season === "normal" &&
               !c.master &&
+              !c.noStar &&
               (c.level ?? 1) <= userLevel,
           );
           // 場所1 指定時：その場所1 に出現する生物のみに絞る
