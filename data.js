@@ -987,6 +987,105 @@ const fishingCreatures = [
     rarityData: [{ star: 1, price: 850 }],
     note: "魚影：金",
   },
+  {
+    name: "ベタ",
+    hobby: "釣り",
+    level: 12,
+    places1: ["森林", "湖"],
+    places2: ["森の湖"],
+    times: ["12-18", "18-00"],
+    weathers: ["雨(雪)", "虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "魚影：小",
+  },
+  {
+    name: "エンゼルフィッシュ",
+    hobby: "釣り",
+    level: 12,
+    places1: ["郊外", "湖"],
+    places2: ["郊外の湖"],
+    times: ["00-06", "18-00"],
+    weathers: ["虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "魚影：中",
+  },
+  {
+    name: "ミズクラゲ",
+    hobby: "釣り",
+    level: 12,
+    places1: ["漁村", "海"],
+    places2: ["「海釣り」"],
+    times: ["00-06", "12-18", "18-00"],
+    weathers: ["雨(雪)", "虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "魚影：金",
+  },
+  {
+    name: "アオウミガメ",
+    hobby: "釣り",
+    level: 12,
+    places1: ["花畑", "海"],
+    places2: ["クジラ海"],
+    times: ["12-18", "18-00"],
+    weathers: ["虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "魚影：大",
+  },
+  {
+    name: "シイラ",
+    hobby: "釣り",
+    level: 12,
+    places1: ["温泉山", "海"],
+    places2: ["旧海"],
+    times: ["06-12", "12-18"],
+    weathers: ["虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "魚影：大",
+  },
+  {
+    name: "ニザダイ",
+    hobby: "釣り",
+    level: 13,
+    places1: ["温泉山", "海"],
+    places2: ["旧海"],
+    times: ["00-06", "12-18", "18-00"],
+    weathers: ["雨(雪)", "虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "魚影：中",
+  },
+  {
+    name: "ミノカサゴ",
+    hobby: "釣り",
+    level: 13,
+    places1: ["花畑", "海"],
+    places2: ["クジラ海"],
+    times: ["00-06", "06-12"],
+    weathers: ["雨(雪)", "虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "魚影：中",
+  },
+  {
+    name: "レナーズラス",
+    hobby: "釣り",
+    level: 14,
+    places1: ["森林", "海"],
+    places2: ["東海"],
+    times: ["06-12", "12-18", "18-00"],
+    weathers: ["晴れ", "虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "魚影：中",
+  },
+  {
+    name: "シリキルリスズメダイ",
+    hobby: "釣り",
+    level: 14,
+    places1: ["漁村", "海"],
+    places2: ["そよ風の海", "「海釣り」"],
+    times: ["12-18", "18-00"],
+    weathers: ["晴れ", "虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "魚影：小",
+  },
 ];
 
 // 虫捕り----------------------------------------------
@@ -1749,6 +1848,83 @@ const insectCreatures = [
     rarityData: [{ star: 1, price: 515 }],
     note: "特になし",
   },
+  {
+    name: "ミイロタイマイ",
+    hobby: "虫捕り",
+    level: 12,
+    places1: ["花畑"],
+    places2: ["風車の花畑"],
+    times: ["00-06", "06-12", "18-00"],
+    weathers: ["雨(雪)", "虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "特になし",
+  },
+  {
+    name: "オオサマゴライアス",
+    hobby: "虫捕り",
+    level: 12,
+    places1: ["森林"],
+    places2: ["コジカ塔"],
+    times: ["00-06", "18-00"],
+    weathers: ["虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "特になし",
+  },
+  {
+    name: "ベニトンボ",
+    hobby: "虫捕り",
+    level: 12,
+    places1: ["花畑"],
+    places2: ["草原の湖"],
+    times: ["06-12", "12-18"],
+    weathers: ["虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "特になし",
+  },
+  {
+    name: "デイダミアモルフォ",
+    hobby: "虫捕り",
+    level: 13,
+    places1: ["温泉山"],
+    places2: ["火山湖"],
+    times: ["12-18", "18-00"],
+    weathers: ["虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "特になし",
+  },
+  {
+    name: "ミドリカワトンボ",
+    hobby: "虫捕り",
+    level: 13,
+    places1: ["郊外"],
+    places2: ["郊外の湖"],
+    times: ["12-18", "18-00"],
+    weathers: ["雨(雪)", "虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "特になし",
+  },
+  {
+    name: "グラスウィングバタフライ",
+    hobby: "虫捕り",
+    level: 14,
+    places1: ["花畑"],
+    places2: ["クジラ山"],
+    times: ["12-18", "18-00"],
+    weathers: ["虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "特になし",
+  },
+  {
+    name: "アオミオカタニシ",
+    hobby: "虫捕り",
+    level: 14,
+    places1: ["森林"],
+    places2: ["森の島"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["雨(雪)", "虹"],
+    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    note: "特になし",
+  },
 ];
 
 // 野鳥観察----------------------------------------------
@@ -1970,7 +2146,7 @@ const birdCreatures = [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
     ],
-    //雨、虹で出るか確認
+    //★要調べ雨、虹で出るか確認
   },
   {
     name: "ゴジュウカラ",
@@ -2932,7 +3108,7 @@ const birdCreatures = [
     places2: ["「巣ごもり」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 2, price: 0 }], //★要調べ
+    rarityData: [{ star: 2, price: 150 }],
     star5Weathers: [], //★要調べ
     star5Times: [], //★要調べ
     note: [
