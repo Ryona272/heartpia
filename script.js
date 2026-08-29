@@ -159,7 +159,7 @@ const SEASON_LABELS = {
   whaleseason: "ホエールシーズン",
   dreamlightfes: "ドリームライトフェス",
   blockfes: "ブロック市街地フェス",
-  primitivefes: "原始の呼び声",
+  primitivefes: "原始の呼び声フェス",
   otherevent: "その他イベント",
 };
 
