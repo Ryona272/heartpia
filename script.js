@@ -1020,12 +1020,14 @@ function saveState() {
     showFiveStarShell,
     showMasterShell,
     creatures: creatures.map((c) => ({
+      id: c.id ?? c.name,
       name: c.name,
       acquired: !!c.acquired,
       fiveStar: !!c.fiveStar,
       master: !!c.master,
     })),
     page2: page2Creatures.map((c) => ({
+      id: c.id ?? c.name,
       name: c.name,
       acquired: !!c.acquired,
       fiveStar: !!c.fiveStar,
@@ -1065,7 +1067,10 @@ function loadState() {
       showMasterShell = obj.showMasterShell;
     if (Array.isArray(obj.creatures)) {
       obj.creatures.forEach((stored) => {
-        const target = creatures.find((c) => c.name === stored.name);
+        const storedKey = stored.id ?? stored.name;
+        const target =
+          creatures.find((c) => (c.id ?? c.name) === storedKey) ??
+          creatures.find((c) => c.name === stored.name);
         if (!target) return;
         target.acquired = !!stored.acquired;
         target.fiveStar = !!stored.fiveStar;
@@ -1074,7 +1079,10 @@ function loadState() {
     }
     if (Array.isArray(obj.page2)) {
       obj.page2.forEach((stored) => {
-        const target = page2Creatures.find((c) => c.name === stored.name);
+        const storedKey = stored.id ?? stored.name;
+        const target =
+          page2Creatures.find((c) => (c.id ?? c.name) === storedKey) ??
+          page2Creatures.find((c) => c.name === stored.name);
         if (!target) return;
         target.acquired = !!stored.acquired;
         target.fiveStar = !!stored.fiveStar;
@@ -2177,6 +2185,7 @@ const COOKING_WAGON_IMAGE_BY_TYPE = {
   "whale-stove": "img/other/潮汐コンロ.png",
   "popcorn-wagon": "img/other/ポップコーン移動ワゴン.png",
   "block-wagon": "img/other/積み木移動ワゴン.png",
+  "clay-stove": "img/other/粘土の簡易かまど.png",
 };
 
 /**

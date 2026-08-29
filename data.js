@@ -4256,7 +4256,7 @@ function getPage2WagonType(item) {
   if (item.season === "whaleseason") return "whale-stove";
   if (item.season === "dreamlightfes") return "popcorn-wagon";
   if (item.season === "blockfes") return "block-wagon";
-  if (item.season === "primitivefes") return "primitive-fire";
+  if (item.season === "primitivefes") return "clay-stove";
 
   // 通常・その他イベント・現時点で未分類のイベント料理はコンロ
   return "stove";
@@ -6262,7 +6262,7 @@ const primitivefesCreatures = [
     season: "primitivefes",
   },
   {
-    name: "ブラックスポットガーパイク ",
+    name: "ブラックスポットガーパイク",
     hobby: "釣り",
     level: 1,
     places1: ["森林"],
@@ -6684,7 +6684,7 @@ const primitivefesPage2Creatures = [
     food: [
       "サボテンフレッシュジュース",
       "サボテンフレッシュジュース",
-      "野菜焼肉",
+      "野菜焼き肉",
       "サボテンと魚のスープ",
     ],
     rarityData: [{ star: 1, price: 1300, tc: 240 }],
