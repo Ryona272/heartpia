@@ -138,13 +138,17 @@ const WATER_PLACE_CLASSES = {
 };
 
 // フェス判定用定数（フェス系シーズン値のセット）
-const FESTIVAL_SEASON_VALUES = new Set(["dreamlightfes", "blockfes"]);
+const FESTIVAL_SEASON_VALUES = new Set([
+  "dreamlightfes",
+  "blockfes",
+  "primitivefes",
+]);
 
 // その他イベント判定用定数（イベント系シーズン値のセット）
 const OTHER_EVENT_SEASON_VALUES = new Set(["otherevent"]);
 
 // 現在開催中のシーズン・フェス（ここを編集して開催状況を管理）
-const ACTIVE_SEASONS = new Set(["otherevent"]);
+const ACTIVE_SEASONS = new Set(["otherevent", "primitivefes"]);
 // 現在開催中のその他イベント名（ここを編集して開催状況を管理）
 const ACTIVE_EVENT_NAMES = new Set(["エア漏れ厳禁！", "蘭月遊園会"]);
 
@@ -155,6 +159,7 @@ const SEASON_LABELS = {
   whaleseason: "ホエールシーズン",
   dreamlightfes: "ドリームライトフェス",
   blockfes: "ブロック市街地フェス",
+  primitivefes: "原始の呼び声",
   otherevent: "その他イベント",
 };
 
@@ -310,6 +315,9 @@ const PLACE2_SEASON_TAGS = {
   "「(特殊)積み木魚」": ["blockfes"],
   "「(特殊)積み木虫」": ["blockfes"],
   "「(特殊)積み木鳥」": ["blockfes"],
+  "「原始の泉」": ["primitivefes"],
+  "「原始の大樹」": ["primitivefes"],
+  "「原始の断崖」": ["primitivefes"],
 };
 
 // =======================
@@ -398,16 +406,16 @@ function getPage2HobbyCardStyle(item, gardenLevel, cookingLevel) {
 // 検索リセット
 // =======================
 
-/** ページ1・2のシーズンフィルターをデフォルト値（blockfes）に設定する */
+/** ページ1・2のシーズンフィルターをデフォルト値（primitivefes）に設定する */
 function applyDefaultSeasons() {
-  // page1: ブロック市街地フェス
+  // page1: 原始の呼び声
   if (seasonFilter) {
-    seasonFilter.value = "blockfes";
+    seasonFilter.value = "primitivefes";
     if (eventnameFilter) eventnameFilter.style.visibility = "hidden";
   }
-  // page2: ブロック市街地フェス
+  // page2: 原始の呼び声
   if (seasonFilterPage2) {
-    seasonFilterPage2.value = "blockfes";
+    seasonFilterPage2.value = "primitivefes";
     if (eventnameFilterPage2) {
       eventnameFilterPage2.value = "";
     }
@@ -6206,7 +6214,7 @@ function init() {
   // シーズンフィルター初期化（シーズンとフェスを一括管理）
   seasonFilter.innerHTML = '<option value="">すべて</option>';
   const seasonPriority = ["normal", "snowseason", "whaleseason"];
-  const festivalPriority = ["dreamlightfes", "blockfes"];
+  const festivalPriority = ["dreamlightfes", "blockfes", "primitivefes"];
   const otherEventPriority = ["otherevent"];
   const sortedRegularSeasons = seasonPriority.filter((s) =>
     regularSeasons.has(s),
@@ -6311,7 +6319,11 @@ function init() {
 
   // 保存済み状態がない場合のみデフォルトシーズンを適用
   if (!hadSavedState) {
-    if (sortedFestivals.includes("blockfes")) {
+    if (sortedFestivals.includes("primitivefes")) {
+      seasonFilter.value = "primitivefes";
+      eventnameFilter.style.visibility = "hidden";
+      seasonFilterPage2.value = "primitivefes";
+    } else if (sortedFestivals.includes("blockfes")) {
       seasonFilter.value = "blockfes";
       eventnameFilter.style.visibility = "hidden";
       seasonFilterPage2.value = "blockfes";
