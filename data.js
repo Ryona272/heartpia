@@ -6294,14 +6294,14 @@ const primitivefesCreatures = [
     season: "primitivefes",
   },
   {
-    name: "ゴールデンガーパイク", //★要調べ
+    name: "ゴールデンガーパイク",
     hobby: "釣り",
     level: 1,
     places1: ["森林"],
     places2: ["「ガーパイク」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0, tc: 0 }],
+    rarityData: [{ star: 1, price: 320, tc: 60 }],
     note: ["魚影：大", "追加段階のみ出現"],
     season: "primitivefes",
   },
@@ -6354,14 +6354,14 @@ const primitivefesCreatures = [
     season: "primitivefes",
   },
   {
-    name: "レインボーカブト", //★要調べ
+    name: "レインボーカブト",
     hobby: "虫捕り",
     level: 1,
     places1: ["花畑"],
     places2: ["", "「ニシキコウチュウ」"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0, tc: 0 }],
+    rarityData: [{ star: 1, price: 165, tc: 45 }],
     note: "特になし",
     season: "primitivefes",
   },
@@ -6450,7 +6450,7 @@ const primitivefesPage2Creatures = [
     season: "primitivefes",
   },
   {
-    name: "リューカデンドロン・サマーサン", //★要調べ
+    name: "リューカデンドロン・サマーサン",
     hobby: ["園芸", "花"],
     level: 1,
     seedprice: 30,
@@ -6692,7 +6692,7 @@ const primitivefesPage2Creatures = [
     season: "primitivefes",
   },
   {
-    name: "サボテンとゴールデンガーのスープ", //★要調べ
+    name: "サボテンとゴールデンガーのスープ",
     hobby: ["料理", "食材"],
     level: 1,
     food: [
@@ -6701,10 +6701,10 @@ const primitivefesPage2Creatures = [
       "濃縮ナツメペースト",
       "ゴールデンガーパイク",
     ],
-    rarityData: [{ star: 1, price: 0, tc: 0 }],
-    staminaRecovery: 70,
+    rarityData: [{ star: 1, price: 500, tc: 90 }],
+    staminaRecovery: 50,
     buff: "なし",
-    note: "サボテンと魚のスープの魚をゴールデンガーに変える",
+    note: "サボテンと魚のスープの魚をゴールデンガーパイクに変える",
     season: "primitivefes",
   },
   {
