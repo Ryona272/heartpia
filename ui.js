@@ -43,6 +43,7 @@ const PAGE_DEFS = [
 
 // 現在ナビに表示中の行番号
 let activeNavRow = 1;
+let activeNavPageId = "page-zukan";
 
 function groupByRow(defs) {
   return defs.reduce((acc, p) => {
@@ -138,7 +139,9 @@ function buildNav() {
 
 function updateAllNavTabs() {
   const rows = groupByRow(PAGE_DEFS);
-  const pages = rows[activeNavRow] || [];
+  const activePage = PAGE_DEFS.find((p) => p.id === activeNavPageId);
+  const pages =
+    activePage?.id === "page-shell" ? [activePage] : rows[activeNavRow] || [];
   [".top-nav", ".bottom-nav"].forEach((selector) => {
     const nav = document.querySelector(selector);
     if (!nav) return;
@@ -234,11 +237,10 @@ function switchTab(target) {
   // 対象ページの row に合わせナビ行を切り替える
   const def = PAGE_DEFS.find((p) => p.id === target);
   if (def) {
+    activeNavPageId = target;
     const targetRow = def.row || 1;
-    if (targetRow !== activeNavRow) {
-      activeNavRow = targetRow;
-      updateAllNavTabs();
-    }
+    activeNavRow = targetRow;
+    updateAllNavTabs();
   }
 
   // 現在表示中のページのスクロール位置を保存
