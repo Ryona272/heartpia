@@ -185,6 +185,21 @@ function isOtherEvent(seasonValue) {
   return OTHER_EVENT_SEASON_VALUES.has(getPrimarySeasonValue(seasonValue));
 }
 
+/** 単体狙いの競合数に含める、現在出現可能な生物かを判定する */
+function isCurrentlyAvailableForBestEnv(creature) {
+  const seasons = Array.isArray(creature.season)
+    ? creature.season
+    : [creature.season ?? "normal"];
+
+  return seasons.some((season) => {
+    if (season === "normal") return true;
+    if (!ACTIVE_SEASONS.has(season)) return false;
+    return (
+      season !== "otherevent" || ACTIVE_EVENT_NAMES.has(creature.eventname)
+    );
+  });
+}
+
 /**
  * プライマリシーズン値が「通常でもフェスでもその他イベントでもない」
  * 特定シーズン（snowseason など）かどうかを判定する
@@ -1626,10 +1641,13 @@ function renderList(list, hobbyLevelMap, _opts) {
     if (topName) topPriceNames.add(topName);
   });
 
-  // 各（場所2×時間×天候）ごとの生物数を集計し、各生物の最少競合環境を算出
-  // 絞り込み条件によらず常に同じおススメ環境を返すため全件(creatures)で集計する
+  // 各（場所2×時間×天候）ごとの現在出現可能な生物数を集計し、各生物の最少競合環境を算出
+  // 通常生物に加え、開催中のシーズン・フェス・その他イベントの生物だけを競合に含める
   const envCountByP2 = new Map();
-  creatures.forEach((c) => {
+  const bestEnvCompetitionCreatures = creatures.filter(
+    isCurrentlyAvailableForBestEnv,
+  );
+  bestEnvCompetitionCreatures.forEach((c) => {
     for (const p2 of c.places2 || []) {
       for (const t of c.times || []) {
         for (const w of c.weathers || []) {
@@ -1703,7 +1721,7 @@ function renderList(list, hobbyLevelMap, _opts) {
       const p2Parts = c.places2.map((p) =>
         c._bestEnvP2s?.has(p) ? `<span class="place2-best-env">${p}</span>` : p,
       );
-      metaLines.push(`場所2：${p2Parts.join(" / ")}`);
+      metaLines.push(`<strong>\u{1F4CD} ${p2Parts.join(" / ")}</strong>`);
     }
     if (c.weathers) {
       // 天候は画像行で表示するため metaLines には追加しない
