@@ -549,7 +549,12 @@ updateViewButtons();
     const name = chip.dataset.itemName;
     const hobby = chip.dataset.itemHobby;
     const isCreature = ["釣り", "虫捕り", "野鳥観察"].includes(hobby);
-    const targetPage = isCreature ? "page-zukan" : "page-info";
+    const isShell = hobby === "海洋清掃";
+    const targetPage = isCreature
+      ? "page-zukan"
+      : isShell
+        ? "page-shell"
+        : "page-info";
 
     switchTab(targetPage);
 
@@ -572,10 +577,27 @@ updateViewButtons();
       place2Filter.value = p2;
       timeFilter.value = time;
       weatherFilter.value = weather;
+
+      // ★5/マスターOFFで対象カードが非表示にならないようONにする
+      showFiveStar = true;
+      showMaster = true;
+      updateToggleButtons();
       filterCreatures();
 
       // カードへスクロール（setTimeout でレイアウト確定を待つ）
       const sel = `.card-flip[data-name="${CSS.escape(name)}"]`;
+      scrollToCard(sel);
+    } else if (isShell) {
+      // 海洋清掃ページへ：検索・キーワードをリセットして対象カードへスクロール
+      if (searchInputShell) searchInputShell.value = "";
+
+      // ★5/マスターOFFで対象カードが非表示にならないようONにする
+      showFiveStarShell = true;
+      showMasterShell = true;
+      updateToggleButtonsShell();
+      filterShell();
+
+      const sel = `#resultShell .card-flip[data-name="${CSS.escape(name)}"]`;
       scrollToCard(sel);
     } else {
       // 園芸・料理ページへ：趣味フィルターをセットして対象カードへスクロール
@@ -585,6 +607,11 @@ updateViewButtons();
         ? hobby
         : "";
       document.getElementById("hobbyFilterPage2").value = hobbyVal;
+
+      // ★5/マスターOFFで対象カードが非表示にならないようONにする
+      showFiveStarPage2 = true;
+      showMasterPage2 = true;
+      updateToggleButtonsPage2();
       filterAndRenderPage2();
 
       const sel = `#resultPage2 .card-flip[data-name="${CSS.escape(name)}"]`;

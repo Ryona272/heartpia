@@ -4650,6 +4650,7 @@ function initPageTest() {
     if (c.hobby === "釣り") return "chip-fishing";
     if (c.hobby === "虫捕り") return "chip-insect";
     if (c.hobby === "野鳥観察") return "chip-bird";
+    if (c.hobby === "海洋清掃") return "chip-shell";
     if (isPage2Gardening(c)) return "chip-gardening";
     if (isPage2StoreIngredient(c)) return "chip-ingredient";
     return "chip-cooking";

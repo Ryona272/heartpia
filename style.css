@@ -2777,6 +2777,13 @@ button.is-pressed,
 .test-chip.chip-cooking .test-chip-name { color: #835700; }
 .test-chip.chip-cooking .test-chip-hobby { color: #a06700; }
 
+.test-chip.chip-shell {
+  background: linear-gradient(180deg, #3db8ce, #a8e4f0);
+  border-color: rgba(10, 79, 100, 0.2);
+}
+.test-chip.chip-shell .test-chip-name { color: #0a4f64; }
+.test-chip.chip-shell .test-chip-hobby { color: #0d6b85; }
+
 /* =======================
    おすすめTop5（ページ2：園芸・料理）
    ======================= */
