@@ -995,7 +995,7 @@ const fishingCreatures = [
     places2: ["森の湖"],
     times: ["12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    rarityData: [{ star: 1, price: 395 }],
     note: "魚影：小",
   },
   {
@@ -1017,7 +1017,7 @@ const fishingCreatures = [
     places2: ["「海釣り」"],
     times: ["00-06", "12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    rarityData: [{ star: 1, price: 850 }],
     note: "魚影：金",
   },
   {
@@ -1028,7 +1028,7 @@ const fishingCreatures = [
     places2: ["クジラ海"],
     times: ["12-18", "18-00"],
     weathers: ["虹"],
-    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    rarityData: [{ star: 1, price: 850 }],
     note: "魚影：大",
   },
   {
@@ -1039,7 +1039,7 @@ const fishingCreatures = [
     places2: ["旧海"],
     times: ["06-12", "12-18"],
     weathers: ["虹"],
-    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    rarityData: [{ star: 1, price: 850 }],
     note: "魚影：大",
   },
   {
@@ -1050,7 +1050,7 @@ const fishingCreatures = [
     places2: ["旧海"],
     times: ["00-06", "12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    rarityData: [{ star: 1, price: 610 }],
     note: "魚影：中",
   },
   {
@@ -1065,17 +1065,6 @@ const fishingCreatures = [
     note: "魚影：中",
   },
   {
-    name: "レナーズラス",
-    hobby: "釣り",
-    level: 14,
-    places1: ["森林", "海"],
-    places2: ["東海"],
-    times: ["06-12", "12-18", "18-00"],
-    weathers: ["晴れ", "虹"],
-    rarityData: [{ star: 1, price: 0 }], //★要調べ
-    note: "魚影：中",
-  },
-  {
     name: "シリキルリスズメダイ",
     hobby: "釣り",
     level: 14,
@@ -1083,8 +1072,19 @@ const fishingCreatures = [
     places2: ["そよ風の海", "「海釣り」"],
     times: ["12-18", "18-00"],
     weathers: ["晴れ", "虹"],
-    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    rarityData: [{ star: 1, price: 395 }],
     note: "魚影：小",
+  },
+  {
+    name: "レナーズラス",
+    hobby: "釣り",
+    level: 14,
+    places1: ["森林", "海"],
+    places2: ["東海"],
+    times: ["06-12", "12-18", "18-00"],
+    weathers: ["晴れ", "虹"],
+    rarityData: [{ star: 1, price: 610 }],
+    note: "魚影：中",
   },
 ];
 
@@ -1856,7 +1856,7 @@ const insectCreatures = [
     places2: ["風車の花畑"],
     times: ["00-06", "06-12", "18-00"],
     weathers: ["雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    rarityData: [{ star: 1, price: 240 }],
     note: "特になし",
   },
   {
@@ -1867,7 +1867,7 @@ const insectCreatures = [
     places2: ["コジカ塔"],
     times: ["00-06", "18-00"],
     weathers: ["虹"],
-    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    rarityData: [{ star: 1, price: 440 }],
     note: "特になし",
   },
   {
@@ -1878,51 +1878,51 @@ const insectCreatures = [
     places2: ["草原の湖"],
     times: ["06-12", "12-18"],
     weathers: ["虹"],
-    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    rarityData: [{ star: 1, price: 295 }],
     note: "特になし",
   },
   {
-    name: "デイダミアモルフォ",
+    name: "デイダミアモルフォ", //★要調べ
     hobby: "虫捕り",
     level: 13,
     places1: ["温泉山"],
     places2: ["火山湖"],
     times: ["12-18", "18-00"],
     weathers: ["虹"],
-    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    rarityData: [{ star: 1, price: 0 }],
     note: "特になし",
   },
   {
-    name: "ミドリカワトンボ",
+    name: "ミドリカワトンボ", //★要調べ
     hobby: "虫捕り",
     level: 13,
     places1: ["郊外"],
     places2: ["郊外の湖"],
     times: ["12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    rarityData: [{ star: 1, price: 0 }],
     note: "特になし",
   },
   {
-    name: "グラスウィングバタフライ",
+    name: "グラスウィングバタフライ", //★要調べ
     hobby: "虫捕り",
     level: 14,
     places1: ["花畑"],
     places2: ["クジラ山"],
     times: ["12-18", "18-00"],
     weathers: ["虹"],
-    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    rarityData: [{ star: 1, price: 0 }],
     note: "特になし",
   },
   {
-    name: "アオミオカタニシ",
+    name: "アオミオカタニシ", //★要調べ
     hobby: "虫捕り",
     level: 14,
     places1: ["森林"],
     places2: ["森の島"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0 }], //★要調べ
+    rarityData: [{ star: 1, price: 0 }],
     note: "特になし",
   },
 ];
@@ -2146,7 +2146,6 @@ const birdCreatures = [
       "時間と天気の金縁は★５動作をする環境を表しています",
       "表記の環境以外で出る可能性もあります",
     ],
-    //★要調べ雨、虹で出るか確認
   },
   {
     name: "ゴジュウカラ",
@@ -7063,51 +7062,51 @@ const oceanCleaningCreatures = [
   },
   // level 9 (2)
   {
-    name: "未定27",
+    name: "マンボウガイ", //★要調べ
     hobby: "海洋清掃",
     level: 9,
     places1: ["ホエールフォール峡谷"],
     places2: ["「海洋清掃」"],
-    times: ["00-06", "06-12", "12-18", "18-00"],
-    weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0, tc: 0 }],
+    times: ["00-06", "06-12", "18-00"],
+    weathers: ["虹"],
+    rarityData: [{ star: 1, price: 0, tc: 0 }], //★要調べ機を逃した
     note: "特になし",
     season: "normal",
   },
   {
-    name: "未定28",
+    name: "イチゴナツモモ",
     hobby: "海洋清掃",
     level: 9,
     places1: ["ホエールフォール峡谷"],
     places2: ["「海洋清掃」"],
-    times: ["00-06", "06-12", "12-18", "18-00"],
+    times: ["00-06", "06-12", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0, tc: 0 }],
+    rarityData: [{ star: 1, price: 120, tc: 0 }], //★要調べ機を逃した
     note: "特になし",
     season: "normal",
   },
   // level 10 (2)
   {
-    name: "未定29",
+    name: "ナンヨウダカラ", //★要調べ
     hobby: "海洋清掃",
     level: 10,
     places1: ["ホエールフォール峡谷"],
     places2: ["「海洋清掃」"],
-    times: ["00-06", "06-12", "12-18", "18-00"],
+    times: ["00-06", "06-12", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0, tc: 0 }],
+    rarityData: [{ star: 1, price: 0, tc: 0 }], //★要調べ機を逃した
     note: "特になし",
     season: "normal",
   },
   {
-    name: "未定30",
+    name: "ピンクガイ",
     hobby: "海洋清掃",
     level: 10,
     places1: ["ホエールフォール峡谷"],
     places2: ["「海洋清掃」"],
-    times: ["00-06", "06-12", "12-18", "18-00"],
-    weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0, tc: 0 }],
+    times: ["00-06", "06-12", "12-18"],
+    weathers: ["虹"],
+    rarityData: [{ star: 1, price: 165, tc: 0 }], //★要調べ機を逃した
     note: "特になし",
     season: "normal",
   },

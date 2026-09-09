@@ -1759,7 +1759,13 @@ function renderList(list, hobbyLevelMap, _opts) {
 
     // レアリティブロック（☦1〜☦5）の売値・TC計算
     // 野鳥観察は☦2基準（☦1は4分の1）、それ以外は☦1基準（各倍率を乗算）
-    const rarityBlocks = (c.noStar ? [1] : [1, 2, 3, 4, 5])
+    const rarityStars =
+      c.hobby === "海洋清掃"
+        ? [1, 2, 3, 4, 10]
+        : c.noStar
+          ? [1]
+          : [1, 2, 3, 4, 5];
+    const rarityBlocks = rarityStars
       .map((star) => {
         const rarity = c.rarityData.find((r) => r.star === star);
         const original = rarity?.price ?? 0;
@@ -1791,6 +1797,15 @@ function renderList(list, hobbyLevelMap, _opts) {
               calculatedPrice = base * 8;
               calculatedTc = tcBase * 8;
               break;
+          }
+        } else if (c.hobby === "海洋清掃") {
+          const multiplier = { 2: 2, 3: 3, 4: 4, 10: 10 };
+          if (star === 1) {
+            calculatedPrice = baseStar1;
+            calculatedTc = baseStar1Tc;
+          } else {
+            calculatedPrice = Math.floor(baseStar1 * (multiplier[star] || 0));
+            calculatedTc = Math.floor(baseStar1Tc * (multiplier[star] || 0));
           }
         } else {
           const multiplier = { 2: 1.5, 3: 2, 4: 4, 5: 8 };
