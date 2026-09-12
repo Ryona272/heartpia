@@ -146,7 +146,6 @@ const FESTIVAL_SEASON_VALUES = new Set([
 
 // その他イベント判定用定数（イベント系シーズン値のセット）
 const OTHER_EVENT_SEASON_VALUES = new Set(["otherevent"]);
-
 // 現在開催中のシーズン・フェス（ここを編集して開催状況を管理）
 const ACTIVE_SEASONS = new Set(["otherevent", "primitivefes"]);
 // 現在開催中のその他イベント名（ここを編集して開催状況を管理）
@@ -5462,7 +5461,7 @@ function initPageTest() {
             `${bioFixedWeathers ? bioFixedWeathers.map((w) => BIO_ENV_WEATHER_LABELS[w] ?? w).join("/") : bioFixedWeathersRaw}`,
           );
         const bioEnvSectionTitle =
-          `🏆 生物 マスター おすすめ環境` +
+          `🏆 生物 マスター おすすめ環境(同時狙い最多)` +
           (_bioCondParts.length ? `　${_bioCondParts.join("　")}` : "");
 
         /**
@@ -5470,7 +5469,11 @@ function initPageTest() {
          * 最も多くの種が重なる (場所2, 時間帯, 天気) 組み合わせ Top1 を返す。
          * プルダウンで指定済みの軸はその値に固定して探索する。
          */
-        const calcBioEnvTop = (hobbyName, userLevel) => {
+        const calcBioEnvTop = (
+          hobbyName,
+          userLevel,
+          weatherPriority = false,
+        ) => {
           let targets = creatures.filter(
             (c) =>
               c.hobby === hobbyName &&
@@ -5528,7 +5531,7 @@ function initPageTest() {
               ];
           const timesToSearch = bioFixedTime ? [bioFixedTime] : BIO_ENV_TIMES;
 
-          const allCombos = [];
+          let allCombos = [];
 
           if (bioNowWeather || !bioSetWeatherDef) {
             // 「今 X」型 or 天候指定なし：weather 軸もループ
@@ -5590,7 +5593,38 @@ function initPageTest() {
             }
           }
 
-          allCombos.sort((a, b) => b.score - a.score);
+          if (weatherPriority && !bioFixedWeathersRaw) {
+            const weatherRank = { 晴れ: 0, "雨(雪)": 1, 虹: 2 };
+            const countByEnvironment = new Map(
+              allCombos.map((combo) => [
+                `${combo.place}|${combo.time}|${combo.weather}`,
+                combo.count,
+              ]),
+            );
+            const laterWeathers = {
+              晴れ: ["雨(雪)", "虹"],
+              "雨(雪)": ["虹"],
+              虹: [],
+            };
+
+            // 後の天気に変えても種類数が増えない環境だけを候補にする。
+            allCombos = allCombos.filter((combo) => {
+              const later = laterWeathers[combo.weather] ?? [];
+              return later.every(
+                (weather) =>
+                  countByEnvironment.get(
+                    `${combo.place}|${combo.time}|${weather}`,
+                  ) === combo.count,
+              );
+            });
+            allCombos.sort((a, b) => {
+              const rankDiff =
+                (weatherRank[a.weather] ?? 3) - (weatherRank[b.weather] ?? 3);
+              return rankDiff || b.score - a.score;
+            });
+          } else {
+            allCombos.sort((a, b) => b.score - a.score);
+          }
           if (allCombos.length === 0) return [];
 
           const best = allCombos[0];
@@ -5615,53 +5649,74 @@ function initPageTest() {
           return [{ ...best, times: sortedTimes }];
         };
 
-        // 3趣味の結果を組み立て（趣味ボタンがOFFの場合 or 全軸指定済みは非表示）
+        const renderBioEnvCombo = (combo, weatherFocused = false) => {
+          const timesArr = combo.times ?? [combo.time];
+          const _activeTimes = new Set(
+            bioFixedTime ? [bioFixedTime] : timesArr,
+          );
+          const timeLabel = ["00-06", "06-12", "12-18", "18-00"]
+            .map((t) => {
+              const [f, hr] = t.split("-");
+              const cls = _activeTimes.has(t)
+                ? "env-time-badge"
+                : "env-time-badge env-time-badge--off";
+              return `<span class="${cls}"><span class="card-time-start">${f}</span>${BIO_ENV_TIME_LABELS[t]}<span class="card-time-end">${hr}</span></span>`;
+            })
+            .join("");
+          const envBadge =
+            `<span class="bio-env-badge">` +
+            `\u{1F4CD}${combo.place}\u3000` +
+            `${timeLabel}\u3000` +
+            `<span class="env-weather-chip">${BIO_ENV_WEATHER_LABELS[combo.weather] ?? combo.weather}</span>` +
+            `</span>` +
+            `<span class="bio-env-count"> \u2192 ${combo.count}種同時マスター狙い可${
+              weatherFocused && combo.weather === "晴れ"
+                ? "（雨(雪)/虹限定の生物無し）"
+                : weatherFocused && combo.weather === "雨(雪)"
+                  ? "（虹限定の生物無し）"
+                  : ""
+            }</span>`;
+          const chipsHtml = `<div class="test-chips">${combo.matching
+            .slice()
+            .sort((a, b) => (b.level ?? 1) - (a.level ?? 1))
+            .map((c) => renderChip(c, `Lv${c.level ?? 1}`))
+            .join("")}</div>`;
+          return (
+            `<div class="bio-env-combo bio-env-combo--top">` +
+            `<div class="bio-env-combo-header">${envBadge}</div>` +
+            chipsHtml +
+            `</div>`
+          );
+        };
+
+        // 既存の効率重視おすすめ
         let bioEnvHtml = "";
+        // 天候の出やすさを優先する追加おすすめ
+        let bioWeatherEnvHtml = "";
         if (!bioAllFixed) {
-          for (const { hobby, level, icon, label } of BIO_ENV_HOBBY_META) {
+          for (const { hobby, level, label } of BIO_ENV_HOBBY_META) {
             if (!enabledHobbies.has(hobby)) continue;
-            const topCombos = calcBioEnvTop(hobby, level);
-            if (topCombos.length === 0) {
-              bioEnvHtml += `<p class="test-cat-label">${label}：マスター未達なし</p>`;
-              continue;
-            }
-            bioEnvHtml += `<p class="test-cat-label">${label}</p>`;
-            const combo = topCombos[0];
-            const timesArr = combo.times ?? [combo.time];
-            const _activeTimes = new Set(
-              bioFixedTime ? [bioFixedTime] : timesArr,
-            );
-            const timeLabel = ["00-06", "06-12", "12-18", "18-00"]
-              .map((t) => {
-                const [f, hr] = t.split("-");
-                const cls = _activeTimes.has(t)
-                  ? "env-time-badge"
-                  : "env-time-badge env-time-badge--off";
-                return `<span class="${cls}"><span class="card-time-start">${f}</span>${BIO_ENV_TIME_LABELS[t]}<span class="card-time-end">${hr}</span></span>`;
-              })
-              .join("");
-            const envBadge =
-              `<span class="bio-env-badge">` +
-              `\u{1F4CD}${combo.place}\u3000` +
-              `${timeLabel}\u3000` +
-              `<span class="env-weather-chip">${BIO_ENV_WEATHER_LABELS[combo.weather] ?? combo.weather}</span>` +
-              `</span>` +
-              `<span class="bio-env-count"> \u2192 ${combo.count}種同時マスター狙い可</span>`;
-            const chipsHtml = `<div class="test-chips">${combo.matching
-              .slice()
-              .sort((a, b) => (b.level ?? 1) - (a.level ?? 1))
-              .map((c) => renderChip(c, `Lv${c.level ?? 1}`))
-              .join("")}</div>`;
-            bioEnvHtml +=
-              `<div class="bio-env-combo bio-env-combo--top">` +
-              `<div class="bio-env-combo-header">${envBadge}</div>` +
-              chipsHtml +
-              `</div>`;
+
+            const topCombo = calcBioEnvTop(hobby, level)[0];
+            bioEnvHtml += topCombo
+              ? `<p class="test-cat-label">${label}</p>${renderBioEnvCombo(topCombo)}`
+              : `<p class="test-cat-label">${label}：マスター未達なし</p>`;
+
+            const weatherTopCombo = calcBioEnvTop(hobby, level, true)[0];
+            bioWeatherEnvHtml += weatherTopCombo
+              ? `<p class="test-cat-label">${label}</p>${renderBioEnvCombo(weatherTopCombo, true)}`
+              : `<p class="test-cat-label">${label}：マスター未達なし</p>`;
           }
         }
 
         if (bioEnvHtml) {
           html += renderSection(bioEnvSectionTitle, bioEnvHtml);
+        }
+        if (bioWeatherEnvHtml) {
+          html += renderSection(
+            `🏆 生物 マスター おすすめ環境(天候重視)`,
+            bioWeatherEnvHtml,
+          );
         }
 
         // ── 以下、Top10 と全件リスト ──
