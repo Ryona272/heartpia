@@ -5595,28 +5595,43 @@ function initPageTest() {
 
           if (weatherPriority && !bioFixedWeathersRaw) {
             const weatherRank = { 晴れ: 0, "雨(雪)": 1, 虹: 2 };
-            const countByEnvironment = new Map(
-              allCombos.map((combo) => [
-                `${combo.place}|${combo.time}|${combo.weather}`,
-                combo.count,
-              ]),
-            );
-            const laterWeathers = {
-              晴れ: ["雨(雪)", "虹"],
-              "雨(雪)": ["虹"],
-              虹: [],
-            };
 
-            // 後の天気に変えても種類数が増えない環境だけを候補にする。
-            allCombos = allCombos.filter((combo) => {
-              const later = laterWeathers[combo.weather] ?? [];
-              return later.every(
-                (weather) =>
-                  countByEnvironment.get(
-                    `${combo.place}|${combo.time}|${weather}`,
-                  ) === combo.count,
+            // 場所ごとに「全時間帯を通して」必要な天候を先に決める。
+            // 時間帯ごとに判定すると、別の時間に虹限定/雨限定がいる場所でも
+            // 晴れがおすすめに出てしまうのを防ぐため。
+            //   虹限定（晴れ・雨(雪)では出ない）が1種でもいる → 虹
+            //   虹限定はいないが晴れでは出ない種がいる        → 雨(雪)
+            //   全種が晴れで出る                              → 晴れ
+            const requiredWeatherByPlace = new Map();
+            for (const place of placesToSearch) {
+              const here = weatherFiltered.filter((c) =>
+                getEffectivePlaces(c).includes(place),
               );
-            });
+              if (here.length === 0) continue;
+              const hasRainbowOnly = here.some((c) => {
+                const w = c.weathers || [];
+                return (
+                  w.includes("虹") &&
+                  !w.includes("晴れ") &&
+                  !w.includes("雨(雪)")
+                );
+              });
+              const hasNonSunny = here.some(
+                (c) => !(c.weathers || []).includes("晴れ"),
+              );
+              requiredWeatherByPlace.set(
+                place,
+                hasRainbowOnly ? "虹" : hasNonSunny ? "雨(雪)" : "晴れ",
+              );
+            }
+
+            // 各場所は決定した天候の組み合わせのみを候補に残し、
+            // 天候の出やすさ（晴れ>雨(雪)>虹）を最優先にしてから
+            // 同時マスター数（スコア）で比較する。
+            allCombos = allCombos.filter(
+              (combo) =>
+                requiredWeatherByPlace.get(combo.place) === combo.weather,
+            );
             allCombos.sort((a, b) => {
               const rankDiff =
                 (weatherRank[a.weather] ?? 3) - (weatherRank[b.weather] ?? 3);
