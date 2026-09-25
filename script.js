@@ -149,7 +149,7 @@ const OTHER_EVENT_SEASON_VALUES = new Set(["otherevent"]);
 // 現在開催中のシーズン・フェス（ここを編集して開催状況を管理）
 const ACTIVE_SEASONS = new Set(["otherevent", "primitivefes"]);
 // 現在開催中のその他イベント名（ここを編集して開催状況を管理）
-const ACTIVE_EVENT_NAMES = new Set(["「バー」ッチリ美味しさをはさんで"]);
+const ACTIVE_EVENT_NAMES = new Set(["「バー」ッチリ美味しさをはさんで", "満月に秋を収めて"]);
 
 // シーズン・フェスのラベルマップ
 const SEASON_LABELS = {
