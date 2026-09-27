@@ -3109,7 +3109,7 @@ const birdCreatures = [
     weathers: ["晴れ", "雨(雪)", "虹"],
     rarityData: [{ star: 2, price: 150 }],
     star5Weathers: [], //★要調べ
-    star5Times: [], //★要調べ
+    star5Times: [], //★要調べ,昼夜出ず
     note: [
       "「巣ごもり」追加段階でのみ出現",
       "※追加段階ではマクジャク,シロクジャク,クロクジャクからランダムに1種が出現",
@@ -7542,7 +7542,7 @@ const otherEventPage2Creatures = [
     season: ["otherevent", "normal"],
     eventname: "満月に秋を収めて",
   },{
-    name: "チョコレート月餅",//★要調べ
+    name: "チョコレート月餅",//★要調べ,カカオ
     hobby: ["料理"],
     level: 1,
     food: ["小麦", "小麦", "卵", "カカオ"],
@@ -7564,7 +7564,7 @@ const otherEventPage2Creatures = [
     season: ["otherevent", "normal"],
     eventname: "満月に秋を収めて",
   },{
-    name: "チョコレート月餅・大",//★要調べ
+    name: "チョコレート月餅・大",
     hobby: ["料理"],
     level: 1,
     food: ["チョコレート月餅", "チョコレート月餅", "チョコレート月餅", "牛乳"],
