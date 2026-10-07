@@ -1869,6 +1869,16 @@ const insectCreatures = [
     weathers: ["虹"],
     rarityData: [{ star: 1, price: 440 }],
     note: "特になし",
+  },{
+    name: "トウワタバッタ",
+    hobby: "虫捕り",
+    level: 12,
+    places1: ["温泉山"],
+    places2: ["温泉"],
+    times: ["06-12", "12-18"],
+    weathers: ["雨(雪)","虹"],
+    rarityData: [{ star: 1, price: 370 }],
+    note: "特になし",
   },
   {
     name: "ベニトンボ",
@@ -1882,47 +1892,47 @@ const insectCreatures = [
     note: "特になし",
   },
   {
-    name: "デイダミアモルフォ", //★要調べ
+    name: "デイダミアモルフォ", 
     hobby: "虫捕り",
     level: 13,
     places1: ["温泉山"],
     places2: ["火山湖"],
     times: ["12-18", "18-00"],
     weathers: ["虹"],
-    rarityData: [{ star: 1, price: 0 }],
+    rarityData: [{ star: 1, price: 480 }],
     note: "特になし",
   },
   {
-    name: "ミドリカワトンボ", //★要調べ
+    name: "ミドリカワトンボ", 
     hobby: "虫捕り",
     level: 13,
     places1: ["郊外"],
     places2: ["郊外の湖"],
     times: ["12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0 }],
+    rarityData: [{ star: 1, price: 590 }],
     note: "特になし",
   },
   {
-    name: "グラスウィングバタフライ", //★要調べ
+    name: "グラスウィングバタフライ", 
     hobby: "虫捕り",
     level: 14,
     places1: ["花畑"],
     places2: ["クジラ山"],
     times: ["12-18", "18-00"],
     weathers: ["虹"],
-    rarityData: [{ star: 1, price: 0 }],
+    rarityData: [{ star: 1, price: 480 }],
     note: "特になし",
   },
   {
-    name: "アオミオカタニシ", //★要調べ
+    name: "アオミオカタニシ", 
     hobby: "虫捕り",
     level: 14,
     places1: ["森林"],
     places2: ["森の島"],
     times: ["00-06", "06-12", "12-18", "18-00"],
     weathers: ["雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0 }],
+    rarityData: [{ star: 1, price: 590 }],
     note: "特になし",
   },
 ];
@@ -7062,14 +7072,14 @@ const oceanCleaningCreatures = [
   },
   // level 9 (2)
   {
-    name: "マンボウガイ", //★要調べ
+    name: "マンボウガイ",
     hobby: "海洋清掃",
     level: 9,
     places1: ["ホエールフォール峡谷"],
     places2: ["「海洋清掃」"],
     times: ["00-06", "06-12", "18-00"],
     weathers: ["虹"],
-    rarityData: [{ star: 1, price: 0, tc: 0 }], //★要調べ機を逃した
+    rarityData: [{ star: 1, price: 165, tc: 0 }], //★要調べ機を逃した
     note: "特になし",
     season: "normal",
   },
@@ -7087,14 +7097,14 @@ const oceanCleaningCreatures = [
   },
   // level 10 (2)
   {
-    name: "ナンヨウダカラ", //★要調べ
+    name: "ナンヨウダカラ", 
     hobby: "海洋清掃",
     level: 10,
     places1: ["ホエールフォール峡谷"],
     places2: ["「海洋清掃」"],
     times: ["00-06", "06-12", "18-00"],
     weathers: ["晴れ", "雨(雪)", "虹"],
-    rarityData: [{ star: 1, price: 0, tc: 0 }], //★要調べ機を逃した
+    rarityData: [{ star: 1, price: 165, tc: 0 }], //★要調べ機を逃した
     note: "特になし",
     season: "normal",
   },
