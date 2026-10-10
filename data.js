@@ -1,4 +1,4 @@
-﻿// data.js
+// data.js
 // このファイルはゲーム内の生き物・植物・料理・食材などのデータを定義する。
 // script.js から参照され、フィルタリング・表示に使用される。
 
@@ -3226,6 +3226,15 @@ const gardeningCreatures = [
     note: "特になし",
   },
   {
+    name: "かぼちゃ",
+    hobby: ["園芸", "食材"],
+    level: 1,
+    seedprice: 10,
+    time: 0.25,
+    rarityData: [{ star: 1, price: 30 }], //★要調べ
+    note: "特になし",
+  },
+  {
     name: "小麦",
     hobby: ["園芸", "食材"],
     level: 2,
@@ -4272,6 +4281,14 @@ function getPage2WagonType(item) {
 }
 
 function applyPage2ItemAssets(item) {
+  if (
+    item.season === "yuyaNoShukai" &&
+    Array.isArray(item.rarityData) &&
+    item.rarityData.length === 0 &&
+    (!Array.isArray(item.food) || item.food.length === 0)
+  )
+    return;
+
   const folder = getPage2ImageFolder(item);
   if (folder) {
     item.img = `img/${folder}/${item.name}.png`;
@@ -6755,6 +6772,382 @@ const primitivefesPage2Creatures = [
   },
 ];
 
+// 幽夜の集いフェス限定生物
+const yuyaNoShukaiCreatures = [
+  {
+    name: "シリヤケイカ",
+    hobby: "釣り",
+    level: 1,
+    places1: ["温泉山", "海"],
+    places2: ["旧海"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["晴れ", "雨(雪)", "虹"],
+    rarityData: [{ star: 1, price: 155, tc: 0 }],
+    note: "",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "トラフコウイカ",
+    hobby: "釣り",
+    level: 1,
+    places1: ["温泉山", "海"],
+    places2: ["旧海"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["晴れ", "雨(雪)", "虹"],
+    rarityData: [{ star: 1, price: 155, tc: 0 }],
+    note: "",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "コウイカ",
+    hobby: "釣り",
+    level: 1,
+    places1: ["温泉山", "海"],
+    places2: ["旧海"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["晴れ", "雨(雪)", "虹"],
+    rarityData: [{ star: 1, price: 155, tc: 0 }],
+    note: "",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "ブルークリオネ",
+    hobby: "釣り",
+    level: 1,
+    places1: ["温泉山", "海"],
+    places2: ["旧海"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["晴れ", "雨(雪)", "虹"],
+    rarityData: [{ star: 1, price: 100, tc: 15 }],
+    note: "",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "シイタケフンチュウ",
+    hobby: "虫捕り",
+    level: 1,
+    places1: ["森林"],
+    places2: ["ジャンプステージ"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["晴れ", "雨(雪)", "虹"],
+    rarityData: [{ star: 1, price: 110, tc: 25 }],
+    note: "特になし",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "オレンジフンチュウ",
+    hobby: "虫捕り",
+    level: 1,
+    places1: ["森林"],
+    places2: ["不思議な松林"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["晴れ", "雨(雪)", "虹"],
+    rarityData: [{ star: 1, price: 110, tc: 25 }],
+    note: "特になし",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "イチゴフンチュウ",
+    hobby: "虫捕り",
+    level: 1,
+    places1: ["森林"],
+    places2: ["コジカ塔"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["晴れ", "雨(雪)", "虹"],
+    rarityData: [{ star: 1, price: 110, tc: 25 }],
+    note: "特になし",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "かぼちゃフンチュウ",
+    hobby: "虫捕り",
+    level: 1,
+    places1: ["森林"],
+    places2: ["不思議な松林"],
+    times: ["00-06", "06-12", "12-18", "18-00"],
+    weathers: ["晴れ", "雨(雪)", "虹"],
+    rarityData: [{ star: 1, price: 110, tc: 25 }],
+    note: "特になし",
+    season: "yuyaNoShukai",
+  },
+];
+
+// 幽夜の集いフェス限定ページ2データ（画像確認分。詳細データは未登録）
+const yuyaNoShukaiPage2Creatures = [
+  {
+    name: "ホオズキ",
+    hobby: ["園芸", "食材"],
+    level: 1,
+    seedprice: 10,
+    time: 0.25,
+    rarityData: [{ star: 1, price: 30 ,tc: 5}],
+    note: "",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "ヒガンバナ",
+    hobby: ["園芸", "花"],
+    level: 1,
+    seedprice: 30,
+    time: 1,
+    rarityData: [{ star: 1, price: 125, tc: 0 }],
+    note: "",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "ホオズキ香るホットココア",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["ホオズキ", "シナモンココアパウダー", "牛乳", "果物"],
+    rarityData: [{ star: 1, price: 240, tc: 35 }],
+    staminaRecovery: 25,
+    buff: "なし",
+    note: [
+      "マッシモからレシピを入手",
+      "果物ならなんでも",
+    ],
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "ホオズキリンゴホットココア",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["ホオズキ", "シナモンココアパウダー", "牛乳", "リンゴ"],
+    rarityData: [{ star: 1, price: 260, tc: 40 }],
+    staminaRecovery: 25,
+    buff: "なし",
+    note: "ホオズキ香るホットココアの果物をリンゴに変える",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "ホオズキオレンジホットココア",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["ホオズキ", "シナモンココアパウダー", "牛乳", "オレンジ"],
+    rarityData: [{ star: 1, price: 260, tc: 40 }],
+    staminaRecovery: 25,
+    buff: "なし",
+    note: "ホオズキ香るホットココアの果物をオレンジに変える",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "ホオズキブルーベリーホットココア",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["ホオズキ", "シナモンココアパウダー", "牛乳", "ブルーベリー"],
+    rarityData: [{ star: 1, price: 240, tc: 35 }],
+    staminaRecovery: 25,
+    buff: "なし",
+    note: "ホオズキ香るホットココアの果物をブルーベリーに変える",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "ホオズキラズベリーホットココア",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["ホオズキ", "シナモンココアパウダー", "牛乳", "ラズベリー"],
+    rarityData: [{ star: 1, price: 260, tc: 40 }],
+    staminaRecovery: 25,
+    buff: "なし",
+    note: "ホオズキ香るホットココアの果物をラズベリーに変える",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "ホオズキイチゴホットココア",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["ホオズキ", "シナモンココアパウダー", "牛乳", "いちご"],
+    rarityData: [{ star: 1, price: 580, tc: 85 }],
+    staminaRecovery: 50,
+    buff: "なし",
+    note: "ホオズキ香るホットココアの果物をいちごに変える",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "ホオズキブドウホットココア",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["ホオズキ", "シナモンココアパウダー", "牛乳", "ブドウ"],
+    rarityData: [{ star: 1, price: 690, tc: 100 }],
+    staminaRecovery: 65,
+    buff: "なし",
+    note: "ホオズキ香るホットココアの果物をブドウに変える",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "ホオズキパイナップルホットココア",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["ホオズキ", "シナモンココアパウダー", "牛乳", "パイナップル"],
+    rarityData: [{ star: 1, price: 260, tc: 40 }],
+    staminaRecovery: 25,
+    buff: "なし",
+    note: "ホオズキ香るホットココアの果物をパイナップルに変える",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "かぼちゃとキノコのクリームポタージュ",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["ナラタケ", "かぼちゃ", "牛乳", "野菜"],
+    rarityData: [{ star: 1, price: 240, tc: 35 }],
+    staminaRecovery: 20,
+    buff: "なし",
+    note: [
+      "マッシモからレシピを入手",
+      "野菜ならなんでも",
+    ],
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "かぼちゃとジャガイモのクリームポタージュ",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["ナラタケ", "かぼちゃ", "牛乳", "ジャガイモ"],
+    rarityData: [{ star: 1, price: 300, tc: 45 }],
+    staminaRecovery: 25,
+    buff: "なし",
+    note: "かぼちゃとキノコのクリームポタージュの野菜をジャガイモに変える",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "かぼちゃとコーンのクリームポタージュ",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["ナラタケ", "かぼちゃ", "牛乳", "トウモロコシ"],
+    rarityData: [{ star: 1, price: 730, tc: 105 }],
+    staminaRecovery: 70,
+    buff: "なし",
+    note: "かぼちゃとキノコのクリームポタージュの野菜をトウモロコシに変える",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "かぼちゃとトマトのクリームポタージュ",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["ナラタケ", "かぼちゃ", "牛乳", "トマト"],
+    rarityData: [{ star: 1, price: 240, tc: 35 }],
+    staminaRecovery: 20,
+    buff: "なし",
+    note: "かぼちゃとキノコのクリームポタージュの野菜をトマトに変える",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "かぼちゃとニンジンのクリームポタージュ",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["ナラタケ", "かぼちゃ", "牛乳", "ニンジン"],
+    rarityData: [{ star: 1, price: 370, tc: 55 }],
+    staminaRecovery: 35,
+    buff: "なし",
+    note: "かぼちゃとキノコのクリームポタージュの野菜をニンジンに変える",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "かぼちゃとナスのクリームポタージュ",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["ナラタケ", "かぼちゃ", "牛乳", "ナス"],
+    rarityData: [{ star: 1, price: 620, tc: 90 }],
+    staminaRecovery: 60,
+    buff: "なし",
+    note: "かぼちゃとキノコのクリームポタージュの野菜をナスに変える",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "イカのトムヤムクンヌードル",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["トムヤムペースト", "かぼちゃ", "シリヤケイカ"],
+    rarityData: [{ star: 1, price: 290, tc: 45 }],
+    staminaRecovery: 30,
+    buff: "なし",
+    note: [
+      "マッシモからレシピを入手",
+      "イカならなんでも",
+    ],
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "シリヤケイカのトムヤムクンヌードル",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["トムヤムペースト", "かぼちゃ", "シリヤケイカ"],
+    rarityData: [{ star: 1, price: 290, tc: 45 }],
+    staminaRecovery: 30,
+    buff: "なし",
+    note: "イカのトムヤムクンヌードルのイカをシリヤケイカに変える",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "トラフコウイカのトムヤムクンヌードル",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["トムヤムペースト", "かぼちゃ", "トラフコウイカ"],
+    rarityData: [{ star: 1, price: 290, tc: 45 }],
+    staminaRecovery: 30,
+    buff: "なし",
+    note: "イカのトムヤムクンヌードルのイカをトラフコウイカに変える",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "コウイカのトムヤムクンヌードル",
+    hobby: ["料理", "食材"],
+    level: 1,
+    food: ["トムヤムペースト", "かぼちゃ", "コウイカ"],
+    rarityData: [{ star: 1, price: 290, tc: 45 }],
+    staminaRecovery: 30,
+    buff: "なし",
+    note: "イカのトムヤムクンヌードルのイカをコウイカに変える",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "幽林の不思議セット",
+    hobby: ["料理"],
+    level: 1,
+    food: [
+      "ホオズキ香るホットココア",
+      "ホオズキ香るホットココア",
+      "かぼちゃとキノコのクリームポタージュ",
+      "イカのトムヤムクンヌードル",
+    ],
+    rarityData: [{ star: 1, price: 1060, tc: 160 }],
+    staminaRecovery: "30*4",
+    buff: "なし",
+    note: [
+      "マッシモからレシピを入手",
+      "ホオズキ香るホットココアならなんでも",
+      "かぼちゃとキノコのクリームポタージュならなんでも",
+      "イカのトムヤムクンヌードルならなんでも",
+    ],
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "シナモンココアパウダー",
+    hobby: ["販売", "食材"],
+    price: { buy: 50, sell: 25 },
+    level: 1,
+    note: "特になし",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "トムヤムペースト",
+    hobby: ["販売", "食材"],
+    price: { buy: 50, sell: 25 },
+    level: 1,
+    note: "特になし",
+    season: "yuyaNoShukai",
+  },
+  {
+    name: "ナラタケ",
+    hobby: ["採取", "食材"],
+    price: { buy: 0, sell: 16 },
+    level: 1,
+    note: "特になし",
+    season: "yuyaNoShukai",
+  },
+];
+
 // 海洋清掃----------------------------------------------
 const oceanCleaningCreatures = [
   {
@@ -7646,10 +8039,19 @@ const allSeasonalCreatures = [
   ...dreamlightfesCreatures,
   ...blockfesCreatures,
   ...primitivefesCreatures,
+  ...yuyaNoShukaiCreatures,
   ...otherEventCreatures,
 ];
 creatures.push(...allSeasonalCreatures);
 allSeasonalCreatures.forEach((c) => {
+  if (
+    c.season === "yuyaNoShukai" &&
+    c.rarityData.length === 0 &&
+    !["places1", "places2", "times", "weathers"].some(
+      (key) => Array.isArray(c[key]) && c[key].length > 0,
+    )
+  )
+    return;
   let folder = "";
   if (c.hobby === "釣り") folder = "fish";
   else if (c.hobby === "虫捕り") folder = "insect";
@@ -7664,6 +8066,7 @@ const allSeasonalPage2 = [
   ...dreamlightfesPage2Creatures,
   ...blockfesPage2Creatures,
   ...primitivefesPage2Creatures,
+  ...yuyaNoShukaiPage2Creatures,
   ...otherEventPage2Creatures,
 ];
 page2Creatures.push(...allSeasonalPage2);

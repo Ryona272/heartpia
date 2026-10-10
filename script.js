@@ -142,12 +142,13 @@ const FESTIVAL_SEASON_VALUES = new Set([
   "dreamlightfes",
   "blockfes",
   "primitivefes",
+  "yuyaNoShukai",
 ]);
 
 // その他イベント判定用定数（イベント系シーズン値のセット）
 const OTHER_EVENT_SEASON_VALUES = new Set(["otherevent"]);
 // 現在開催中のシーズン・フェス（ここを編集して開催状況を管理）
-const ACTIVE_SEASONS = new Set(["otherevent", "primitivefes"]);
+const ACTIVE_SEASONS = new Set(["otherevent", "yuyaNoShukai"]);
 // 現在開催中のその他イベント名（ここを編集して開催状況を管理）
 const ACTIVE_EVENT_NAMES = new Set(["「バー」ッチリ美味しさをはさんで", "満月に秋を収めて"]);
 
@@ -159,6 +160,7 @@ const SEASON_LABELS = {
   dreamlightfes: "ドリームライトフェス",
   blockfes: "ブロック市街地フェス",
   primitivefes: "原始の呼び声フェス",
+  yuyaNoShukai: "幽夜の集い",
   otherevent: "その他イベント",
 };
 
@@ -177,6 +179,17 @@ function getPrimarySeasonValue(seasonValue) {
 /** プライマリシーズン値がフェス系かどうかを判定する */
 function isFestivalSeason(seasonValue) {
   return FESTIVAL_SEASON_VALUES.has(getPrimarySeasonValue(seasonValue));
+}
+
+function isNameOnlyFestivalItem(item) {
+  return (
+    getPrimarySeasonValue(item.season) === "yuyaNoShukai" &&
+    Array.isArray(item.rarityData) &&
+    item.rarityData.length === 0 &&
+    !["places1", "places2", "times", "weathers"].some(
+      (key) => Array.isArray(item[key]) && item[key].length > 0,
+    )
+  );
 }
 
 /** プライマリシーズン値がその他イベント系かどうかを判定する */
@@ -1625,7 +1638,11 @@ function renderList(list, hobbyLevelMap, _opts) {
   const topPriceNames = new Set();
   RANKED_HOBBIES.forEach((hobby) => {
     const hobbyItems = list.filter(
-      (c) => c.hobby === hobby && c.level <= (hobbyLevelMap[hobby] ?? 10),
+      (c) =>
+        !isNameOnlyFestivalItem(c) &&
+        c.rarityData?.length > 0 &&
+        c.hobby === hobby &&
+        c.level <= (hobbyLevelMap[hobby] ?? 10),
     );
     if (hobbyItems.length === 0) return;
     let topPrice = -1;
@@ -1713,7 +1730,9 @@ function renderList(list, hobbyLevelMap, _opts) {
     const waterBadgesInner = waterPlaces.length
       ? `<div class="place-water-badges">${waterPlaces.map((p) => `<span class="place-water-badge ${WATER_PLACE_CLASSES[p]}">${WATER_PLACE_ICONS[p]}<span class="place-water-badge-name">${p.replace("★", "")}</span></span>`).join("")}</div>`
       : "";
-    const placeBadgeMarkup = `<div class="place-badges-container">${mainPlaceBadgeMarkup}${waterBadgesInner}</div>`;
+    const placeBadgeMarkup = isNameOnlyFestivalItem(c)
+      ? ""
+      : `<div class="place-badges-container">${mainPlaceBadgeMarkup}${waterBadgesInner}</div>`;
 
     const metaLines = [];
     if (c.places2?.length) {
@@ -1731,7 +1750,9 @@ function renderList(list, hobbyLevelMap, _opts) {
     const star5WeatherSet = new Set(c.star5Weathers || []);
     const bestEnvTimeSet = new Set((c._bestEnv || []).map((e) => e.t));
     const bestEnvWeatherSet = new Set((c._bestEnv || []).map((e) => e.w));
-    const weatherRowMarkup = `<div class="card-weather-row"><span class="card-row-label">天気：</span>${ALL_WEATHERS_CARD.map((w) => `<span class="card-weather-chip${weatherSet.has(w) ? "" : " card-weather-chip--off"}${star5WeatherSet.has(w) ? " card-weather-chip--star5" : ""}${bestEnvWeatherSet.has(w) ? " card-weather-chip--best-env" : ""}" data-label="${w}"><img class="card-weather-chip-img" src="img/other/${w}.png" alt="${w}" onerror="this.closest('.card-weather-chip').style.display='none'"></span>`).join("")}</div>`;
+    const weatherRowMarkup = isNameOnlyFestivalItem(c)
+      ? ""
+      : `<div class="card-weather-row"><span class="card-row-label">天気：</span>${ALL_WEATHERS_CARD.map((w) => `<span class="card-weather-chip${weatherSet.has(w) ? "" : " card-weather-chip--off"}${star5WeatherSet.has(w) ? " card-weather-chip--star5" : ""}${bestEnvWeatherSet.has(w) ? " card-weather-chip--best-env" : ""}" data-label="${w}"><img class="card-weather-chip-img" src="img/other/${w}.png" alt="${w}" onerror="this.closest('.card-weather-chip').style.display='none'"></span>`).join("")}</div>`;
 
     const TIME_SLOTS = [
       { key: "00-06", emoji: "\u{1F319}", dataLabel: "深夜 00:00～06:00" },
@@ -1741,12 +1762,14 @@ function renderList(list, hobbyLevelMap, _opts) {
     ];
     const timeSet = new Set(c.times || []);
     const star5TimeSet = new Set(c.star5Times || []);
-    const timeRowMarkup = `<div class="card-time-row"><span class="card-row-label">時間：</span>${TIME_SLOTS.map(
-      ({ key, emoji, dataLabel }) => {
-        const [tStart, tEnd] = key.split("-");
-        return `<span class="card-time-badge${timeSet.has(key) ? " card-time-badge--on" : " card-time-badge--off"}${star5TimeSet.size > 0 && star5TimeSet.has(key) ? " card-time-badge--star5" : ""}${bestEnvTimeSet.has(key) ? " card-time-badge--best-env" : ""}" data-label="${dataLabel}"><span class="card-time-start">${tStart}</span>${emoji}<span class="card-time-end">${tEnd}</span></span>`;
-      },
-    ).join("")}</div>`;
+    const timeRowMarkup = isNameOnlyFestivalItem(c)
+      ? ""
+      : `<div class="card-time-row"><span class="card-row-label">時間：</span>${TIME_SLOTS.map(
+          ({ key, emoji, dataLabel }) => {
+            const [tStart, tEnd] = key.split("-");
+            return `<span class="card-time-badge${timeSet.has(key) ? " card-time-badge--on" : " card-time-badge--off"}${star5TimeSet.size > 0 && star5TimeSet.has(key) ? " card-time-badge--star5" : ""}${bestEnvTimeSet.has(key) ? " card-time-badge--best-env" : ""}" data-label="${dataLabel}"><span class="card-time-start">${tStart}</span>${emoji}<span class="card-time-end">${tEnd}</span></span>`;
+          },
+        ).join("")}</div>`;
 
     const star1Data = c.rarityData.find((r) => r.star === 1);
     const star2Data = c.rarityData.find((r) => r.star === 2);
@@ -1764,72 +1787,77 @@ function renderList(list, hobbyLevelMap, _opts) {
         : c.noStar
           ? [1]
           : [1, 2, 3, 4, 5];
-    const rarityBlocks = rarityStars
-      .map((star) => {
-        const rarity = c.rarityData.find((r) => r.star === star);
-        const original = rarity?.price ?? 0;
-        const originalTc = rarity?.tc ?? 0;
-        let calculatedPrice = 0;
-        let calculatedTc = 0;
+    const rarityBlocks =
+      isNameOnlyFestivalItem(c) || c.rarityData.length === 0
+        ? isNameOnlyFestivalItem(c)
+          ? ""
+          : '<div class="note">売値データなし</div>'
+        : rarityStars
+          .map((star) => {
+            const rarity = c.rarityData.find((r) => r.star === star);
+            const original = rarity?.price ?? 0;
+            const originalTc = rarity?.tc ?? 0;
+            let calculatedPrice = 0;
+            let calculatedTc = 0;
 
-        if (c.hobby === "野鳥観察") {
-          const base = baseStar2;
-          const tcBase = baseStar2Tc;
-          switch (star) {
-            case 1:
-              calculatedPrice = Math.floor(base / 4);
-              calculatedTc = Math.floor(tcBase / 4);
-              break;
-            case 2:
-              calculatedPrice = base;
-              calculatedTc = tcBase;
-              break;
-            case 3:
-              calculatedPrice = base * 2;
-              calculatedTc = tcBase * 2;
-              break;
-            case 4:
-              calculatedPrice = base * 4;
-              calculatedTc = tcBase * 4;
-              break;
-            case 5:
-              calculatedPrice = base * 8;
-              calculatedTc = tcBase * 8;
-              break;
-          }
-        } else if (c.hobby === "海洋清掃") {
-          const multiplier = { 2: 2, 3: 3, 4: 4, 10: 10 };
-          if (star === 1) {
-            calculatedPrice = baseStar1;
-            calculatedTc = baseStar1Tc;
-          } else {
-            calculatedPrice = Math.floor(baseStar1 * (multiplier[star] || 0));
-            calculatedTc = Math.floor(baseStar1Tc * (multiplier[star] || 0));
-          }
-        } else {
-          const multiplier = { 2: 1.5, 3: 2, 4: 4, 5: 8 };
-          if (star === 1) {
-            calculatedPrice = baseStar1;
-            calculatedTc = baseStar1Tc;
-          } else {
-            calculatedPrice = Math.floor(baseStar1 * (multiplier[star] || 0));
-            calculatedTc = Math.floor(baseStar1Tc * (multiplier[star] || 0));
-          }
-        }
+            if (c.hobby === "野鳥観察") {
+              const base = baseStar2;
+              const tcBase = baseStar2Tc;
+              switch (star) {
+                case 1:
+                  calculatedPrice = Math.floor(base / 4);
+                  calculatedTc = Math.floor(tcBase / 4);
+                  break;
+                case 2:
+                  calculatedPrice = base;
+                  calculatedTc = tcBase;
+                  break;
+                case 3:
+                  calculatedPrice = base * 2;
+                  calculatedTc = tcBase * 2;
+                  break;
+                case 4:
+                  calculatedPrice = base * 4;
+                  calculatedTc = tcBase * 4;
+                  break;
+                case 5:
+                  calculatedPrice = base * 8;
+                  calculatedTc = tcBase * 8;
+                  break;
+              }
+            } else if (c.hobby === "海洋清掃") {
+              const multiplier = { 2: 2, 3: 3, 4: 4, 10: 10 };
+              if (star === 1) {
+                calculatedPrice = baseStar1;
+                calculatedTc = baseStar1Tc;
+              } else {
+                calculatedPrice = Math.floor(baseStar1 * (multiplier[star] || 0));
+                calculatedTc = Math.floor(baseStar1Tc * (multiplier[star] || 0));
+              }
+            } else {
+              const multiplier = { 2: 1.5, 3: 2, 4: 4, 5: 8 };
+              if (star === 1) {
+                calculatedPrice = baseStar1;
+                calculatedTc = baseStar1Tc;
+              } else {
+                calculatedPrice = Math.floor(baseStar1 * (multiplier[star] || 0));
+                calculatedTc = Math.floor(baseStar1Tc * (multiplier[star] || 0));
+              }
+            }
 
-        const price = original > 0 ? original : calculatedPrice;
-        const tc = originalTc > 0 ? originalTc : calculatedTc;
-        const showTc =
-          c.season !== "normal" &&
-          !isOtherEvent(c.season) &&
-          !isMultiSeasonNormal(c.season);
-        return `
+            const price = original > 0 ? original : calculatedPrice;
+            const tc = originalTc > 0 ? originalTc : calculatedTc;
+            const showTc =
+              c.season !== "normal" &&
+              !isOtherEvent(c.season) &&
+              !isMultiSeasonNormal(c.season);
+            return `
       <div class="rarity-block">
         <span class="badge">★${star} 売値：${price}G${showTc ? ` / TC：${tc}C` : ""}</span>
       </div>
     `;
-      })
-      .join("");
+          })
+          .join("");
 
     const noteLines = getNoteLines(c.note);
     if (c._bestEnv?.length) {
@@ -1858,8 +1886,9 @@ function renderList(list, hobbyLevelMap, _opts) {
             ${c.img ? `<img class="card-img" src="${c.img}" alt="${c.name}" loading="eager">` : ""}
             <div class="card-header">
               <span class="card-name">${c.name}</span>
-              <span class="card-category">（${c.hobby}）<span class="card-level">Lv.${c.level}</span></span>
+              <span class="card-category">（${c.hobby}）${isNameOnlyFestivalItem(c) || c.level == null ? "" : `<span class="card-level">Lv.${c.level}</span>`}</span>
             </div>
+            ${isNameOnlyFestivalItem(c) ? '<div class="note">詳細データ未登録</div>' : ""}
             ${metaLines.length ? `<div class="meta">${metaLines.join("<br>")}</div>` : ""}
             ${timeRowMarkup}
             ${weatherRowMarkup}
@@ -1899,7 +1928,7 @@ function renderList(list, hobbyLevelMap, _opts) {
             }
             <div class="card-control-row">
               <label><input type="checkbox" class="card-acquired-checkbox" data-name="${c.name}" ${c.acquired ? "checked" : ""} /> 獲得</label>
-              ${!c.noStar ? `<label><input type="checkbox" class="card-star5-checkbox" data-name="${c.name}" ${c.fiveStar ? "checked" : ""} /> ★5</label>` : ""}
+              ${!c.noStar && !isNameOnlyFestivalItem(c) ? `<label><input type="checkbox" class="card-star5-checkbox" data-name="${c.name}" ${c.fiveStar ? "checked" : ""} /> ★5</label>` : ""}
               ${c.season === "normal" && !c.noStar ? `<label><input type="checkbox" class="card-master-checkbox" data-name="${c.name}" ${c.master ? "checked" : ""} /> マスター</label>` : ""}
             </div>
           </div>
@@ -1908,6 +1937,7 @@ function renderList(list, hobbyLevelMap, _opts) {
             <div class="rarity-list">
               ${rarityBlocks}
             </div>
+            ${isNameOnlyFestivalItem(c) ? '<div class="note">詳細データ未登録</div>' : ""}
             ${noteLines.length ? `<div class="note">備考：${noteLines.join("<br>")}</div>` : ""}
           </div>
         </div>
@@ -2357,8 +2387,9 @@ function renderPage2List(targetEl, list, gardenLevel, cookingLevel) {
   _p2Groups.forEach((items) => {
     const eligible = items.filter(
       (item) =>
+        !isNameOnlyFestivalItem(item) &&
         getEffectiveLevelPage2(item, gardenLevel, cookingLevel) >=
-        (item.level ?? 1),
+          (item.level ?? 1),
     );
     if (eligible.length === 0) return;
     let topPrice = -1;
@@ -2432,8 +2463,9 @@ function renderPage2List(targetEl, list, gardenLevel, cookingLevel) {
               ${item.img ? `<img class="card-img" src="${item.img}" alt="${item.name}" loading="eager">` : ""}
               <div class="card-header">
                 <span class="card-name">${item.name}</span>
-                <span class="card-category">（${formatPage2HobbyLabel(item)}）<span class="card-level">Lv.${item.level}</span></span>
+                <span class="card-category">（${formatPage2HobbyLabel(item)}）${isNameOnlyFestivalItem(item) || item.level == null ? "" : `<span class="card-level">Lv.${item.level}</span>`}</span>
               </div>
+              ${isNameOnlyFestivalItem(item) ? '<div class="note">詳細データ未登録</div>' : ""}
               ${metaLines.length ? `<div class="meta">${metaLines.join("<br>")}</div>` : ""}
               ${foodItemsMarkup}
               ${
@@ -2448,7 +2480,9 @@ function renderPage2List(targetEl, list, gardenLevel, cookingLevel) {
                         `<label><input type="checkbox" class="card-acquired-checkbox-p2" data-name="${item.name}" ${item.acquired ? "checked" : ""} /> 獲得</label>` +
                         (isUgly
                           ? ""
-                          : `<label><input type="checkbox" class="card-star5-checkbox-p2" data-name="${item.name}" ${item.fiveStar ? "checked" : ""} /> ★5</label>` +
+                          : (isNameOnlyFestivalItem(item)
+                              ? ""
+                              : `<label><input type="checkbox" class="card-star5-checkbox-p2" data-name="${item.name}" ${item.fiveStar ? "checked" : ""} /> ★5</label>`) +
                             (item.season === "normal"
                               ? `<label><input type="checkbox" class="card-master-checkbox-p2" data-name="${item.name}" ${item.master ? "checked" : ""} /> マスター</label>`
                               : "")) +
@@ -6327,7 +6361,12 @@ function init() {
   // シーズンフィルター初期化（シーズンとフェスを一括管理）
   seasonFilter.innerHTML = '<option value="">すべて</option>';
   const seasonPriority = ["normal", "snowseason", "whaleseason"];
-  const festivalPriority = ["dreamlightfes", "blockfes", "primitivefes"];
+  const festivalPriority = [
+    "dreamlightfes",
+    "blockfes",
+    "primitivefes",
+    "yuyaNoShukai",
+  ];
   const otherEventPriority = ["otherevent"];
   const sortedRegularSeasons = seasonPriority.filter((s) =>
     regularSeasons.has(s),
