@@ -461,3 +461,11 @@ store-ingredient/野ニンニクガラシ
 store-ingredient/雑草
 store-ingredient/青のキャンディ
 store-ingredient/黄色のキャンディ
+bird/リンゴワタリガラス
+bird/ミカンワタリガラス
+bird/イチゴワタリガラス
+bird/カボチャワタリガラス
+bird/タンザニアウーリーコウモリ
+bird/シロヘラコウモリ
+bird/パナイスンダオオコウモリ
+insect/トリュフフンチュウ
