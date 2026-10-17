@@ -30,7 +30,7 @@ git diff -- data.js
 画像とデータを対象にする（変更がないファイルは追加されない）。
 
 ```powershell
-git add -- img data.js
+git add -- img data.js img_list.txt
 ```
 
 このメモも一緒に保存する場合：
