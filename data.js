@@ -6964,7 +6964,7 @@ const yuyaNoShukaiCreatures = [
     hobby: "野鳥観察",
     level: 1,
     places2: ["「ワタリガラスの隠し餌」"],
-    rarityData: [{ star: 2, price: 0, tc: 0 }], //★要調べ:出現場所・時間・天候・売値・TC
+    rarityData: [{ star: 2, price: 60, tc: 20 }], //★要調べ:出現場所・時間・天候・売値・TC
     star5Weathers: ["雨(雪)", "虹"],
     star5Times: [],
     note: "「ワタリガラスの隠し餌」追加段階のみ",
