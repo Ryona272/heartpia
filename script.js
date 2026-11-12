@@ -148,9 +148,9 @@ const FESTIVAL_SEASON_VALUES = new Set([
 // その他イベント判定用定数（イベント系シーズン値のセット）
 const OTHER_EVENT_SEASON_VALUES = new Set(["otherevent"]);
 // 現在開催中のシーズン・フェス（ここを編集して開催状況を管理）
-const ACTIVE_SEASONS = new Set(["otherevent", "yuyaNoShukai"]);
+const ACTIVE_SEASONS = new Set(["yuyaNoShukai"]);
 // 現在開催中のその他イベント名（ここを編集して開催状況を管理）
-const ACTIVE_EVENT_NAMES = new Set(["「バー」ッチリ美味しさをはさんで", "満月に秋を収めて"]);
+const ACTIVE_EVENT_NAMES = new Set(["トリック・オア・トリート！"]);
 
 // シーズン・フェスのラベルマップ
 const SEASON_LABELS = {
@@ -160,7 +160,7 @@ const SEASON_LABELS = {
   dreamlightfes: "ドリームライトフェス",
   blockfes: "ブロック市街地フェス",
   primitivefes: "原始の呼び声フェス",
-  yuyaNoShukai: "幽夜の集い",
+  yuyaNoShukai: "幽夜の集いフェス",
   otherevent: "その他イベント",
 };
 

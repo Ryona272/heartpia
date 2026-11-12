@@ -106,6 +106,7 @@ cooking/オーロラディナー
 cooking/カフェラテ
 cooking/カラフル映画鑑賞セット
 cooking/カントリー風煮込み
+cooking/かぼちゃニャンコクッキー
 cooking/キノコパイ
 cooking/キャラメルポップコーンバケツ
 cooking/キャンドルディナー
@@ -122,9 +123,11 @@ cooking/シュガーパンケーキ（プレーン）
 cooking/シュガーパンケーキ（ラズベリー）
 cooking/シーフードピザ
 cooking/シーフードリゾット
+cooking/白包帯ゴーストドリンク
 cooking/ジャム
 cooking/スモークサーモンベーグル
 cooking/チーズケーキ
+cooking/チョコソース
 cooking/ティラミス
 cooking/トマトソース
 cooking/トリュフのクリームパスタ
@@ -148,6 +151,8 @@ cooking/ミートバーガー
 cooking/モルチーズカヌレ
 cooking/モルチーズコンパンナ
 cooking/ヤマドリタケパイ
+cooking/ユラユラかぼちゃチョコ
+cooking/ユラユラチーズかぼちゃパスタ
 cooking/ラズベリージャム
 cooking/ラズベリーバーベナテイスティーパイ
 cooking/ラブリーMALTESEコンパンナ
@@ -158,6 +163,7 @@ cooking/レトリバーコンパンナ
 cooking/ロメインレタスタコス
 cooking/不気味な食べ物
 cooking/不気味な飲み物
+cooking/不気味に笑うかぼちゃタルト
 cooking/北欧ブルーアカザエビの前菜
 cooking/塩味2種盛りバケツ
 cooking/塩味ポップコーンバケツ
@@ -320,11 +326,13 @@ gardening/いちご
 gardening/アサガオの花
 gardening/アンスリウム
 gardening/オランダカイウ
+gardening/カカオ豆
 gardening/カーネーション
 gardening/ジャガイモ
 gardening/タンポポ
 gardening/ダイコン
 gardening/チューリップ
+gardening/茶葉
 gardening/トウモロコシ
 gardening/トマト
 gardening/ナス
