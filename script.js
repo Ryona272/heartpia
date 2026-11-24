@@ -150,7 +150,7 @@ const OTHER_EVENT_SEASON_VALUES = new Set(["otherevent"]);
 // 現在開催中のシーズン・フェス（ここを編集して開催状況を管理）
 const ACTIVE_SEASONS = new Set(["yuyaNoShukai"]);
 // 現在開催中のその他イベント名（ここを編集して開催状況を管理）
-const ACTIVE_EVENT_NAMES = new Set(["トリック・オア・トリート！"]);
+const ACTIVE_EVENT_NAMES = new Set(["大空を翔ける天馬"]);
 
 // シーズン・フェスのラベルマップ
 const SEASON_LABELS = {
@@ -190,6 +190,14 @@ function isNameOnlyFestivalItem(item) {
       (key) => Array.isArray(item[key]) && item[key].length > 0,
     )
   );
+}
+
+function hasCreatureStar5Checkbox(item) {
+  return !item.noStar && !isNameOnlyFestivalItem(item);
+}
+
+function hasCreatureMasterCheckbox(item) {
+  return item.season === "normal" && !item.noStar;
 }
 
 /** プライマリシーズン値がその他イベント系かどうかを判定する */
@@ -1129,27 +1137,25 @@ function updateCounters(shownList) {
   totalCountEl.textContent = `全件：${creatures.length}`;
   displayCountEl.textContent = `表示：${shownList.length}`;
   acquiredCountEl.textContent = `獲得：${creatures.filter((c) => c.acquired).length}`;
-  star5CountEl.textContent = `★5：${creatures.filter((c) => c.fiveStar).length}`;
-  masterCountEl.textContent = `マスター：${creatures.filter((c) => c.master).length}`;
+  star5CountEl.textContent = `★5：${creatures.filter((c) => hasCreatureStar5Checkbox(c) && c.fiveStar).length}`;
+  masterCountEl.textContent = `マスター：${creatures.filter((c) => hasCreatureMasterCheckbox(c) && c.master).length}`;
 }
 
 /**
  * ページ2のカウンター表示を更新する。
- * 「不気味な食べ物」「不気味な飲み物」と販売食材は獲得カウントから除外する。
+ * 販売食材はページ全件数から除外し、獲得・★5・マスターは各カードにあるチェック欄だけを数える。
  * @param {Array} shownList - 現在表示中のページ2アイテム配列
  */
 function updateCountersPage2(shownList) {
   if (!totalCountPage2El) return;
-  const EXCLUDED_NAMES = new Set(["不気味な食べ物", "不気味な飲み物"]);
-  const forAcquiredCount = (arr) =>
-    arr.filter(
-      (c) => !EXCLUDED_NAMES.has(c.name) && !isPage2StoreIngredient(c),
-    );
-  totalCountPage2El.textContent = `全件：${page2Creatures.filter((c) => !isPage2StoreIngredient(c)).length}`;
+  const countableItems = page2Creatures.filter(
+    (item) => !isPage2StoreIngredient(item),
+  );
+  totalCountPage2El.textContent = `全件：${countableItems.length}`;
   displayCountPage2El.textContent = `表示：${shownList.filter((c) => !isPage2StoreIngredient(c)).length}`;
-  acquiredCountPage2El.textContent = `獲得：${forAcquiredCount(page2Creatures).filter((c) => c.acquired).length}`;
-  star5CountPage2El.textContent = `★5：${forAcquiredCount(page2Creatures).filter((c) => c.fiveStar).length}`;
-  masterCountPage2El.textContent = `マスター：${forAcquiredCount(page2Creatures).filter((c) => c.master).length}`;
+  acquiredCountPage2El.textContent = `獲得：${countableItems.filter((c) => c.acquired).length}`;
+  star5CountPage2El.textContent = `★5：${countableItems.filter((c) => hasPage2Star5Checkbox(c) && c.fiveStar).length}`;
+  masterCountPage2El.textContent = `マスター：${countableItems.filter((c) => hasPage2MasterCheckbox(c) && c.master).length}`;
 }
 
 /**
@@ -1180,9 +1186,9 @@ function updateCountersShell(shownList) {
   if (acquiredCountShellEl)
     acquiredCountShellEl.textContent = `獲得：${oceanCleaningCreatures.filter((c) => c.acquired).length}`;
   if (star5CountShellEl)
-    star5CountShellEl.textContent = `★5：${oceanCleaningCreatures.filter((c) => c.fiveStar).length}`;
+    star5CountShellEl.textContent = `★5：${oceanCleaningCreatures.filter((c) => hasCreatureStar5Checkbox(c) && c.fiveStar).length}`;
   if (masterCountShellEl)
-    masterCountShellEl.textContent = `マスター：${oceanCleaningCreatures.filter((c) => c.master).length}`;
+    masterCountShellEl.textContent = `マスター：${oceanCleaningCreatures.filter((c) => hasCreatureMasterCheckbox(c) && c.master).length}`;
 }
 
 function updateToggleButtonsShell() {
@@ -1928,8 +1934,8 @@ function renderList(list, hobbyLevelMap, _opts) {
             }
             <div class="card-control-row">
               <label><input type="checkbox" class="card-acquired-checkbox" data-name="${c.name}" ${c.acquired ? "checked" : ""} /> 獲得</label>
-              ${!c.noStar && !isNameOnlyFestivalItem(c) ? `<label><input type="checkbox" class="card-star5-checkbox" data-name="${c.name}" ${c.fiveStar ? "checked" : ""} /> ★5</label>` : ""}
-              ${c.season === "normal" && !c.noStar ? `<label><input type="checkbox" class="card-master-checkbox" data-name="${c.name}" ${c.master ? "checked" : ""} /> マスター</label>` : ""}
+              ${hasCreatureStar5Checkbox(c) ? `<label><input type="checkbox" class="card-star5-checkbox" data-name="${c.name}" ${c.fiveStar ? "checked" : ""} /> ★5</label>` : ""}
+              ${hasCreatureMasterCheckbox(c) ? `<label><input type="checkbox" class="card-master-checkbox" data-name="${c.name}" ${c.master ? "checked" : ""} /> マスター</label>` : ""}
             </div>
           </div>
           <div class="card-back ${cardClass}" style="${hobbyStyle}">
@@ -2236,6 +2242,28 @@ function isPage2StoreIngredient(item) {
   );
 }
 
+function isPage2CookingFailure(item) {
+  return item.name === "不気味な食べ物" || item.name === "不気味な飲み物";
+}
+
+function hasPage2Star5Checkbox(item) {
+  return (
+    !isPage2StoreIngredient(item) &&
+    !item.noStar &&
+    !isPage2CookingFailure(item) &&
+    !isNameOnlyFestivalItem(item)
+  );
+}
+
+function hasPage2MasterCheckbox(item) {
+  return (
+    !isPage2StoreIngredient(item) &&
+    !item.noStar &&
+    !isPage2CookingFailure(item) &&
+    item.season === "normal"
+  );
+}
+
 /** アイテムが料理系（ルートが「料理」）かどうかを判定する */
 function isPage2Cooking(item) {
   return getPage2HobbyParts(item)[0] === "料理";
@@ -2429,7 +2457,11 @@ function renderPage2List(targetEl, list, gardenLevel, cookingLevel) {
       metaLines.push(`スタミナ回復量：${staminaStr}`);
     }
     if (item.buff != null) {
-      metaLines.push(`効果(バフ)：${item.buff}`);
+      const buff =
+        typeof item.buff === "string" && item.buff.trim() === ""
+          ? "なし"
+          : item.buff;
+      metaLines.push(`効果(バフ)：${buff}`);
     }
     const foodItemsMarkup = renderFoodItemsWithImages(item.food);
     const noteLines = getNoteLines(item.note);
@@ -2468,28 +2500,11 @@ function renderPage2List(targetEl, list, gardenLevel, cookingLevel) {
               ${isNameOnlyFestivalItem(item) ? '<div class="note">詳細データ未登録</div>' : ""}
               ${metaLines.length ? `<div class="meta">${metaLines.join("<br>")}</div>` : ""}
               ${foodItemsMarkup}
-              ${
-                isStoreIngredient
-                  ? `<div class="card-control-row"><label><input type="checkbox" class="card-acquired-checkbox-p2" data-name="${item.name}" ${item.acquired ? "checked" : ""} /> 獲得</label></div>`
-                  : (() => {
-                      const isUgly =
-                        item.name === "不気味な食べ物" ||
-                        item.name === "不気味な飲み物";
-                      return (
-                        `<div class="card-control-row">` +
-                        `<label><input type="checkbox" class="card-acquired-checkbox-p2" data-name="${item.name}" ${item.acquired ? "checked" : ""} /> 獲得</label>` +
-                        (isUgly
-                          ? ""
-                          : (isNameOnlyFestivalItem(item)
-                              ? ""
-                              : `<label><input type="checkbox" class="card-star5-checkbox-p2" data-name="${item.name}" ${item.fiveStar ? "checked" : ""} /> ★5</label>`) +
-                            (item.season === "normal"
-                              ? `<label><input type="checkbox" class="card-master-checkbox-p2" data-name="${item.name}" ${item.master ? "checked" : ""} /> マスター</label>`
-                              : "")) +
-                        `</div>`
-                      );
-                    })()
-              }
+              <div class="card-control-row">
+                <label><input type="checkbox" class="card-acquired-checkbox-p2" data-name="${item.name}" ${item.acquired ? "checked" : ""} /> 獲得</label>
+                ${hasPage2Star5Checkbox(item) ? `<label><input type="checkbox" class="card-star5-checkbox-p2" data-name="${item.name}" ${item.fiveStar ? "checked" : ""} /> ★5</label>` : ""}
+                ${hasPage2MasterCheckbox(item) ? `<label><input type="checkbox" class="card-master-checkbox-p2" data-name="${item.name}" ${item.master ? "checked" : ""} /> マスター</label>` : ""}
+              </div>
             </div>
             <div class="card-back ${cardClass}" style="${hobbyStyle}">
               ${cookingWagonMarkup}

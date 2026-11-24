@@ -221,6 +221,12 @@ cooking/野シダレタスタコス
 cooking/野ニンニクガラシレタスタコス
 cooking/青いロールケーキ
 cooking/黄色いロールケーキ
+cooking/トワイライトスパークルカップケーキ
+cooking/フラッターシャイカップケーキ
+cooking/レインボーダッシュカップケーキ
+cooking/ラリティカップケーキ
+cooking/ピンキーパイカップケーキ
+cooking/アップルジャックカップケーキ
 fish/アオザメ
 fish/アカマンボウ
 fish/アプロケイルス
