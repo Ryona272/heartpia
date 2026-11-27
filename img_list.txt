@@ -292,6 +292,7 @@ fish/マッドミノー
 fish/マブナ
 fish/マンボウ
 fish/ミナミマグロ
+fish/ミノカサゴ
 fish/ミノー
 fish/メカジキ
 fish/モンツキダラ
